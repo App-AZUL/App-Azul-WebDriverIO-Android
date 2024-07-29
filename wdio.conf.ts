@@ -1,5 +1,7 @@
 import type { Options } from "@wdio/types";
 
+let driver: WebdriverIO.Browser;
+
 export const config: Options.Testrunner = {
   runner: "local",
   autoCompileOpts: {
@@ -23,7 +25,7 @@ export const config: Options.Testrunner = {
       "appium:platformName": "Android",
       "appium:deviceName": "Google Pixel 7 Pro (Android 14)",
       "appium:platformVersion": "14.0",
-      "appium:noReset": false,
+      "appium:noReset": true,
       "appium:automationName": "UIAutomator2",
       "appium:appPackage": "com.sdp.appazul", // Replace with your app's package name
       "appium:appActivity":
@@ -31,7 +33,7 @@ export const config: Options.Testrunner = {
     },
   ],
 
-  logLevel: "info",
+  logLevel: "debug",
 
   bail: 0,
 
@@ -83,9 +85,74 @@ export const config: Options.Testrunner = {
 
       // Take the screenshot
       await driver.saveScreenshot(screenshotFile);
+    } else {
+      // Screenshot directory
+      const screenshotPath = "./successShots/";
+
+      // Create directory if it does not exist
+      const fs = require("fs");
+      if (!fs.existsSync(screenshotPath)) {
+        fs.mkdirSync(screenshotPath);
+      }
+
+      // Get the test name and sanitize it for a filename
+      const testName = test.title.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+      const screenshotFile = `${screenshotPath}${testName}.png`;
+
+      // Take the screenshot
+      await driver.saveScreenshot(screenshotFile);
     }
   },
+  // Hook to run before the test suite starts
+  onPrepare: async function (config, capabilities) {
+    console.log("onPrepare: Starting the test suite...");
+    // Initialize or configure settings if needed
+  },
 
+  // Hook to run before the session starts
+  beforeSession: async function (config, capabilities, specs, cid) {
+    console.log("beforeSession: Starting a new session...");
+    // Setup actions before the session starts
+  },
+
+  // Hook to run before each test
+  before: function (capabilities, specs) {
+    console.log("before: Test is about to start.");
+  },
+
+  // Hook to run after all tests are completed
+  onComplete: function (exitCode, config, capabilities, results) {
+    console.log("onComplete: All tests completed.");
+    console.log("Exit code:", exitCode);
+  },
+
+  // Hook to run when a worker starts
+  onWorkerStart: function (cid, caps, specs, args, execArgv) {
+    console.log("onWorkerStart: Worker started. CID:", cid);
+  },
+
+  // Hook to run when a worker ends
+  onWorkerEnd: function (cid, exitCode, specs, retries) {
+    console.log("onWorkerEnd: Worker ended. CID:", cid);
+    console.log("Exit code:", exitCode);
+    console.log("Retries:", retries);
+  },
+
+  // Hook to run before each command
+  beforeCommand: function (commandName, args) {
+    console.log(
+      "beforeCommand: Command",
+      commandName,
+      "is about to be executed."
+    );
+  },
+
+  // Hook to run after each command
+  afterCommand: function (commandName, args, result, error) {
+    console.log("afterCommand: Command", commandName, "has been executed.");
+    console.log("Result:", result);
+    console.log("Error:", error);
+  },
   /**
    * Uncomment and implement hooks if needed
    */
@@ -96,7 +163,12 @@ export const config: Options.Testrunner = {
   // before: function (capabilities, specs) {},
   // beforeCommand: function (commandName, args) {},
   // beforeFeature: function (uri, feature) {},
-  // beforeScenario: function (world, context) {},
+  beforeFeature: function (world, context) {
+    console.log("before scenario");
+  },
+  afterFeature: function (world, context) {
+    console.log("after scenario");
+  },
   // beforeStep: function (step, scenario, context) {},
   // afterStep: function (step, scenario, result, context) {},
   // afterScenario: function (world, result, context) {},
