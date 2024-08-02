@@ -1,4 +1,4 @@
-Feature: Login
+Feature: Login 
 
 Scenario Outline: Verify Onboarding screen
 
@@ -23,74 +23,71 @@ Then User should be on Login Screen
 Scenario Outline: Verify Reset Password
 
 Given User is on Login screen
-When User clicks Rest password button
+When User clicks Reset password button
 Then User should be redirected to AZUL reset password portal
+  And User should be able to go back to login screen
 
 
 
 Scenario Outline: Login only with invalid password
 
-Given Went back to Login screen
-When User types an invalid password on password textfield
-  And User leaves username textfield empty
+Given User is on Login screen
+When User only types an invalid password on password textfield
   And User clicks on Iniciar sesión button
 Then User should see a message asking for typing the username
-  And User can't login
+  And after dismissing the message User still being on login screen
 
 
 
 Scenario Outline: Login only with invalid user
 
-Given Went back to Login screen
-When User types an invalid username on username textfield
-  And User leaves password textfield empty
+Given User is on Login screen
+When User only types an invalid username on username textfield
   And User clicks on Iniciar sesión button
 Then User should see a message asking for typing the password
-  And User can't login
+  And after dismissing the message User still being on login screen
 
 
 
 Scenario Outline: Login only with valid password
 
-Given Went back to Login screen
-When User types a valid password on password textfield
-  And User leaves username textfield empty
+Given User is on Login screen
+When User only types a valid password on password textfield
   And User clicks on Iniciar sesión button
 Then User should see a message asking for typing the username
-  And User can't login
+  And after dismissing the message User still being on login screen
 
 
 
-Scenario Outline: Login only with valid user
+Scenario Outline: Login only with valid username
 
-Given Went back to Login screen
-When User types a valid username on username textfield
-  And User leaves password textfield empty
+Given User is on Login screen
+When User only types a valid username on username textfield
   And User clicks on Iniciar sesión button
 Then User should see a message asking for typing the password
-  And User can't login
+  And after dismissing the message User still being on login screen
 
 
 
 Scenario Outline: Login with invalid user and valid password
 
-Given Went back to Login screen
+Given User is on Login screen
 When User types an invalid username on username textfield
   And User types a valid password on password textfield
   And User clicks on Iniciar sesión button
 Then User should see a message saying incorrect credentials
-  And User can't login
+  And after dismissing the message User still being on login screen
 
 
 
 Scenario Outline: Login with valid user and invalid password
 
-Given Went back to Login screen
+Given User is on Login screen
 When User types a valid username on username textfield
   And User types an invalid password on password textfield
   And User clicks on Iniciar sesión button
 Then User should see a message saying incorrect credentials
-  And User can't login
+  And after dismissing the message User still being on login screen
 
 
 
@@ -104,18 +101,18 @@ Then User should see a message asking for credentials
 
 Scenario Outline: Login invalid credentials
 
-Given Went back to Login screen
+Given User is on Login screen
 When User types an invalid username on username textfield
   And User types an invalid password on password textfield
   And User clicks on Iniciar sesión button
 Then User should see a message saying incorrect credentials
-  And User can't login
+  And after dismissing the message User still being on login screen
 
 
 
 Scenario Outline: Login with valid credentials
 
-Given Went back to Login screen
+Given User is on Login screen
 When User types a valid username on username textfield
   And User types a valid password on password textfield
   And User clicks on Iniciar sesión button

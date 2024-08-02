@@ -1,14 +1,16 @@
-import { expect, $ } from "@wdio/globals";
+import { $ } from "@wdio/globals";
 
 class NewAccessScreen {
   get screenTitle() {
-    return $("//*[contains(@text,'¡Bienvenido a tu\nApp AZUL!')]");
+    return $(
+      "//*[contains(@text,'Vende desde tu móvil\nde forma fácil y segura')]"
+    );
   }
   get yaSoyClienteButton() {
-    return $("//*[contains(@text,'¡Bienvenido a tu\nApp AZUL!')]");
+    return $("//*[contains(@text,'Ya soy cliente')]");
   }
   get AfiliarmeButton() {
-    return $("//*[contains(@text,'¡Bienvenido a tu\nApp AZUL!')]");
+    return $("//*[contains(@resource-id,'Afiliarme')]");
   }
   get PressBackButton() {
     return $("");
