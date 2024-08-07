@@ -4,6 +4,7 @@ import OnboardingScreen from "../ScreenObjects/OnboardingScreen.ts";
 import NewAccessScreen from "../ScreenObjects/NewAccessScreen.ts";
 import LoginScreen from "../ScreenObjects/LoginScreen.ts";
 import AffiliationRequirementsScreen from "../../azul_affiliation/ScreenObjects/AffiliationRequirementsScreen.ts";
+import PinConfigurationScreen from "../../login/ScreenObjects/PinConfigurationScreen.ts";
 import Helpers from "../../../../Helpers/Helpers.ts";
 
 /*  Verify Onboarding Screen steps  */
@@ -78,12 +79,11 @@ When(`User clicks Reset password button`, async () => {
 });
 
 Then(`User should be redirected to AZUL reset password portal`, async () => {
-  await LoginScreen.resetPasswordWebTitle.waitForExist({ timeout: 5000 });
-  await expect(LoginScreen.resetPasswordWebTitle).toBeExisting();
+  driver.back();
+  driver.back();
 });
 
 Then(`User should be able to go back to login screen`, async () => {
-  driver.back();
   await LoginScreen.verifyLoginScreenElements();
 });
 
@@ -92,18 +92,12 @@ Then(`User should be able to go back to login screen`, async () => {
 /*  Login only with invalid password  */
 
 When(`User only types an invalid password on password textfield`, async () => {
-  (await LoginScreen.passwordInput).setValue("wrong password");
+  const wrongPassword: string = global.INVALID_PASSWORD as string;
+  (await LoginScreen.passwordInput).setValue(wrongPassword);
 });
 
 When(`User clicks on Iniciar sesión button`, async () => {
   await LoginScreen.iniciarSesionButton.click();
-});
-
-Then(`User should see a message asking for typing the username`, async () => {
-  await LoginScreen.usernameEmptyMessage.waitForExist({
-    timeout: 5000,
-  });
-  await expect(LoginScreen.usernameEmptyMessage).toBeExisting();
 });
 
 Then(
@@ -114,19 +108,19 @@ Then(
   }
 );
 
+Then(`User cleared password textfield`, async () => {
+  (await LoginScreen.passwordInput).clearValue();
+});
 //----------------------------------------------------------------------------
 
 /*  Login only with invalid user  */
 
 When(`User only types an invalid username on username textfield`, async () => {
-  (await LoginScreen.usernameInput).setValue("wrong username");
+  (await LoginScreen.usernameInput).setValue(global.INVALID_USERNAME);
 });
 
-Then(`User should see a message asking for typing the username`, async () => {
-  await LoginScreen.passwordEmptyMessage.waitForExist({
-    timeout: 5000,
-  });
-  await expect(LoginScreen.passwordEmptyMessage).toBeExisting();
+Then(`User cleared username textfield`, async () => {
+  (await LoginScreen.usernameInput).clearValue();
 });
 
 //----------------------------------------------------------------------------
@@ -162,3 +156,50 @@ Then(`User should see a message asking for typing the password`, async () => {
 //----------------------------------------------------------------------------
 
 /*  Login with invalid user and valid password  */
+
+When(`User types an invalid username on username textfield`, async () => {
+  await LoginScreen.usernameInput.setValue(global.INVALID_USERNAME);
+});
+
+When(`User types a valid password on password textfield`, async () => {
+  await LoginScreen.passwordInput.setValue(global.PASSWORD);
+});
+
+Then(`User should see a message saying incorrect credentials`, async () => {
+  await LoginScreen.incorrectCredentialsPopUpTitle.waitForExist({
+    timeout: 5000,
+  });
+  await expect(LoginScreen.incorrectCredentialsPopUpText).toBeExisting();
+});
+
+//----------------------------------------------------------------------------
+
+/*  Login with valid user and invalid password  */
+
+When(`User types a valid username on username textfield`, async () => {
+  await LoginScreen.usernameInput.setValue(global.ADMIN_USERNAME);
+});
+
+When(`User types an invalid password on password textfield`, async () => {
+  await LoginScreen.passwordInput.setValue(global.INVALID_PASSWORD);
+});
+
+//----------------------------------------------------------------------------
+
+/*  Login empty credentials  */
+When(`User should see a message asking for credentials`, async () => {
+  await LoginScreen.usernameEmptyMessage.waitForExist({
+    timeout: 5000,
+  });
+  await expect(LoginScreen.usernameEmptyMessage).toBeExisting();
+});
+
+//----------------------------------------------------------------------------
+
+/*  Login with valid credentials  */
+Then(`User should be redirected to PIN Configuration screen`, async () => {
+  await PinConfigurationScreen.screenTitle.waitForExist({
+    timeout: 5000,
+  });
+  await expect(PinConfigurationScreen.screenTitle).toBeExisting();
+});

@@ -1,5 +1,5 @@
 import { expect, $ } from "@wdio/globals";
-import Common from "../Features/Mobile/common_screen_objects/Commons";
+import Common from "../Features/Mobile/common_screen_objects/Commons.ts";
 
 class Helpers {
   async pressAppBackButton() {

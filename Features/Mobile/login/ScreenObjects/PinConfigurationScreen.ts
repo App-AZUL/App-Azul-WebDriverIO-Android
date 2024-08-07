@@ -1,9 +1,9 @@
 import { $ } from "@wdio/globals";
 
-class NewAccessScreen {
+class PinConfigurationScreen {
   get screenTitle() {
     return $(
-      "//*[contains(@text,'Vende desde tu móvil\nde forma fácil y segura')]"
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/welcomeText"]'
     );
   }
   get yaSoyClienteButton() {
@@ -19,4 +19,4 @@ class NewAccessScreen {
   }
 }
 
-export default new NewAccessScreen();
+export default new PinConfigurationScreen();

@@ -6,7 +6,7 @@ class Commons {
   }
   get okButton() {
     return $(
-      "//*[@class = 'android.widget.Button' and (@text = 'OK ' or . = 'OK ') and @resource-id = 'android:id/button1']"
+      "//*[@class = 'android.widget.Button' and (@text = 'OK ' or . = 'OK ') and @resource-id = 'android:id/button1'] | //*[contains(@text,'Continuar')]"
     );
   }
 }

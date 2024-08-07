@@ -3,36 +3,45 @@ import AffiliationRequirementsScreen from "../../azul_affiliation/ScreenObjects/
 
 class LoginScreen {
   /* Screen Elements */
-  get screenTitle() {
-    return $(
-      "//*[contains(@text,'Vende desde tu móvil\nde forma fácil y segura')]"
-    );
-  }
   get usernameInput() {
-    return $("//*[contains(@text,'Ya soy cliente')]");
+    return $(
+      '//android.widget.EditText[@resource-id="com.sdp.appazul:id/editUsername"]'
+    );
   }
   get passwordInput() {
     return $(
-      "//*[@class = 'android.widget.EditText' and @resource-id = 'com.sdp.appazul:id/edit_password']"
+      '//android.widget.EditText[@resource-id="com.sdp.appazul:id/edit_password"]'
     );
   }
   get iniciarSesionButton() {
-    return $("//*[(@text = 'Iniciar sesión' or . = 'Iniciar sesión')]");
+    return $(
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvFinalAmount"]'
+    );
   }
   get resetPasswordButton() {
-    return $("");
+    return $(
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/forgotPasswordLabel"]'
+    );
   }
   get afiliateAquiButton() {
-    return $("");
+    return $(
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/register"]'
+    );
   }
   get appVersionLabel() {
-    return $("");
+    return $(
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/versionText"]'
+    );
   }
   get informativeText() {
-    return $("");
+    return $(
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/textView3"]'
+    );
   }
   get resetPasswordWebTitle() {
-    return $("");
+    return $(
+      '//android.widget.TextView[@text="¡Hola! Para poder recuperar tu contraseña, por favor, responde la información que a continuación te solicitamos:"]'
+    );
   }
 
   /* Pop up messages */
@@ -43,24 +52,20 @@ class LoginScreen {
   }
   get passwordEmptyMessage() {
     return $(
-      "//*[@class = 'android.widget.TextView' and (@text = 'Por favor introduce tu contraseña para continuar.' or . = 'Por favor introduce tu contraseña para continuar.') and @resource-id = 'android:id/message']"
+      "//*[contains(@text,'Por favor introduce tu contraseña para continuar.')]"
     );
   }
   get incorrectCredentialsPopUpTitle() {
-    return $("");
+    return $(
+      "//*[contains(@text,'Las credenciales suministradas son incorrectas')]"
+    );
   }
   get incorrectCredentialsPopUpText() {
-    return $("");
+    return $("//*[contains(@text,'Por favor, inténtalo de nuevo')]");
   }
 
   /* Functions */
   async verifyLoginScreenElements() {
-    //Verify screen title
-    await this.screenTitle.waitForExist({
-      timeout: 5000,
-    });
-    await expect(this.screenTitle).toBeExisting();
-
     //Verify user input
     await this.usernameInput.waitForExist({
       timeout: 5000,
@@ -90,22 +95,11 @@ class LoginScreen {
       timeout: 5000,
     });
     await expect(this.appVersionLabel).toBeExisting();
-
-    //verify informative
-    await this.screenTitle.waitForExist({
-      timeout: 5000,
-    });
-    await expect(this.screenTitle).toBeExisting();
   }
 
   async verifyResetPassword() {
     await this.resetPasswordButton.click();
     driver.back();
-
-    await this.screenTitle.waitForExist({
-      timeout: 5000,
-    });
-    await expect(this.screenTitle).toBeExisting();
   }
 
   async verifyAfiliateAquiButton() {
