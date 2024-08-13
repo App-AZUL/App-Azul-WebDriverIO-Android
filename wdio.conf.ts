@@ -61,7 +61,17 @@ export const config: Options.Testrunner = {
 
   framework: "cucumber",
 
-  reporters: ["spec"],
+  reporters: [
+    "spec",
+    [
+      "allure",
+      {
+        outputDir: "allure-results",
+        disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: false,
+      },
+    ],
+  ],
 
   cucumberOpts: {
     require: ["./features/**/*.ts"], // Update if needed

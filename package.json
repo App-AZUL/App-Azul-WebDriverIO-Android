@@ -11,6 +11,7 @@
     "@wdio/mocha-framework": "^8.39.0",
     "@wdio/spec-reporter": "^8.39.0",
     "@wdio/visual-service": "^5.1.0",
+    "allure-commandline": "^2.30.0",
     "appium-uiautomator2-driver": "^3.7.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
