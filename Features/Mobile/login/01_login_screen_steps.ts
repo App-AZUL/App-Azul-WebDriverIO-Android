@@ -9,22 +9,24 @@ import Helpers from "../../../Helpers/Helpers.ts";
 
 /*  Verify Onboarding Screen steps  */
 Given("User started the app by first time", async () => {
-  await OnboardingScreen.bienvenidoTitle.waitForExist({ timeout: 5000 });
-  await expect(OnboardingScreen.bienvenidoTitle).toBeExisting();
+  await Helpers.verifyElement(
+    OnboardingScreen.bienvenidoTitle,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
 });
 
 When(
   "User checks the elements in the screen matches with the provided design",
   async () => {
-    await OnboardingScreen.aprendeComoHacerloButton.waitForExist({
-      timeout: 5000,
-    });
-    await expect(OnboardingScreen.aprendeComoHacerloButton).toBeExisting();
+    await Helpers.verifyElement(
+      OnboardingScreen.aprendeComoHacerloButton,
+      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    );
 
-    await OnboardingScreen.saltarDemostracionButton.waitForExist({
-      timeout: 5000,
-    });
-    await expect(OnboardingScreen.saltarDemostracionButton).toBeExisting();
+    await Helpers.verifyElement(
+      OnboardingScreen.saltarDemostracionButton,
+      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    );
 
     await OnboardingScreen.aprendeComoHacerloButton.click();
     await OnboardingScreen.verifyOnboardingTexts();
@@ -39,8 +41,10 @@ Then("User can continue to New Access Screen", async () => {
 
 /*  Verify New Access screen steps  */
 Given(`User is on the New Access Screen`, async () => {
-  await NewAccessScreen.screenTitle.waitForExist({ timeout: 5000 });
-  await expect(NewAccessScreen.screenTitle).toBeExisting();
+  await Helpers.verifyElement(
+    NewAccessScreen.screenTitle,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
 });
 
 When(`User press on Afiliarme`, async () => {
@@ -48,10 +52,10 @@ When(`User press on Afiliarme`, async () => {
 });
 
 Then(`User should be on the Affiliation Requirements Screen`, async () => {
-  await AffiliationRequirementsScreen.screenTitle.waitForExist({
-    timeout: 5000,
-  });
-  await expect(AffiliationRequirementsScreen.screenTitle).toBeExisting();
+  await Helpers.verifyElement(
+    AffiliationRequirementsScreen.screenTitle,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
 });
 
 When(`User press back`, async () => {
@@ -71,7 +75,14 @@ Then(`User should be on Login Screen`, async () => {
 /*  Verify Reset Password  */
 
 Given(`User is on Login screen`, async () => {
-  await LoginScreen.verifyLoginScreenElements();
+  const userIsOnLoginScreen = await LoginScreen.verifyLoginScreenElements();
+  if (!userIsOnLoginScreen) {
+    await Helpers.verifyElement(
+      OnboardingScreen.bienvenidoTitle,
+      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    );
+    await OnboardingScreen.saltarDemostracionButton.click();
+  }
 });
 
 When(`User clicks Reset password button`, async () => {
@@ -132,10 +143,10 @@ When(`User only types a valid password on password textfield`, async () => {
 });
 
 Then(`User should see a message asking for typing the username`, async () => {
-  await LoginScreen.usernameEmptyMessage.waitForExist({
-    timeout: 5000,
-  });
-  await expect(LoginScreen.usernameEmptyMessage).toBeExisting();
+  await Helpers.verifyElement(
+    LoginScreen.usernameEmptyMessage,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
 });
 
 //----------------------------------------------------------------------------
@@ -147,10 +158,10 @@ When(`User only types a valid username on username textfield`, async () => {
 });
 
 Then(`User should see a message asking for typing the password`, async () => {
-  await LoginScreen.passwordEmptyMessage.waitForExist({
-    timeout: 5000,
-  });
-  await expect(LoginScreen.passwordEmptyMessage).toBeExisting();
+  await Helpers.verifyElement(
+    LoginScreen.passwordEmptyMessage,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
 });
 
 //----------------------------------------------------------------------------
@@ -166,10 +177,10 @@ When(`User types a valid password on password textfield`, async () => {
 });
 
 Then(`User should see a message saying incorrect credentials`, async () => {
-  await LoginScreen.incorrectCredentialsPopUpTitle.waitForExist({
-    timeout: 5000,
-  });
-  await expect(LoginScreen.incorrectCredentialsPopUpText).toBeExisting();
+  await Helpers.verifyElement(
+    LoginScreen.incorrectCredentialsPopUpTitle,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
 });
 
 //----------------------------------------------------------------------------
@@ -188,18 +199,18 @@ When(`User types an invalid password on password textfield`, async () => {
 
 /*  Login empty credentials  */
 When(`User should see a message asking for credentials`, async () => {
-  await LoginScreen.usernameEmptyMessage.waitForExist({
-    timeout: 5000,
-  });
-  await expect(LoginScreen.usernameEmptyMessage).toBeExisting();
+  await Helpers.verifyElement(
+    LoginScreen.usernameEmptyMessage,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
 });
 
 //----------------------------------------------------------------------------
 
 /*  Login with valid credentials  */
 Then(`User should be redirected to PIN Configuration screen`, async () => {
-  await PinConfigurationScreen.screenTitle.waitForExist({
-    timeout: 5000,
-  });
-  await expect(PinConfigurationScreen.screenTitle).toBeExisting();
+  await Helpers.verifyElement(
+    PinConfigurationScreen.screenTitle,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
 });

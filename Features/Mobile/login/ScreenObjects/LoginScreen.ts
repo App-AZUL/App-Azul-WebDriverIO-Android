@@ -1,5 +1,6 @@
 import { $ } from "@wdio/globals";
 import AffiliationRequirementsScreen from "../../azul_affiliation/ScreenObjects/AffiliationRequirementsScreen.ts";
+import Helpers from "../../../../Helpers/Helpers.ts";
 
 class LoginScreen {
   /* Screen Elements */
@@ -66,35 +67,30 @@ class LoginScreen {
 
   /* Functions */
   async verifyLoginScreenElements() {
-    //Verify user input
-    await this.usernameInput.waitForExist({
-      timeout: 5000,
-    });
-    await expect(this.usernameInput).toBeExisting();
+    const timeout = 5000;
+    let allElementsPresent = true;
 
-    //Verify password input
-    await this.passwordInput.waitForExist({
-      timeout: 5000,
-    });
-    await expect(this.passwordInput).toBeExisting();
+    // Verify user input
+    if (!(await Helpers.verifyElement(this.usernameInput, timeout)))
+      allElementsPresent = false;
 
-    //verify reset passwordd button
-    await this.resetPasswordButton.waitForExist({
-      timeout: 5000,
-    });
-    await expect(this.resetPasswordButton).toBeExisting();
+    // Verify password input
+    if (!(await Helpers.verifyElement(this.passwordInput, timeout)))
+      allElementsPresent = false;
 
-    //verify afiliate aqui button
-    await this.afiliateAquiButton.waitForExist({
-      timeout: 5000,
-    });
-    await expect(this.afiliateAquiButton).toBeExisting();
+    // Verify reset password button
+    if (!(await Helpers.verifyElement(this.resetPasswordButton, timeout)))
+      allElementsPresent = false;
 
-    //verify version label
-    await this.appVersionLabel.waitForExist({
-      timeout: 5000,
-    });
-    await expect(this.appVersionLabel).toBeExisting();
+    // Verify affiliate aqui button
+    if (!(await Helpers.verifyElement(this.afiliateAquiButton, timeout)))
+      allElementsPresent = false;
+
+    // Verify version label
+    if (!(await Helpers.verifyElement(this.appVersionLabel, timeout)))
+      allElementsPresent = false;
+
+    return allElementsPresent;
   }
 
   async verifyResetPassword() {

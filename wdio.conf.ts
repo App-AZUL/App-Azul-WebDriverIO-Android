@@ -9,9 +9,8 @@ import {
   NOT_PERMISSION_USERNAME,
   PASSWORD,
   APP_AZUL_BUNDLE,
+  IS_PREVIOUS_TEST_SUCCESS,
 } from "./Helpers/ConstantsDev.ts";
-
-let driver: WebdriverIO.Browser;
 
 export const config: Options.Testrunner = {
   runner: "local",
@@ -61,6 +60,31 @@ export const config: Options.Testrunner = {
 
   framework: "cucumber",
 
+  beforeTest: async function (test, context) {
+    console.log("Starting the app before the test...");
+    if (!(global as any).IS_PREVIOUS_TEST_SUCCESS) {
+      await driver.activateApp((global as any).APP_AZUL_BUNDLE);
+    }
+  },
+
+  afterTest: async function (
+    test,
+    context,
+    { error, result, duration, passed, retries }
+  ) {
+    if (!passed) {
+      //Close app & delete data when test fail
+      console.log(`Test failed: ${test.title}. Closing the app...`);
+      (global as any).IS_PREVIOUS_TEST_SUCCESS = false;
+      await driver.terminateApp((global as any).APP_AZUL_BUNDLE);
+      await driver.execute("mobile: shell", {
+        command: "pm clear " + (global as any).APP_AZUL_BUNDLE,
+      });
+    } else {
+      (global as any).IS_PREVIOUS_TEST_SUCCESS = true;
+    }
+  },
+
   reporters: [
     "spec",
     [
@@ -98,5 +122,6 @@ export const config: Options.Testrunner = {
     (global as any).NOT_AFFILIATED_USERNAME = NOT_AFFILIATED_USERNAME;
     (global as any).NOT_PERMISSION_USERNAME = NOT_PERMISSION_USERNAME;
     (global as any).APP_AZUL_BUNDLE = APP_AZUL_BUNDLE;
+    (global as any).IS_PREVIOUS_TEST_SUCCESS = IS_PREVIOUS_TEST_SUCCESS;
   },
 };
