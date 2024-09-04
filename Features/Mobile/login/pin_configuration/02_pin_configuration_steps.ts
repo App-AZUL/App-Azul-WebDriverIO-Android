@@ -54,12 +54,21 @@ When(`User logged in succesfully`, async () => {
   );
 });
 
-When(`User logged out`, async () => {});
-
-Then(`User should see Equal PIN Configuration mesage`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
+When(`User logged out`, async () => {
+  await DashboardScreen.logOutFromDashboard();
 });
 
-Then(`User should be logged-in succesfully`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
+Then(`User should see Equal PIN Configuration mesage`, async () => {
+  await Helpers.verifyElement(
+    PinConfigurationScreen.equalPinConfirmationMessage,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
+  await Helpers.dismissPopUp();
+});
+
+Then(`User should be logged-in succesfully`, async () => {
+  await Helpers.verifyElement(
+    DashboardScreen.screenTitle,
+    Helpers.TEN_SECONDS_IN_MILLISECONDS
+  );
 });

@@ -21,8 +21,23 @@ class Helpers {
     await Common.okButton.click();
   }
   async verifyElement(element, timeout) {
-    const isExisting = await element.waitForExist({ timeout });
-    return isExisting && (await element.isExisting());
+    try {
+      var isExisting = await driver.waitUntil(
+        async () => await element.isDisplayed(),
+        {
+          timeout: timeout, // custom timeout in milliseconds
+          timeoutMsg: `Element ${element.selector.toString()} not displayed after ${timeout} ms`,
+          interval: 500, // polling interval in milliseconds
+        }
+      );
+    } catch (error) {
+      isExisting = false;
+      //await driver.deleteSession();
+      //process.exit(1);
+      (global as any).IS_PREVIOUS_TEST_SUCCESS = false;
+      throw new Error("Element not found");
+    }
+    return isExisting;
   }
 }
 

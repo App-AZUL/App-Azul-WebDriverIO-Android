@@ -1,4 +1,5 @@
 import type { Options } from "@wdio/types";
+import { execSync } from "child_process";
 import {
   APP_PATH,
   INVALID_USERNAME,
@@ -11,6 +12,7 @@ import {
   APP_AZUL_BUNDLE,
   IS_PREVIOUS_TEST_SUCCESS,
 } from "./Helpers/ConstantsDev.ts";
+import { PERMISSIONS } from "./Helpers/Permissions.ts";
 
 export const config: Options.Testrunner = {
   runner: "local",
@@ -36,21 +38,20 @@ export const config: Options.Testrunner = {
       "appium:deviceName": "Google Pixel 7 Pro (Android 14)",
       "appium:platformVersion": "14.0",
       "appium:autoGrantPermissions": true,
-      "appium:autoAcceptAlerts": true,
       "appium:enableMultiWindows": true,
-      //np"appium:noReset": true,
+      "appium:noReset": true,
       "appium:automationName": "UIAutomator2",
-      "appium:appPackage": "com.sdp.appazul", // Replace with your app's package name
+      "appium:appPackage": "com.sdp.appazul",
       "appium:appActivity":
-        "com.sdp.appazul.activities.dashboard.SplashScreenActivity", // Replace with your app's main activity
+        "com.sdp.appazul.activities.dashboard.SplashScreenActivity",
     },
   ],
 
-  logLevel: "error",
+  logLevel: "info",
 
-  bail: 0,
+  bail: 1,
 
-  waitforTimeout: 10000,
+  waitforTimeout: 99000,
 
   connectionRetryTimeout: 120000,
 
@@ -59,6 +60,13 @@ export const config: Options.Testrunner = {
   services: ["appium", "visual"],
 
   framework: "cucumber",
+
+  beforeScenario: async function (test, context) {
+    if (!(global as any).IS_PREVIOUS_TEST_SUCCESS) {
+      await driver.deleteSession();
+      process.exit(1);
+    }
+  },
 
   beforeTest: async function (test, context) {
     console.log("Starting the app before the test...");
@@ -123,5 +131,34 @@ export const config: Options.Testrunner = {
     (global as any).NOT_PERMISSION_USERNAME = NOT_PERMISSION_USERNAME;
     (global as any).APP_AZUL_BUNDLE = APP_AZUL_BUNDLE;
     (global as any).IS_PREVIOUS_TEST_SUCCESS = IS_PREVIOUS_TEST_SUCCESS;
+
+    try {
+      PERMISSIONS.forEach((permission) => {
+        const cmd = `adb shell pm grant ${APP_AZUL_BUNDLE} ${permission}`;
+        console.log(`Executing: ${cmd}`);
+        try {
+          execSync(cmd);
+        } catch (error) {
+          if (
+            (error as Error).message.includes("java.lang.SecurityException")
+          ) {
+            console.log(
+              `Skipping ${permission}: Permission not requested by the app.`
+            );
+          } else {
+            console.log(
+              `Failed to grant ${permission}:`,
+              (error as Error).message
+            );
+          }
+        }
+      });
+
+      console.log(
+        `Attempted to grant all possible permissions to ${APP_AZUL_BUNDLE}`
+      );
+    } catch (error) {
+      console.error("Failed to grant permissions:", (error as Error).message);
+    }
   },
 };

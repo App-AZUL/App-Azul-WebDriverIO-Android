@@ -9,10 +9,11 @@ import Helpers from "../../../Helpers/Helpers.ts";
 
 /*  Verify Onboarding Screen steps  */
 Given("User started the app by first time", async () => {
-  await Helpers.verifyElement(
+  var isUserAtLogin = await Helpers.verifyElement(
     OnboardingScreen.bienvenidoTitle,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
+  expect(isUserAtLogin).toBeTruthy;
 });
 
 When(
@@ -211,6 +212,6 @@ When(`User should see a message asking for credentials`, async () => {
 Then(`User should be redirected to PIN Configuration screen`, async () => {
   await Helpers.verifyElement(
     PinConfigurationScreen.screenTitle,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
   );
 });

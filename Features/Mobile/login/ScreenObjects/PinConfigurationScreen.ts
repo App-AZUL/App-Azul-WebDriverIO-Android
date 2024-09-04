@@ -21,6 +21,11 @@ class PinConfigurationScreen {
       "//*[@class = 'android.widget.TextView' and (@text = 'Los dígitos no pueden ser secuenciales' or . = 'Los dígitos no pueden ser secuenciales') and @resource-id = 'com.sdp.appazul:id/textMsg']"
     );
   }
+  get equalPinConfirmationMessage() {
+    return $(
+      "//*[@class = 'android.widget.TextView' and (@text = 'Utiliza un PIN diferente al anterior' or . = 'Utiliza un PIN diferente al anterior') and @resource-id = 'com.sdp.appazul:id/textMsg']"
+    );
+  }
   async typePin(arg0: number) {
     let pinString = arg0.toString();
     for (let i = 0; i < pinString.length; i++) {

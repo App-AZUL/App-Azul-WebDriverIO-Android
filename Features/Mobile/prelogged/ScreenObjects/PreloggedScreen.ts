@@ -35,6 +35,11 @@ class PreloggedScreen {
       "//*[@class = 'android.widget.TextView' and (@text = '¡Crea Links de Pagos para Sólo Autorización!' or . = '¡Crea Links de Pagos para Sólo Autorización!') and @resource-id = 'com.sdp.appazul:id/v1']"
     );
   }
+  get nextButtonTips() {
+    return $(
+      "//*[@class = 'android.widget.RelativeLayout' and @resource-id = 'com.sdp.appazul:id/goToNext' and (@text = '' or . = '')]"
+    );
+  }
 }
 
 export default new PreloggedScreen();
