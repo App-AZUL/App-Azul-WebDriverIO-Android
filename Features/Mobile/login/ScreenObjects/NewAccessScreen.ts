@@ -1,4 +1,6 @@
 import { $ } from "@wdio/globals";
+import Helpers from "../../../../Helpers/Helpers.ts";
+import OnboardingScreen from "./OnboardingScreen.ts";
 
 class NewAccessScreen {
   get screenTitle() {
@@ -16,6 +18,17 @@ class NewAccessScreen {
   }
   get PressBackButton() {
     return $("");
+  }
+  async navigateToNewAccessScreen() {
+    if (
+      !(await Helpers.verifyElementExist(
+        this.screenTitle,
+        Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+      ))
+    ) {
+      await Helpers.startAppByFirstTime();
+      await OnboardingScreen.skipOnboardingScreen();
+    }
   }
 }
 

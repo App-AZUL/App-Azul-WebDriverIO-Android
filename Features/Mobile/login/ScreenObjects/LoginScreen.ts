@@ -1,5 +1,6 @@
 import { $ } from "@wdio/globals";
 import AffiliationRequirementsScreen from "../../azul_affiliation/ScreenObjects/AffiliationRequirementsScreen.ts";
+import NewAccessScreen from "./NewAccessScreen.ts";
 import Helpers from "../../../../Helpers/Helpers.ts";
 
 class LoginScreen {
@@ -71,23 +72,35 @@ class LoginScreen {
     let allElementsPresent = true;
 
     // Verify user input
-    if (!(await Helpers.verifyElement(this.usernameInput, timeout)))
+    if (!(await Helpers.verifyElementIsDisplayed(this.usernameInput, timeout)))
       allElementsPresent = false;
 
     // Verify password input
-    if (!(await Helpers.verifyElement(this.passwordInput, timeout)))
+    if (!(await Helpers.verifyElementIsDisplayed(this.passwordInput, timeout)))
       allElementsPresent = false;
 
     // Verify reset password button
-    if (!(await Helpers.verifyElement(this.resetPasswordButton, timeout)))
+    if (
+      !(await Helpers.verifyElementIsDisplayed(
+        this.resetPasswordButton,
+        timeout
+      ))
+    )
       allElementsPresent = false;
 
     // Verify affiliate aqui button
-    if (!(await Helpers.verifyElement(this.afiliateAquiButton, timeout)))
+    if (
+      !(await Helpers.verifyElementIsDisplayed(
+        this.afiliateAquiButton,
+        timeout
+      ))
+    )
       allElementsPresent = false;
 
     // Verify version label
-    if (!(await Helpers.verifyElement(this.appVersionLabel, timeout)))
+    if (
+      !(await Helpers.verifyElementIsDisplayed(this.appVersionLabel, timeout))
+    )
       allElementsPresent = false;
 
     return allElementsPresent;
@@ -104,6 +117,17 @@ class LoginScreen {
       timeout: 5000,
     });
     await expect(AffiliationRequirementsScreen.screenTitle).toBeExisting();
+  }
+  async navigateToLoginScreen() {
+    if (
+      !(await Helpers.verifyElementExist(
+        this.usernameInput,
+        Helpers.TEN_SECONDS_IN_MILLISECONDS
+      ))
+    ) {
+      await NewAccessScreen.navigateToNewAccessScreen();
+      await NewAccessScreen.yaSoyClienteButton.click();
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 import type { Options } from "@wdio/types";
-import { execSync } from "child_process";
+import allure from "@wdio/allure-reporter";
 import {
   APP_PATH,
   INVALID_USERNAME,
@@ -12,7 +12,6 @@ import {
   APP_AZUL_BUNDLE,
   IS_PREVIOUS_TEST_SUCCESS,
 } from "./Helpers/ConstantsDev.ts";
-import { PERMISSIONS } from "./Helpers/Permissions.ts";
 
 export const config: Options.Testrunner = {
   runner: "local",
@@ -24,7 +23,7 @@ export const config: Options.Testrunner = {
     },
   },
 
-  port: 4724,
+  port: 4723,
 
   specs: ["./features/**/*.feature"],
 
@@ -37,9 +36,8 @@ export const config: Options.Testrunner = {
       "appium:platformName": "Android",
       "appium:deviceName": "Google Pixel 7 Pro (Android 14)",
       "appium:platformVersion": "14.0",
-      "appium:autoGrantPermissions": true,
-      "appium:enableMultiWindows": true,
       "appium:noReset": true,
+      "appium:enableMultiWindows": true,
       "appium:automationName": "UIAutomator2",
       "appium:appPackage": "com.sdp.appazul",
       "appium:appActivity":
@@ -55,24 +53,22 @@ export const config: Options.Testrunner = {
 
   connectionRetryTimeout: 120000,
 
-  connectionRetryCount: 1,
+  connectionRetryCount: 0,
 
   services: ["appium", "visual"],
 
   framework: "cucumber",
 
-  beforeScenario: async function (test, context) {
-    if (!(global as any).IS_PREVIOUS_TEST_SUCCESS) {
-      await driver.deleteSession();
-      process.exit(1);
-    }
-  },
+  beforeSession: async function (config, capabilities, specs) {},
 
-  beforeTest: async function (test, context) {
-    console.log("Starting the app before the test...");
-    if (!(global as any).IS_PREVIOUS_TEST_SUCCESS) {
-      await driver.activateApp((global as any).APP_AZUL_BUNDLE);
-    }
+  afterStep: async function (step, scenario) {
+    // Take a screenshot after each step
+    const screenshot = await browser.takeScreenshot();
+    allure.addAttachment(
+      `Screenshot for step: ${step.text}`,
+      Buffer.from(screenshot, "base64"),
+      "image/png"
+    );
   },
 
   afterTest: async function (
@@ -80,17 +76,22 @@ export const config: Options.Testrunner = {
     context,
     { error, result, duration, passed, retries }
   ) {
-    if (!passed) {
-      //Close app & delete data when test fail
-      console.log(`Test failed: ${test.title}. Closing the app...`);
-      (global as any).IS_PREVIOUS_TEST_SUCCESS = false;
-      await driver.terminateApp((global as any).APP_AZUL_BUNDLE);
-      await driver.execute("mobile: shell", {
-        command: "pm clear " + (global as any).APP_AZUL_BUNDLE,
-      });
-    } else {
-      (global as any).IS_PREVIOUS_TEST_SUCCESS = true;
-    }
+    // Take a screenshot after every test, whether it passed or failed
+    const screenshot = await driver.takeScreenshot();
+
+    // Attach the screenshot to the Allure report
+    // Add a descriptive screenshot name
+    const testStatus = passed ? "PASSED" : "FAILED";
+    const screenshotName = `${
+      test.title
+    } - ${testStatus} - ${new Date().toISOString()}`;
+
+    // Attach the screenshot to the Allure report
+    allure.addAttachment(
+      screenshotName,
+      Buffer.from(screenshot, "base64"),
+      "image/png"
+    );
   },
 
   reporters: [
@@ -99,8 +100,6 @@ export const config: Options.Testrunner = {
       "allure",
       {
         outputDir: "allure-results",
-        disableWebdriverStepsReporting: true,
-        disableWebdriverScreenshotsReporting: false,
       },
     ],
   ],
@@ -116,9 +115,10 @@ export const config: Options.Testrunner = {
     source: true,
     strict: false,
     tagExpression: "",
-    timeout: 60000,
+    timeout: 90000,
     ignoreUndefinedDefinitions: false,
   },
+
   before: function (capabilities, specs) {
     // Attach constants to global object
     (global as any).APP_PATH = APP_PATH;
@@ -131,34 +131,5 @@ export const config: Options.Testrunner = {
     (global as any).NOT_PERMISSION_USERNAME = NOT_PERMISSION_USERNAME;
     (global as any).APP_AZUL_BUNDLE = APP_AZUL_BUNDLE;
     (global as any).IS_PREVIOUS_TEST_SUCCESS = IS_PREVIOUS_TEST_SUCCESS;
-
-    try {
-      PERMISSIONS.forEach((permission) => {
-        const cmd = `adb shell pm grant ${APP_AZUL_BUNDLE} ${permission}`;
-        console.log(`Executing: ${cmd}`);
-        try {
-          execSync(cmd);
-        } catch (error) {
-          if (
-            (error as Error).message.includes("java.lang.SecurityException")
-          ) {
-            console.log(
-              `Skipping ${permission}: Permission not requested by the app.`
-            );
-          } else {
-            console.log(
-              `Failed to grant ${permission}:`,
-              (error as Error).message
-            );
-          }
-        }
-      });
-
-      console.log(
-        `Attempted to grant all possible permissions to ${APP_AZUL_BUNDLE}`
-      );
-    } catch (error) {
-      console.error("Failed to grant permissions:", (error as Error).message);
-    }
   },
 };

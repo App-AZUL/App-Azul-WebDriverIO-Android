@@ -2,6 +2,7 @@ import { $ } from "@wdio/globals";
 import Helpers from "../../../../Helpers/Helpers.ts";
 import PreloggedScreen from "../../prelogged/ScreenObjects/PreloggedScreen.ts";
 import LoginScreen from "../../login/ScreenObjects/LoginScreen.ts";
+import Commons from "../../common_screen_objects/Commons.ts";
 
 class DashboardScreen {
   get screenTitle() {
@@ -22,17 +23,17 @@ class DashboardScreen {
   async logOutFromDashboard() {
     await this.burguerMenu.click();
     this.salirButton.click();
-    await Helpers.verifyElement(
+    await Helpers.verifyElementIsDisplayed(
       PreloggedScreen.enteradoButton,
       Helpers.TWENTY_SECONDS_IN_MILLISECONDS
     );
 
     await PreloggedScreen.nextButtonTips.click();
-    await Helpers.verifyElement(
+    await Helpers.verifyElementIsDisplayed(
       PreloggedScreen.secondPageTitle,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
     );
-    await Helpers.verifyElement(
+    await Helpers.verifyElementIsDisplayed(
       PreloggedScreen.secondPageTitle,
       Helpers.TEN_SECONDS_IN_MILLISECONDS
     );
@@ -40,18 +41,20 @@ class DashboardScreen {
 
     await PreloggedScreen.burguerMenu.click();
     await PreloggedScreen.desvincularButton.click();
-    await Helpers.verifyElement(
+    await Helpers.verifyElementIsDisplayed(
       PreloggedScreen.desvincularTitle,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
     );
-    await Helpers.verifyElement(
+    await Helpers.verifyElementIsDisplayed(
       PreloggedScreen.desvincularBody,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
     );
 
-    await Helpers.verifyElement(
+    (await Commons.siButton).click();
+
+    await Helpers.verifyElementIsDisplayed(
       LoginScreen.usernameInput,
-      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+      Helpers.TWENTY_SECONDS_IN_MILLISECONDS
     );
   }
 }

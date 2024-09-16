@@ -6,8 +6,14 @@ class Commons {
   }
   get okButton() {
     return $(
-      "//*[@class = 'android.widget.Button' and (@text = 'OK ' or . = 'OK ') and @resource-id = 'android:id/button1'] | //*[contains(@text,'Continuar')]"
+      "//*[@class = 'android.widget.Button' and (@text = 'OK ' or . = 'OK ') and @resource-id = 'android:id/button1'] | //*[contains(@text,'Continuar')] | //*[contains(@text,'Aceptar')]"
     );
+  }
+  get siButton() {
+    return $("//*[contains(@text,'SÍ')] | //*[contains(@text,'YES')]");
+  }
+  get noButton() {
+    return $("//*[contains(@text,'NO')]");
   }
 }
 

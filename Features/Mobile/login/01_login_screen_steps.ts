@@ -9,22 +9,23 @@ import Helpers from "../../../Helpers/Helpers.ts";
 
 /*  Verify Onboarding Screen steps  */
 Given("User started the app by first time", async () => {
-  var isUserAtLogin = await Helpers.verifyElement(
+  await Helpers.startAppByFirstTime();
+  var isUserAtOnboardingScreen = await Helpers.verifyElementIsDisplayed(
     OnboardingScreen.bienvenidoTitle,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
-  expect(isUserAtLogin).toBeTruthy;
+  await expect(isUserAtOnboardingScreen).toBeTruthy;
 });
 
 When(
   "User checks the elements in the screen matches with the provided design",
   async () => {
-    await Helpers.verifyElement(
+    await Helpers.verifyElementIsDisplayed(
       OnboardingScreen.aprendeComoHacerloButton,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
     );
 
-    await Helpers.verifyElement(
+    await Helpers.verifyElementIsDisplayed(
       OnboardingScreen.saltarDemostracionButton,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
     );
@@ -42,7 +43,8 @@ Then("User can continue to New Access Screen", async () => {
 
 /*  Verify New Access screen steps  */
 Given(`User is on the New Access Screen`, async () => {
-  await Helpers.verifyElement(
+  await NewAccessScreen.navigateToNewAccessScreen();
+  await Helpers.verifyElementIsDisplayed(
     NewAccessScreen.screenTitle,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
@@ -53,7 +55,7 @@ When(`User press on Afiliarme`, async () => {
 });
 
 Then(`User should be on the Affiliation Requirements Screen`, async () => {
-  await Helpers.verifyElement(
+  await Helpers.verifyElementIsDisplayed(
     AffiliationRequirementsScreen.screenTitle,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
@@ -68,6 +70,7 @@ When(`User press Ya soy cliente`, async () => {
 });
 
 Then(`User should be on Login Screen`, async () => {
+  await Helpers.acceptNotificationPermission();
   await LoginScreen.verifyLoginScreenElements();
 });
 
@@ -76,9 +79,10 @@ Then(`User should be on Login Screen`, async () => {
 /*  Verify Reset Password  */
 
 Given(`User is on Login screen`, async () => {
+  LoginScreen.navigateToLoginScreen();
   const userIsOnLoginScreen = await LoginScreen.verifyLoginScreenElements();
   if (!userIsOnLoginScreen) {
-    await Helpers.verifyElement(
+    await Helpers.verifyElementIsDisplayed(
       OnboardingScreen.bienvenidoTitle,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
     );
@@ -144,7 +148,8 @@ When(`User only types a valid password on password textfield`, async () => {
 });
 
 Then(`User should see a message asking for typing the username`, async () => {
-  await Helpers.verifyElement(
+  await driver.pause(3000);
+  await Helpers.verifyElementIsDisplayed(
     LoginScreen.usernameEmptyMessage,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
@@ -159,7 +164,7 @@ When(`User only types a valid username on username textfield`, async () => {
 });
 
 Then(`User should see a message asking for typing the password`, async () => {
-  await Helpers.verifyElement(
+  await Helpers.verifyElementIsDisplayed(
     LoginScreen.passwordEmptyMessage,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
@@ -178,7 +183,8 @@ When(`User types a valid password on password textfield`, async () => {
 });
 
 Then(`User should see a message saying incorrect credentials`, async () => {
-  await Helpers.verifyElement(
+  await driver.pause(3000);
+  await Helpers.verifyElementIsDisplayed(
     LoginScreen.incorrectCredentialsPopUpTitle,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
@@ -200,7 +206,8 @@ When(`User types an invalid password on password textfield`, async () => {
 
 /*  Login empty credentials  */
 When(`User should see a message asking for credentials`, async () => {
-  await Helpers.verifyElement(
+  await driver.pause(3000);
+  await Helpers.verifyElementIsDisplayed(
     LoginScreen.usernameEmptyMessage,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
@@ -210,7 +217,7 @@ When(`User should see a message asking for credentials`, async () => {
 
 /*  Login with valid credentials  */
 Then(`User should be redirected to PIN Configuration screen`, async () => {
-  await Helpers.verifyElement(
+  await Helpers.verifyElementIsDisplayed(
     PinConfigurationScreen.screenTitle,
     Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
   );
