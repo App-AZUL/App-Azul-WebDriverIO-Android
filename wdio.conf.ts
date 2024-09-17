@@ -59,19 +59,16 @@ export const config: Options.Testrunner = {
 
   framework: "cucumber",
 
-  beforeSession: async function (config, capabilities, specs) {},
-
-  afterStep: async function (step, scenario) {
-    // Take a screenshot after each step
-    const screenshot = await browser.takeScreenshot();
-    allure.addAttachment(
-      `Screenshot for step: ${step.text}`,
+  afterStep: async function (step) {
+    const screenshot = await driver.takeScreenshot();
+    /*allure.addAttachment(
+      `Failed Step: ${step.text}`,
       Buffer.from(screenshot, "base64"),
       "image/png"
-    );
+    );*/
   },
 
-  afterTest: async function (
+  /*afterTest: async function (
     test,
     context,
     { error, result, duration, passed, retries }
@@ -92,14 +89,15 @@ export const config: Options.Testrunner = {
       Buffer.from(screenshot, "base64"),
       "image/png"
     );
-  },
+  },*/
 
   reporters: [
-    "spec",
     [
       "allure",
       {
         outputDir: "allure-results",
+        disableWebdriverStepsReporting: true, // Disable WebDriver steps reporting
+        useCucumberStepReporter: true, // Use Cucumber step reporter to minimize reports
       },
     ],
   ],
