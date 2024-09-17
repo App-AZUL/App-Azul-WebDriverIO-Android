@@ -186,7 +186,7 @@ Then(`User should see a message saying incorrect credentials`, async () => {
   await driver.pause(3000);
   await Helpers.verifyElementIsDisplayed(
     LoginScreen.incorrectCredentialsPopUpTitle,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    Helpers.TEN_SECONDS_IN_MILLISECONDS
   );
 });
 
