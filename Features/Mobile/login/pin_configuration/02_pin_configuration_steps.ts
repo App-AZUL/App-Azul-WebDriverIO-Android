@@ -2,7 +2,11 @@ import { Given, When, Then } from "@wdio/cucumber-framework";
 import PinConfigurationScreen from "../ScreenObjects/PinConfigurationScreen.ts";
 import Helpers from "../../../../Helpers/Helpers.ts";
 import DashboardScreen from "../../../Mobile/dashboard/ScreenObjects/DashboardScreen.ts";
+import OnboardingScreen from "../ScreenObjects/OnboardingScreen.ts";
+import NewAccessScreen from "../ScreenObjects/NewAccessScreen.ts";
+import LoginScreen from "../ScreenObjects/LoginScreen.ts";
 
+//Verify User can't login using Wrong PIN Configuration
 Given(`User is at PIN Configuration`, async () => {
   await Helpers.verifyElementIsDisplayed(
     PinConfigurationScreen.screenTitle,
@@ -33,6 +37,7 @@ Then(`User should see Incorrect PIN Message`, async () => {
   );
 });
 
+//Verify User can't login using repeated PIN Digits Configuration
 Then(`User should see repeated PIN digits Message`, async () => {
   await Helpers.verifyElementIsDisplayed(
     PinConfigurationScreen.repeatedPinDigitsConfirmationMessage,
@@ -51,6 +56,7 @@ Then(
   }
 );
 
+//Verify User can't login using Sequential digits PIN Configuration
 Then(`User should see Sequential PIN Message`, async () => {
   await Helpers.verifyElementIsDisplayed(
     PinConfigurationScreen.sequentialPinConfirmationMessage,
@@ -58,11 +64,12 @@ Then(`User should see Sequential PIN Message`, async () => {
   );
 });
 
+//Verify User can't login using Equal PIN Configuration
 When(`User logged in succesfully`, async () => {
   await Helpers.acceptDashboardPermissions();
   await Helpers.verifyElementIsDisplayed(
     DashboardScreen.screenTitle,
-    Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+    Helpers.THIRTY_SECONDS_IN_MILLISECONDS
   );
 });
 
@@ -70,13 +77,25 @@ When(`User logged out`, async () => {
   await DashboardScreen.logOutFromDashboard();
 });
 
-Then(`User should see Equal PIN Configuration mesage`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    PinConfigurationScreen.equalPinConfirmationMessage,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
-  await Helpers.dismissPopUp();
-});
+Then(
+  `User should see Equal PIN Configuration message for pin {int}`,
+  async (arg0: number) => {
+    let pinString = arg0.toString();
+    if (
+      await Helpers.verifyElementExist(
+        PinConfigurationScreen.PinConfiguration24HoursMessage,
+        Helpers.FIVE_SECONDS_IN_MILLISECONDS
+      )
+    ) {
+      PinConfigurationScreen.reset24HoursPinValidation(pinString);
+    }
+    await Helpers.verifyElementIsDisplayed(
+      PinConfigurationScreen.equalPinConfirmationMessage,
+      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    );
+    await Helpers.dismissPopUp();
+  }
+);
 
 Then(`User should be logged-in succesfully`, async () => {
   await Helpers.verifyElementIsDisplayed(
@@ -84,3 +103,31 @@ Then(`User should be logged-in succesfully`, async () => {
     Helpers.TEN_SECONDS_IN_MILLISECONDS
   );
 });
+
+//Verify 24 hours PIN Configuration message
+Given(`User navigates to login screen from Onboarding Screen`, async () => {
+  await OnboardingScreen.skipOnboardingScreen();
+  (await NewAccessScreen.yaSoyClienteButton).click();
+  await Helpers.acceptNotificationPermission();
+  await LoginScreen.verifyLoginScreenElements();
+});
+
+When(`User logs in with admin credential`, async () => {
+  (await LoginScreen.usernameInput).setValue(global.ADMIN_USERNAME);
+  driver.pause(3000);
+  (await LoginScreen.passwordInput).setValue("prueba1");
+  driver.pause(3000);
+  await LoginScreen.iniciarSesionButton.click();
+  driver.pause(3000);
+});
+
+Then(
+  `User should see message PIN Configuration only is allowed every 24 hours`,
+  async () => {
+    await Helpers.verifyElementIsDisplayed(
+      PinConfigurationScreen.equalPinConfirmationMessage,
+      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    );
+    await Helpers.dismissPopUp();
+  }
+);

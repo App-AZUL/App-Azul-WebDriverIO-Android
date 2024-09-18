@@ -35,6 +35,9 @@ class Helpers {
   get TWENTY_SECONDS_IN_MILLISECONDS() {
     return 20000;
   }
+  get THIRTY_SECONDS_IN_MILLISECONDS() {
+    return 30000;
+  }
   async pressAppBackButton() {
     await Common.backButton.click();
   }
@@ -147,7 +150,9 @@ class Helpers {
   }
   async acceptDashboardPermissions() {
     try {
-      console.log("terms and coindition should be accepted and wait 5 minutes");
+      console.log(
+        "terms and coindition should be accepted and wait 10 seconds"
+      );
       (await this.allowCameraPermissionButton).click();
       (await this.allowLocationPermissionButton).click();
       (await this.allowCallPermissionButton).click();
