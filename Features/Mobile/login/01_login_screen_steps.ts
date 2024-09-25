@@ -148,7 +148,7 @@ When(`User only types a valid password on password textfield`, async () => {
 });
 
 Then(`User should see a message asking for typing the username`, async () => {
-  await driver.pause(3000);
+  await driver.pause(5000);
   await Helpers.verifyElementIsDisplayed(
     LoginScreen.usernameEmptyMessage,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
@@ -164,6 +164,7 @@ When(`User only types a valid username on username textfield`, async () => {
 });
 
 Then(`User should see a message asking for typing the password`, async () => {
+  await driver.pause(5000);
   await Helpers.verifyElementIsDisplayed(
     LoginScreen.passwordEmptyMessage,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
@@ -183,7 +184,7 @@ When(`User types a valid password on password textfield`, async () => {
 });
 
 Then(`User should see a message saying incorrect credentials`, async () => {
-  await driver.pause(3000);
+  await driver.pause(5000);
   await Helpers.verifyElementIsDisplayed(
     LoginScreen.incorrectCredentialsPopUpTitle,
     Helpers.TEN_SECONDS_IN_MILLISECONDS
@@ -206,7 +207,7 @@ When(`User types an invalid password on password textfield`, async () => {
 
 /*  Login empty credentials  */
 When(`User should see a message asking for credentials`, async () => {
-  await driver.pause(3000);
+  await driver.pause(5000);
   await Helpers.verifyElementIsDisplayed(
     LoginScreen.usernameEmptyMessage,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS

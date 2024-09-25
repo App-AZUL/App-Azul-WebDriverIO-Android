@@ -1,6 +1,22 @@
 {
-  "name": "project",
+  "name": "app-azul-webdriverio-android",
+  "version": "1.0.0",
+  "description": "Automation framework for app azul project",
   "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "clean-build": "npm run clean && npm run build",
+    "lint": "eslint ./stepDefinitions",
+    "appium": "appium",
+    "clean": "rimraf .tsbuild/ && rimraf allure-results/ && rimraf junit-report/ && rimraf poGenerated/",
+    "start-web": "npm run clean && npx tsc && npx wdio run ./config/wdio.chrome.conf.ts",
+    "start-mobile": "npm run clean && npx tsc && npx wdio run ./config/wdio.mobile.conf.ts --cucumberOpts.tagExpression",
+    "start-mobile-bs": "npm run clean && npx tsc && npx wdio run ./config/wdio.mobile.bs.conf.ts --cucumberOpts.tagExpression \"@mobile \"",
+    "start-mobile-aws": "npm run clean && npx tsc && npx wdio run ./config/wdio.mobile.aws.conf.ts --cucumberOpts.tagExpression ",
+    "clean-report": "allure generate --clean --single-file ./allure-results",
+    "open-report": "allure open",
+    "version": "auto-changelog -p"
+  },
   "devDependencies": {
     "@testing-library/webdriverio": "^3.2.1",
     "@wdio/allure-reporter": "^8.39.0",

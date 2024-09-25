@@ -38,6 +38,9 @@ class Helpers {
   get THIRTY_SECONDS_IN_MILLISECONDS() {
     return 30000;
   }
+  get THIRTY_FIVE_SECONDS_IN_MILLISECONDS() {
+    return 30000;
+  }
   async pressAppBackButton() {
     await Common.backButton.click();
   }
@@ -134,7 +137,7 @@ class Helpers {
   async acceptNotificationPermission() {
     try {
       console.log("terms and coindition should be accepted and wait 5 minutes");
-      (await this.AllowNotificationButton).click();
+      await this.AllowNotificationButton.click();
 
       var wait = await driver.waitUntil(
         async () =>

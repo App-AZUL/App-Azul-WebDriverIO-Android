@@ -11,7 +11,7 @@ import {
   PASSWORD,
   APP_AZUL_BUNDLE,
   IS_PREVIOUS_TEST_SUCCESS,
-} from "./Helpers/ConstantsDev.ts";
+} from "../Helpers/ConstantsDev.ts";
 
 export const config: Options.Testrunner = {
   runner: "local",

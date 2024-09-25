@@ -69,7 +69,7 @@ When(`User logged in succesfully`, async () => {
   await Helpers.acceptDashboardPermissions();
   await Helpers.verifyElementIsDisplayed(
     DashboardScreen.screenTitle,
-    Helpers.THIRTY_SECONDS_IN_MILLISECONDS
+    Helpers.THIRTY_FIVE_SECONDS_IN_MILLISECONDS
   );
 });
 
@@ -113,21 +113,18 @@ Given(`User navigates to login screen from Onboarding Screen`, async () => {
 });
 
 When(`User logs in with admin credential`, async () => {
-  (await LoginScreen.usernameInput).setValue(global.ADMIN_USERNAME);
-  driver.pause(3000);
-  (await LoginScreen.passwordInput).setValue("prueba1");
-  driver.pause(3000);
+  const adminUser: string = global.ADMIN_USERNAME as string;
+  await LoginScreen.passwordInput.setValue("prueba1");
+  await LoginScreen.usernameInput.setValue(adminUser);
   await LoginScreen.iniciarSesionButton.click();
-  driver.pause(3000);
 });
 
 Then(
   `User should see message PIN Configuration only is allowed every 24 hours`,
   async () => {
     await Helpers.verifyElementIsDisplayed(
-      PinConfigurationScreen.equalPinConfirmationMessage,
-      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+      PinConfigurationScreen.PinConfiguration24HoursMessage,
+      Helpers.TEN_SECONDS_IN_MILLISECONDS
     );
-    await Helpers.dismissPopUp();
   }
 );

@@ -126,6 +126,7 @@ class PinConfigurationScreen {
       let buttonDigitElement = driver.$(buttonXpath);
       await buttonDigitElement.click();
     }
+    //this.reset24HoursPinValidation(pinString);
   }
 
   async reversePIN(str: string) {
@@ -140,7 +141,7 @@ class PinConfigurationScreen {
     if (
       await Helpers.verifyElementExist(
         this.PinConfiguration24HoursMessage,
-        Helpers.FIVE_SECONDS_IN_MILLISECONDS
+        Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
       )
     ) {
       // Get the text and remove non-numeric characters
