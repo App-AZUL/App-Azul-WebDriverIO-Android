@@ -1,5 +1,4 @@
 import type { Options } from "@wdio/types";
-import allure from "@wdio/allure-reporter";
 import {
   APP_PATH,
   INVALID_USERNAME,
@@ -11,6 +10,8 @@ import {
   PASSWORD,
   APP_AZUL_BUNDLE,
   IS_PREVIOUS_TEST_SUCCESS,
+  PIN,
+  IS_PIN_REVERSED,
 } from "../Helpers/ConstantsDev.ts";
 
 export const config: Options.Testrunner = {
@@ -25,7 +26,7 @@ export const config: Options.Testrunner = {
 
   port: 4723,
 
-  specs: ["./features/**/*.feature"],
+  specs: ["../Features/**/*.feature"],
 
   exclude: [],
 
@@ -45,7 +46,7 @@ export const config: Options.Testrunner = {
     },
   ],
 
-  logLevel: "info",
+  logLevel: "debug",
 
   bail: 1,
 
@@ -59,13 +60,11 @@ export const config: Options.Testrunner = {
 
   framework: "cucumber",
 
-  afterStep: async function (step) {
-    const screenshot = await driver.takeScreenshot();
-    /*allure.addAttachment(
-      `Failed Step: ${step.text}`,
-      Buffer.from(screenshot, "base64"),
-      "image/png"
-    );*/
+  afterStep: async function () {
+    if (driver.sessionId) {
+      // If session is active, take a screenshot
+      await driver.takeScreenshot();
+    }
   },
 
   /*afterTest: async function (
@@ -103,7 +102,7 @@ export const config: Options.Testrunner = {
   ],
 
   cucumberOpts: {
-    require: ["./features/**/*.ts"], // Update if needed
+    require: ["./Features/**/*.ts"], // Update if needed
     backtrace: false,
     requireModule: [],
     dryRun: false,
@@ -117,7 +116,7 @@ export const config: Options.Testrunner = {
     ignoreUndefinedDefinitions: false,
   },
 
-  before: function (capabilities, specs) {
+  before: function () {
     // Attach constants to global object
     (global as any).APP_PATH = APP_PATH;
     (global as any).INVALID_USERNAME = INVALID_USERNAME;
@@ -129,5 +128,7 @@ export const config: Options.Testrunner = {
     (global as any).NOT_PERMISSION_USERNAME = NOT_PERMISSION_USERNAME;
     (global as any).APP_AZUL_BUNDLE = APP_AZUL_BUNDLE;
     (global as any).IS_PREVIOUS_TEST_SUCCESS = IS_PREVIOUS_TEST_SUCCESS;
+    (global as any).PIN = PIN;
+    (global as any).IS_PIN_REVERSED = IS_PIN_REVERSED;
   },
 };

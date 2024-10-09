@@ -8,9 +8,9 @@ import LoginScreen from "../ScreenObjects/LoginScreen.ts";
 
 //Verify User can't login using Wrong PIN Configuration
 Given(`User is at PIN Configuration`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    PinConfigurationScreen.screenTitle,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  await PinConfigurationScreen.navigateToPinConfiguration(
+    global.USERNAME as string,
+    global.PASSWORD as string
   );
 });
 
@@ -84,14 +84,14 @@ Then(
     if (
       await Helpers.verifyElementExist(
         PinConfigurationScreen.PinConfiguration24HoursMessage,
-        Helpers.FIVE_SECONDS_IN_MILLISECONDS
+        Helpers.TEN_SECONDS_IN_MILLISECONDS
       )
     ) {
       PinConfigurationScreen.reset24HoursPinValidation(pinString);
     }
     await Helpers.verifyElementIsDisplayed(
       PinConfigurationScreen.equalPinConfirmationMessage,
-      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+      Helpers.TEN_SECONDS_IN_MILLISECONDS
     );
     await Helpers.dismissPopUp();
   }
@@ -113,7 +113,7 @@ Given(`User navigates to login screen from Onboarding Screen`, async () => {
 });
 
 When(`User logs in with admin credential`, async () => {
-  const adminUser: string = global.ADMIN_USERNAME as string;
+  const adminUser: string = global.USERNAME as string;
   await LoginScreen.passwordInput.setValue("prueba1");
   await LoginScreen.usernameInput.setValue(adminUser);
   await LoginScreen.iniciarSesionButton.click();

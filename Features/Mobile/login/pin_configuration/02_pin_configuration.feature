@@ -47,7 +47,7 @@ Scenario Outline: Verify 24 hours PIN Configuration message
 Given User started the app by first time
   And User navigates to login screen from Onboarding Screen
 When User logs in with admin credential
-  And User set PIN 1498
+  And User set PIN 1499
   And User logged in succesfully
   And User logged out
 When User logs in with admin credential

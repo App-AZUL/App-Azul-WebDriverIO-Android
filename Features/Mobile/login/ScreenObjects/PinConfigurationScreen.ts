@@ -2,6 +2,8 @@ import { $ } from "@wdio/globals";
 import Helpers from "../../../../Helpers/Helpers.ts";
 import Commons from "../../common_screen_objects/Commons.ts";
 import LoginScreen from "./LoginScreen.ts";
+import OnboardingScreen from "./OnboardingScreen.ts";
+import NewAccessScreen from "./NewAccessScreen.ts";
 
 class PinConfigurationScreen {
   get screenTitle() {
@@ -47,6 +49,7 @@ class PinConfigurationScreen {
 
   async setPin(arg0: number) {
     let pinString = arg0.toString();
+    global.PIN = pinString;
     console.log("Setting PIN: " + pinString);
 
     //Typing PIN
@@ -90,6 +93,8 @@ class PinConfigurationScreen {
       await console.log("El pin no puede ser igual al anterior.");
       await Helpers.dismissPopUp();
       pinString = await this.reversePIN(pinString);
+      global.IS_PIN_REVERSED = true;
+      global.PIN = pinString;
       console.log("Setting (again) PIN: " + pinString);
 
       for (let i = 0; i < pinString.length; i++) {
@@ -116,16 +121,34 @@ class PinConfigurationScreen {
 
   async typePin(arg0: number) {
     let pinString = arg0.toString();
-    console.log("Typing PIN: " + pinString);
-    for (let i = 0; i < pinString.length; i++) {
-      let buttonDigitNumber = pinString[i];
-      let buttonXpath =
-        '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
-        buttonDigitNumber +
-        '"]';
-      let buttonDigitElement = driver.$(buttonXpath);
-      await buttonDigitElement.click();
+    let isPinReversed = global.IS_PIN_REVERSED as boolean;
+    //global.PIN = pinString;
+
+    if (isPinReversed) {
+      pinString = await this.reversePIN(pinString);
+      console.log("Typing PIN: " + pinString);
+      for (let i = 0; i < pinString.length; i++) {
+        let buttonDigitNumber = pinString[i];
+        let buttonXpath =
+          '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
+          buttonDigitNumber +
+          '"]';
+        let buttonDigitElement = driver.$(buttonXpath);
+        await buttonDigitElement.click();
+      }
+    } else {
+      console.log("Typing PIN: " + pinString);
+      for (let i = 0; i < pinString.length; i++) {
+        let buttonDigitNumber = pinString[i];
+        let buttonXpath =
+          '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
+          buttonDigitNumber +
+          '"]';
+        let buttonDigitElement = driver.$(buttonXpath);
+        await buttonDigitElement.click();
+      }
     }
+
     //this.reset24HoursPinValidation(pinString);
   }
 
@@ -214,6 +237,28 @@ class PinConfigurationScreen {
           await buttonDigitElement.click();
         }
       }
+    }
+  }
+  async navigateToPinConfiguration(username: string, password: string) {
+    if (
+      !(await Helpers.verifyElementExist(
+        this.screenTitle,
+        Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+      ))
+    ) {
+      await Helpers.startAppByFirstTime();
+      await (await OnboardingScreen.saltarDemostracionButton).click();
+      await (await NewAccessScreen.yaSoyClienteButton).click();
+      await Helpers.acceptNotificationPermission();
+
+      (await LoginScreen.usernameInput).setValue(username);
+      (await LoginScreen.passwordInput).setValue(password);
+      await LoginScreen.iniciarSesionButton.click();
+
+      await Helpers.verifyElementExist(
+        this.screenTitle,
+        Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+      );
     }
   }
 }

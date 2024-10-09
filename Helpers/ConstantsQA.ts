@@ -5,4 +5,5 @@ export const ADMIN_USERNAME = "NO_TOCAR_prueba_automatizada1";
 export const NOT_AFFILIATED_USERNAME = "NO_TOCAR_prueba_automatizada2";
 export const NOT_PERMISSION_USERNAME = "NO_TOCAR_prueba_automatizada3";
 export const PASSWORD = "prueba1";
+export const PIN = "";
 export const APP_AZUL_BUNDLE = "com.sdp.appazul";
