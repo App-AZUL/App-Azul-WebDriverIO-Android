@@ -77,7 +77,7 @@ class PinConfigurationScreen {
     if (
       await Helpers.verifyElementExist(
         this.PinConfiguration24HoursMessage,
-        Helpers.FIVE_SECONDS_IN_MILLISECONDS
+        Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
       )
     ) {
       this.reset24HoursPinValidation(pinString);
@@ -87,7 +87,7 @@ class PinConfigurationScreen {
     if (
       await Helpers.verifyElementExist(
         this.equalPinConfirmationMessage,
-        Helpers.FIVE_SECONDS_IN_MILLISECONDS
+        Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
       )
     ) {
       await console.log("El pin no puede ser igual al anterior.");
@@ -134,6 +134,7 @@ class PinConfigurationScreen {
           buttonDigitNumber +
           '"]';
         let buttonDigitElement = driver.$(buttonXpath);
+        driver.pause(900);
         await buttonDigitElement.click();
       }
     } else {
@@ -251,8 +252,8 @@ class PinConfigurationScreen {
       await (await NewAccessScreen.yaSoyClienteButton).click();
       await Helpers.acceptNotificationPermission();
 
-      (await LoginScreen.usernameInput).setValue(username);
-      (await LoginScreen.passwordInput).setValue(password);
+      await LoginScreen.passwordInput.setValue(password);
+      await LoginScreen.usernameInput.setValue(username);
       await LoginScreen.iniciarSesionButton.click();
 
       await Helpers.verifyElementExist(

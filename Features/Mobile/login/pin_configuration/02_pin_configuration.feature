@@ -51,8 +51,8 @@ When User logs in with admin credential
   And User logged in succesfully
   And User logged out
 When User logs in with admin credential
-  And User types PIN 1498
-  And User confirms PIN 1498
+  And User types PIN 1499
+  And User confirms PIN 1499
 Then User should see message PIN Configuration only is allowed every 24 hours
   And User should stay in PIN Configuration screen after dismissing the message
 

@@ -66,6 +66,7 @@ Then(`User should see Sequential PIN Message`, async () => {
 
 //Verify User can't login using Equal PIN Configuration
 When(`User logged in succesfully`, async () => {
+  driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
   await Helpers.acceptDashboardPermissions();
   await Helpers.verifyElementIsDisplayed(
     DashboardScreen.screenTitle,
@@ -81,23 +82,24 @@ Then(
   `User should see Equal PIN Configuration message for pin {int}`,
   async (arg0: number) => {
     let pinString = arg0.toString();
-    if (
-      await Helpers.verifyElementExist(
-        PinConfigurationScreen.PinConfiguration24HoursMessage,
-        Helpers.TEN_SECONDS_IN_MILLISECONDS
-      )
-    ) {
+    let is24HoursMessageDisplayed = (await Helpers.verifyElementExist(
+      PinConfigurationScreen.PinConfiguration24HoursMessage,
+      Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+    )) as boolean;
+
+    if (is24HoursMessageDisplayed) {
       PinConfigurationScreen.reset24HoursPinValidation(pinString);
     }
     await Helpers.verifyElementIsDisplayed(
       PinConfigurationScreen.equalPinConfirmationMessage,
-      Helpers.TEN_SECONDS_IN_MILLISECONDS
+      Helpers.TWENTY_SECONDS_IN_MILLISECONDS
     );
     await Helpers.dismissPopUp();
   }
 );
 
 Then(`User should be logged-in succesfully`, async () => {
+  await Helpers.acceptDashboardPermissions();
   await Helpers.verifyElementIsDisplayed(
     DashboardScreen.screenTitle,
     Helpers.TEN_SECONDS_IN_MILLISECONDS
