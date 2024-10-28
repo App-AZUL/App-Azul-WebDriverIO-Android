@@ -12,7 +12,7 @@
     "start-web": "npm run clean && npx tsc && npx wdio run ./config/wdio.chrome.conf.ts",
     "start-mobile": "npm run clean && npx tsc && npx wdio run ./config/wdio.mobile.conf.ts --cucumberOpts.tagExpression \"@Login \"",
     "start-mobile-bs": "npm run clean && npx tsc && npx wdio run ./config/wdio.mobile.bs.conf.ts --cucumberOpts.tagExpression \"@mobile \"",
-    "start-mobile-aws": "npm run clean && npx tsc && npx wdio run ./config/wdio.mobile.aws.conf.ts --cucumberOpts.tagExpression ",
+    "start-mobile-aws": "npm run clean && npx tsc && npx wdio run ./config/wdio.mobile.aws.conf.ts --cucumberOpts.tagExpression \"@Login \"",
     "clean-report": "npx allure generate --clean --single-file ./allure-results",
     "open-report": "allure open",
     "version": "auto-changelog -p"
@@ -31,5 +31,8 @@
     "appium-uiautomator2-driver": "^3.7.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "rimraf": "^6.0.1"
   }
 }
