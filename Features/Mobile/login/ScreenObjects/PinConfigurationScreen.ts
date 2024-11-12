@@ -72,7 +72,7 @@ class PinConfigurationScreen {
       let buttonDigitElement = driver.$(buttonXpath);
       await buttonDigitElement.click();
     }
-
+    driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
     //Continue in case user already set the pin before 24 hours
     if (
       await Helpers.verifyElementExist(
