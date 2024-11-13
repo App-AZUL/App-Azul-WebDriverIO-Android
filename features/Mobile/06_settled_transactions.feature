@@ -27,6 +27,114 @@ Scenario Outline: Verify Settled Transactions Details
   When User clicks on chevron details button
   Then the transaction details should match
 
+  @Login @Regression @HappyPath
+Scenario Outline: Verify Settled Transactions No lote search filter
+
+Given User can see at least one transaction
+When User clicks three dots button of a transaction
+Then the transaction info should match
+When User clicks on chevron details button
+Then the transaction details should match
+When User search the No.Lote
+And User checks the details
+Then the transaction details should match
+
+  @Login @Regression @HappyPath
+Scenario Outline: Verify Settled Transactions No aprobacion search filter
+
+Given User can see at least one transaction
+When User clicks three dots button of a transaction
+Then the transaction info should match
+When User clicks on chevron details button
+Then the transaction details should match
+When User search the No.aprobacion
+And User checks the details
+Then the transaction details should match
+
+  @Login @Regression @HappyPath
+Scenario Outline: Verify Settled Transactions No terminal search filter
+
+Given User can see at least one transaction
+When User clicks three dots button of a transaction
+Then the transaction info should match
+When User clicks on chevron details button
+Then the transaction details should match
+When User search the No.terminal
+And User checks the details
+Then the transaction details should match
+
+  @Login @Regression @HappyPath
+Scenario Outline: Verify Settled Transactions No Tarjeta search filter
+
+Given User can see at least one transaction
+When User clicks three dots button of a transaction
+Then the transaction info should match
+When User clicks on chevron details button
+Then the transaction details should match
+When User search the No.Tarjeta
+And User checks the details
+Then the transaction details should match
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify Ammount textfield only allows numbers
+
+  Given User can see at least one transaction
+  When User clicks three dots button of a transaction
+  And User clicks Solicitar devolucion button
+  And User tries to set a character that is not a number
+  Then User sould see a message asking for the ammount
+  And the ammount should be 0
+  And User should be in Solicitar devolucion screen
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify can't submit a Settled Transaction refund when ammount is 0
+
+  Given User can see at least one transaction
+  When User clicks three dots button of a transaction
+  And User clicks Solicitar devolucion button
+  And User types 0 ammount
+  Then User sould see a message asking for the ammount
+  And the ammount should be 0
+  And User should be in Solicitar devolucion screen
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify can submit a Settled Transaction refund when ammount is 0.01
+
+  Given User can see at least one transaction
+  When User clicks three dots button of a transaction
+  And User clicks Solicitar devolucion button
+  And User types 0.01 ammount
+  And User clicks on Motivo de la devolucion field
+  And User selects Transaccion fraudulenta option
+  Then the Solicitar a AZUL button should be enabled
+  When User clicks Solicitar a AZUL button
+  Then User should be on Request Received screen
+  And User should see the correct SLA message
+  And User should see the request number
+  And User should see the correct MID
+  And User should see the correct Location Name
+  When User press X button
+  Then User should be on Settled Transaction query screen
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify can't submit a Settled Transaction refund when fields are empty
+
+ Given User can see at least one transaction after switching the location
+  When User clicks three dots button of a transaction
+  And User clicks Solicitar devolucion button
+  And User clicks Solicitar a AZUL button
+  Then User should stay in Solicitar devolucion form
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify can't submit a Settled Transaction refund without filling Motivo textfield
+
+ Given User can see at least one transaction after switching the location
+  When User clicks three dots button of a transaction
+  And User types a comment
+  And User clicks Solicitar devolucion button
+  And User clicks Solicitar a AZUL button
+  Then User should stay in Solicitar devolucion form
+
 @Login @Regression @HappyPath
 Scenario Outline: Verify User can submit a Settled Transaction refund for Transaccion fraudulenta
 
@@ -112,6 +220,106 @@ Scenario Outline: Verify User can submit a Settled Transaction refund for Servic
 Then the transaction details should match
   And User clicks on Motivo de la devolucion field
   And User selects Servicio no recibido option
+  Then the Solicitar a AZUL button should be enabled
+  When User clicks Solicitar a AZUL button
+  Then User should be on Request Received screen
+  And User should see the correct SLA message
+  And User should see the request number
+  And User should see the correct MID
+  And User should see the correct Location Name
+  When User press X button
+  Then User should be on Settled Transaction query screen
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify User can submit a Settled Transaction refund for Transaccion fraudulenta with comment
+
+  Given User can see at least one transaction after switching the location
+  When User clicks three dots button of a transaction
+  And User clicks Solicitar devolucion button
+Then the transaction details should match
+  And User clicks on Motivo de la devolucion field
+  And User selects Transaccion fraudulenta option
+  And User types a comment
+  Then the Solicitar a AZUL button should be enabled
+  When User clicks Solicitar a AZUL button
+  Then User should be on Request Received screen
+  And User should see the correct SLA message
+  And User should see the request number
+  And User should see the correct MID
+  And User should see the correct Location Name
+  When User press X button
+  Then User should be on Settled Transaction query screen
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify User can submit a Settled Transaction refund for Monto Incorrecto with comment
+
+  Given User can see at least one transaction after switching the location
+  When User clicks three dots button of a transaction
+  And User clicks Solicitar devolucion button
+Then the transaction details should match
+  And User clicks on Motivo de la devolucion field
+  And User selects Monto Incorrecto option
+  And User types a comment
+  Then the Solicitar a AZUL button should be enabled
+  When User clicks Solicitar a AZUL button
+  Then User should be on Request Received screen
+  And User should see the correct SLA message
+  And User should see the request number
+  And User should see the correct MID
+  And User should see the correct Location Name
+  When User press X button
+  Then User should be on Settled Transaction query screen
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify User can submit a Settled Transaction refund for Transaccion Duplicada with comment
+
+  Given User can see at least one transaction after switching the location
+  When User clicks three dots button of a transaction
+  And User clicks Solicitar devolucion button
+Then the transaction details should match
+  And User clicks on Motivo de la devolucion field
+  And User selects Transaccion Duplicada option
+  And User types a comment
+  Then the Solicitar a AZUL button should be enabled
+  When User clicks Solicitar a AZUL button
+  Then User should be on Request Received screen
+  And User should see the correct SLA message
+  And User should see the request number
+  And User should see the correct MID
+  And User should see the correct Location Name
+  When User press X button
+  Then User should be on Settled Transaction query screen
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify User can submit a Settled Transaction refund for Pagado por otro medio with comment
+
+  Given User can see at least one transaction after switching the location
+  When User clicks three dots button of a transaction
+  And User clicks Solicitar devolucion button
+Then the transaction details should match
+  And User clicks on Motivo de la devolucion field
+  And User selects Pagado por otro medio option
+  And User types a comment
+  Then the Solicitar a AZUL button should be enabled
+  When User clicks Solicitar a AZUL button
+  Then User should be on Request Received screen
+  And User should see the correct SLA message
+  And User should see the request number
+  And User should see the correct MID
+  And User should see the correct Location Name
+  When User press X button
+  Then User should be on Settled Transaction query screen
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify User can submit a Settled Transaction refund for Servicio no recibido with comment
+
+  Given User can see at least one transaction after switching the location
+  When User clicks three dots button of a transaction
+  And User clicks Solicitar devolucion button
+Then the transaction details should match
+  And User clicks on Motivo de la devolucion field
+  And User selects Servicio no recibido option
+  And User types a comment
   Then the Solicitar a AZUL button should be enabled
   When User clicks Solicitar a AZUL button
   Then User should be on Request Received screen

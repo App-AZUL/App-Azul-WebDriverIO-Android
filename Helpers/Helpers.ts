@@ -1,6 +1,6 @@
-import { expect, $ } from "@wdio/globals";
-import Common from "../Features/Mobile/common_screen_objects/Commons.ts";
-import OnboardingScreen from "../Features/Mobile/login/ScreenObjects/OnboardingScreen.ts";
+import { $ } from "@wdio/globals";
+import Common from "../screens/mobile/Commons.ts";
+import OnboardingScreen from "../screens/mobile/OnboardingScreen.ts";
 
 class Helpers {
   get AllowNotificationButton() {
