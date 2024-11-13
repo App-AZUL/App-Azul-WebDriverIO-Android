@@ -1,4 +1,3 @@
-import type { Options } from "@wdio/types";
 import {
   APP_PATH,
   INVALID_USERNAME,
@@ -14,7 +13,7 @@ import {
   IS_PIN_REVERSED,
 } from "../Helpers/ConstantsDev.ts";
 
-export const config: Options.Testrunner = {
+export const config = {
   runner: "local",
   autoCompileOpts: {
     autoCompile: true,
