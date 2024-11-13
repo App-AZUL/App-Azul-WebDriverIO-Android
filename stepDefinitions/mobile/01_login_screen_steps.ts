@@ -1,11 +1,11 @@
 import { Given, When, Then } from "@wdio/cucumber-framework";
 import { expect, $ } from "@wdio/globals";
-import OnboardingScreen from "./ScreenObjects/OnboardingScreen.ts";
-import NewAccessScreen from "./ScreenObjects/NewAccessScreen.ts";
-import LoginScreen from "./ScreenObjects/LoginScreen.ts";
-import AffiliationRequirementsScreen from "../azul_affiliation/ScreenObjects/AffiliationRequirementsScreen.ts";
-import PinConfigurationScreen from "./ScreenObjects/PinConfigurationScreen.ts";
-import Helpers from "../../../Helpers/Helpers.ts";
+import OnboardingScreen from "../../screens/mobile/OnboardingScreen.ts";
+import NewAccessScreen from "../../screens/mobile/NewAccessScreen.ts";
+import LoginScreen from "../../screens/mobile/LoginScreen.ts";
+import AffiliationRequirementsScreen from "../../screens/mobile/AffiliationRequirementsScreen.ts";
+import PinConfigurationScreen from "../../screens/mobile/PinConfigurationScreen.ts";
+import Helpers from "../../helpers/Helpers.ts";
 
 /*  Verify Onboarding Screen steps  */
 Given("User started the app by first time", async () => {

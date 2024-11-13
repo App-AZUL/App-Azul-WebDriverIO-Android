@@ -26,7 +26,7 @@ export const config: Options.Testrunner = {
 
   port: 4723,
 
-  specs: ["../Features/**/*.feature"],
+  specs: ["../features/mobile/*.feature"],
 
   exclude: [],
 
@@ -102,7 +102,7 @@ export const config: Options.Testrunner = {
   ],
 
   cucumberOpts: {
-    require: ["./Features/**/*.ts"], // Update if needed
+    require: ["./stepDefinitions/mobile/*.ts"], // Update if needed
     backtrace: false,
     requireModule: [],
     dryRun: false,

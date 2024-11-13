@@ -1,10 +1,10 @@
 import { Given, When, Then } from "@wdio/cucumber-framework";
-import PinConfigurationScreen from "../ScreenObjects/PinConfigurationScreen.ts";
-import Helpers from "../../../../Helpers/Helpers.ts";
-import DashboardScreen from "../../../Mobile/dashboard/ScreenObjects/DashboardScreen.ts";
-import OnboardingScreen from "../ScreenObjects/OnboardingScreen.ts";
-import NewAccessScreen from "../ScreenObjects/NewAccessScreen.ts";
-import LoginScreen from "../ScreenObjects/LoginScreen.ts";
+import PinConfigurationScreen from "../../screens/mobile/PinConfigurationScreen.ts";
+import Helpers from "../../helpers/Helpers.ts";
+import DashboardScreen from "../../screens/mobile/DashboardScreen.ts";
+import OnboardingScreen from "../../screens/mobile/OnboardingScreen.ts";
+import NewAccessScreen from "../../screens/mobile/NewAccessScreen.ts";
+import LoginScreen from "../../screens/mobile/LoginScreen.ts";
 
 //Verify User can't login using Wrong PIN Configuration
 Given(`User is at PIN Configuration`, async () => {
