@@ -1,7 +1,7 @@
 import { $ } from "@wdio/globals";
-import AffiliationRequirementsScreen from "../../azul_affiliation/ScreenObjects/AffiliationRequirementsScreen.ts";
+import AffiliationRequirementsScreen from "./AffiliationRequirementsScreen.ts";
 import NewAccessScreen from "./NewAccessScreen.ts";
-import Helpers from "../../../../Helpers/Helpers.ts";
+import Helpers from "../../helpers/Helpers.ts";
 
 class LoginScreen {
   /* Screen Elements */

@@ -1,8 +1,8 @@
 import { $ } from "@wdio/globals";
-import Helpers from "../../../../Helpers/Helpers.ts";
-import PreloggedScreen from "../../prelogged/ScreenObjects/PreloggedScreen.ts";
-import LoginScreen from "../../login/ScreenObjects/LoginScreen.ts";
-import Commons from "../../common_screen_objects/Commons.ts";
+import Helpers from "../../helpers/Helpers.ts";
+import PreloggedScreen from "./PreloggedScreen.ts";
+import LoginScreen from "./LoginScreen.ts";
+import Commons from "./Commons.ts";
 
 class DashboardScreen {
   get screenTitle() {

@@ -1,4 +1,4 @@
-import { Given, When, Then } from "@wdio/cucumber-framework";
+import { Given, When, Then } from "@cucumber/cucumber";
 import { expect, $ } from "@wdio/globals";
 import OnboardingScreen from "../../screens/mobile/OnboardingScreen.ts";
 import NewAccessScreen from "../../screens/mobile/NewAccessScreen.ts";

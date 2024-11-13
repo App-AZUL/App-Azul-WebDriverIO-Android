@@ -1,4 +1,4 @@
-import { Given, When, Then } from "@wdio/cucumber-framework";
+import { Given, When, Then } from "@cucumber/cucumber";
 import PinConfigurationScreen from "../../screens/mobile/PinConfigurationScreen.ts";
 import Helpers from "../../helpers/Helpers.ts";
 import DashboardScreen from "../../screens/mobile/DashboardScreen.ts";

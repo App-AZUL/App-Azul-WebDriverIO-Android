@@ -101,7 +101,7 @@ export const config = {
   ],
 
   cucumberOpts: {
-    require: ["./stepDefinitions/mobile/*.ts"], // Update if needed
+    require: ["./features/mobile/*.ts"], // Update if needed
     backtrace: false,
     requireModule: [],
     dryRun: false,

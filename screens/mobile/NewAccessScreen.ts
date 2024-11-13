@@ -1,5 +1,5 @@
 import { $ } from "@wdio/globals";
-import Helpers from "../../../../Helpers/Helpers.ts";
+import Helpers from "../../helpers/Helpers.ts";
 import OnboardingScreen from "./OnboardingScreen.ts";
 
 class NewAccessScreen {

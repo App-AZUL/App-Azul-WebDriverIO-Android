@@ -1,6 +1,6 @@
 import { $ } from "@wdio/globals";
-import Helpers from "../../../../Helpers/Helpers.ts";
-import Commons from "../../common_screen_objects/Commons.ts";
+import Helpers from "../../helpers/Helpers.ts";
+import Commons from "./Commons.ts";
 import LoginScreen from "./LoginScreen.ts";
 import OnboardingScreen from "./OnboardingScreen.ts";
 import NewAccessScreen from "./NewAccessScreen.ts";
