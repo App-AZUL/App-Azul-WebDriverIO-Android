@@ -63,7 +63,7 @@ class Helpers {
       //await driver.deleteSession();
       //process.exit(1);
       (global as any).IS_PREVIOUS_TEST_SUCCESS = false;
-      throw new Error("Element not found");
+      throw new Error("Element not found: " + JSON.stringify(element));
     }
     return isExisting;
   }
@@ -86,22 +86,49 @@ class Helpers {
     }
     return isExisting;
   }
-  /*async verifyElementExist(element, timeout) {
-    const isExisting = await element.waitForExist({ timeout });
-    return isExisting && (await element.isExisting());
-  }*/
   async startAppByFirstTime() {
-    if (
-      !(await this.verifyElementExist(
-        OnboardingScreen.bienvenidoTitle,
-        this.TWENTY_SECONDS_IN_MILLISECONDS
-      ))
-    ) {
-      try {
+    try {
+      if (
+        !(await this.verifyElementExist(
+          OnboardingScreen.bienvenidoTitle,
+          this.TWENTY_SECONDS_IN_MILLISECONDS
+        ))
+      ) {
         await driver.removeApp(global.APP_AZUL_BUNDLE);
-      } catch (error) {
-        console.log("Error removing the app: " + (error as Error).message);
+        //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
+        await driver.installApp("./APP/azul-dev.apk");
+        //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
+        //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
+        /*await driver.waitUntil(
+        async () =>
+          await {
+            timeout: 50000, // custom timeout in milliseconds
+            timeoutMsg: `sss`,
+            interval: 500, // polling interval in milliseconds
+          }
+      );*/
+        await driver.activateApp(global.APP_AZUL_BUNDLE);
+        await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
+        /*await driver.waitUntil(
+        async () =>
+          await {
+            timeout: 25000, // custom timeout in milliseconds
+            timeoutMsg: `sss`,
+            interval: 500, // polling interval in milliseconds
+          }
+      );*/
+        await this.verifyElementIsDisplayed(
+          OnboardingScreen.bienvenidoTitle,
+          120000
+        );
+        await this.verifyElementIsDisplayed(
+          OnboardingScreen.bienvenidoTitle,
+          120000
+        );
       }
+    } catch (error) {
+      console.log("Error removing the app: " + (error as Error).message);
+      await driver.removeApp(global.APP_AZUL_BUNDLE);
       //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
       await driver.installApp("./APP/azul-dev.apk");
       //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);

@@ -139,7 +139,7 @@ Scenario Outline: Login credentials with status Bloqueado
   When User types an username with status Bloqueado on username textfield
     And User types a valid password on password textfield
     And User clicks on Iniciar sesión button
-  Then User should see a message saying temporal access expired
+  Then User should see a message saying proffile blocked
     And after dismissing the message User still being on login screen
 
 @Login @Regression
@@ -149,7 +149,7 @@ Scenario Outline: Login credentials with status Deshabilitado
   When User types an username with status Deshabilitado on username textfield
     And User types a valid password on password textfield
     And User clicks on Iniciar sesión button
-  Then User should see a message saying temporal access expired
+  Then User should see a message saying proffile disabled
     And after dismissing the message User still being on login screen
 
 @Login @Regression
@@ -159,7 +159,7 @@ Scenario Outline: Login credentials with status En Investigacion
   When User types an username with status En Investigacion on username textfield
     And User types a valid password on password textfield
     And User clicks on Iniciar sesión button
-  Then User should see a message saying temporal access expired
+  Then User should see a message saying proffile disabled
     And after dismissing the message User still being on login screen
 
 

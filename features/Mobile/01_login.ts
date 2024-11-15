@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import { expect, $ } from "@wdio/globals";
+import { expect } from "@wdio/globals";
 import OnboardingScreen from "../../screens/mobile/OnboardingScreen.ts";
 import NewAccessScreen from "../../screens/mobile/NewAccessScreen.ts";
 import LoginScreen from "../../screens/mobile/LoginScreen.ts";
@@ -10,11 +10,20 @@ import Helpers from "../../helpers/Helpers.ts";
 /*  Verify Onboarding Screen steps  */
 Given("User started the app by first time", async () => {
   await Helpers.startAppByFirstTime();
-  var isUserAtOnboardingScreen = await Helpers.verifyElementIsDisplayed(
-    OnboardingScreen.bienvenidoTitle,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
-  await expect(isUserAtOnboardingScreen).toBeTruthy;
+  try {
+    var isUserAtOnboardingScreen = await Helpers.verifyElementIsDisplayed(
+      OnboardingScreen.bienvenidoTitle,
+      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    );
+    await expect(isUserAtOnboardingScreen).toBeTruthy;
+  } catch (error) {
+    await Helpers.startAppByFirstTime();
+    var isUserAtOnboardingScreen = await Helpers.verifyElementIsDisplayed(
+      OnboardingScreen.bienvenidoTitle,
+      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    );
+    await expect(isUserAtOnboardingScreen).toBeTruthy;
+  }
 });
 
 When(
@@ -225,5 +234,65 @@ Then(`User should be redirected to PIN Configuration screen`, async () => {
   await Helpers.verifyElementIsDisplayed(
     PinConfigurationScreen.screenTitle,
     Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
+  );
+});
+
+When(
+  "User types an username with status nuevo on username textfield",
+  async () => {
+    await LoginScreen.usernameInput.setValue(global.NUEVO_USERNAME);
+  }
+);
+When(
+  "User types an username with status nuevo expirado on username textfield",
+  async () => {
+    await LoginScreen.usernameInput.setValue(global.NUEVO_EXPIRADO_USERNAME);
+  }
+);
+When(
+  "User types an username with status Bloqueado on username textfield",
+  async () => {
+    await LoginScreen.usernameInput.setValue(global.BLOQUEADO_USERNAME);
+  }
+);
+When(
+  "User types an username with status Deshabilitado on username textfield",
+  async () => {
+    await LoginScreen.usernameInput.setValue(global.DESHABILITADO_USERNAME);
+  }
+);
+When(
+  "User types an username with status En Investigacion on username textfield",
+  async () => {
+    await LoginScreen.usernameInput.setValue(global.EN_INVESTIGACION_USERNAME);
+  }
+);
+/*  Login empty credentials  */
+Then(`User should see a message saying to setup credentials`, async () => {
+  await driver.pause(5000);
+  await Helpers.verifyElementIsDisplayed(
+    LoginScreen.usernameNuevoMessage,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
+});
+Then(`User should see a message saying temporal access expired`, async () => {
+  await driver.pause(5000);
+  await Helpers.verifyElementIsDisplayed(
+    LoginScreen.usernameNuevoExpiradoMessage,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
+});
+Then(`User should see a message saying proffile blocked`, async () => {
+  await driver.pause(5000);
+  await Helpers.verifyElementIsDisplayed(
+    LoginScreen.usernameBloqueadoMessage,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+  );
+});
+Then(`User should see a message saying proffile disabled`, async () => {
+  await driver.pause(5000);
+  await Helpers.verifyElementIsDisplayed(
+    LoginScreen.usernameDeshabilitadoMessage,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
 });

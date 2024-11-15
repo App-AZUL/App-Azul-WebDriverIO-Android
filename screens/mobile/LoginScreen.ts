@@ -52,6 +52,23 @@ class LoginScreen {
       "//*[@class = 'android.widget.TextView' and (@text = 'Por favor introduce tu usuario para continuar.' or . = 'Por favor introduce tu usuario para continuar.') and @resource-id = 'android:id/message']"
     );
   }
+  get usernameNuevoMessage() {
+    return $(
+      "//*[contains(@text,'Debes configurar tu usuario y contraseña para poder acceder a la App AZUL')]"
+    );
+  }
+  get usernameNuevoExpiradoMessage() {
+    return $("//*[contains(@text,'¿Deseas generar nuevas credenciales?')]");
+  }
+  get usernameBloqueadoMessage() {
+    return $("//*[contains(@text,'Tu perfil se encuentra bloqueado')]");
+  }
+  get usernameDeshabilitadoMessage() {
+    return $("//*[contains(@text,'Tu perfil está deshabilitado')]");
+  }
+  get usernameEnInvestigacionMessage() {
+    return $("//*[contains(@text,'Tu perfil se encuentra bloqueado')]");
+  }
   get passwordEmptyMessage() {
     return $(
       "//*[contains(@text,'Por favor introduce tu contraseña para continuar.')]"

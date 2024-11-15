@@ -8,7 +8,14 @@ Scenario Outline: Verify Settled Transactions are not visible
   Given User is on Dashboard screen
   When User clicks on Historial de Transacciones button
   And User clicks on Transacciones Liquidadas
-  Then User should not see any transaction
+  Then User should not see any transaction4
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify user without location can't access Settled Transactions
+
+  Given User is on Dashboard screen
+  When User clicks on Historial de Transacciones button
+  Then User should see a message asking for permission
 
 @Login @Regression @HappyPath
 Scenario Outline: Verify user can query Settled Transactions
