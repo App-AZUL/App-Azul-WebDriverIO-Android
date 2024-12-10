@@ -94,11 +94,11 @@ class Helpers {
         "There was an error while unninstalling the app, it may be already uninstalled"
       );
     }
-    await driver.pause(this.TEN_SECONDS_IN_MILLISECONDS);
+    //await driver.pause(this.TEN_SECONDS_IN_MILLISECONDS);
     await driver.installApp("./APP/azul-dev.apk");
-    await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
+    //await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
     await driver.activateApp(global.APP_AZUL_BUNDLE);
-    await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
+    //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
     await this.verifyElementIsDisplayed(
       OnboardingScreen.bienvenidoTitle,
       120000

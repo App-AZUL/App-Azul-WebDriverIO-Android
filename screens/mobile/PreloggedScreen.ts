@@ -6,7 +6,7 @@ class PreloggedScreen {
       '//android.widget.RelativeLayout[@resource-id="com.sdp.appazul:id/dashBoardTopBar"]'
     );
   }
-  get burguerMenu() {
+  get burgerMenu() {
     return $("//*[@resource-id = 'com.sdp.appazul:id/burgerMenuLoginBtn']");
   }
   get desvincularButton() {

@@ -13,7 +13,7 @@ class DashboardScreen {
       '//android.widget.RelativeLayout[@resource-id="com.sdp.appazul:id/dashBoardTopBar"]'
     );
   }
-  get burguerMenu() {
+  get burgerMenu() {
     return $(
       "//*[@class = 'android.widget.ImageView' and @resource-id = 'com.sdp.appazul:id/dashBoardBurgerMenu' and (@text = '' or . = '')]"
     );
@@ -71,7 +71,7 @@ class DashboardScreen {
     return $('//*[contains(@text,"ALTICE")]');
   }
   async logOutFromDashboard() {
-    await this.burguerMenu.click();
+    await this.burgerMenu.click();
     this.salirButton.click();
     await Helpers.verifyElementIsDisplayed(
       PreloggedScreen.enteradoButton,
@@ -89,7 +89,7 @@ class DashboardScreen {
     );
     await PreloggedScreen.enteradoButton.click();
 
-    await PreloggedScreen.burguerMenu.click();
+    await PreloggedScreen.burgerMenu.click();
     await PreloggedScreen.desvincularButton.click();
     await Helpers.verifyElementIsDisplayed(
       PreloggedScreen.desvincularTitle,

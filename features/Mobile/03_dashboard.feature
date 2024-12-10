@@ -11,10 +11,10 @@ Scenario Outline: Verify Identity Banner shows correct information
   And user should see the current date
 
 @Dashboard @Regression @HappyPath
-Scenario Outline: Verify burguer menu options
+Scenario Outline: Verify burger menu options
 
   Given User is on Dashboard screen
-  When User clicks on burguer menu
+  When User clicks on burger menu
   Then User should see option Mi perfl
   And User should see option Preferencias
   And User should see option Salir
@@ -22,7 +22,7 @@ Scenario Outline: Verify burguer menu options
   And User should see the text Servicios Digitales Popular, S.A.
   And after closing the menu the user should stay in dashboard screen
 
-@Dashboard @Regression @HappyPath
+@Dashboard @Regression
 Scenario Outline: Verify Avance Offer is not visible when is declined
 
   Given User is on Dashboard screen with user miguelcasey

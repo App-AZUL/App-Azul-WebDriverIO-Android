@@ -117,7 +117,7 @@ export const config = {
     source: true,
     strict: false,
     tags: "",
-    timeout: 230000,
+    timeout: 130000,
     ignoreUndefinedDefinitions: false,
   },
 

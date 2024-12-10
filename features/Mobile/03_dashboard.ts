@@ -30,8 +30,8 @@ Then(`user should see the current date`, async () => {
   );
 });
 
-When(`User clicks on burguer menu`, async () => {
-  await DashboardScreen.burguerMenu.click();
+When(`User clicks on burger menu`, async () => {
+  await DashboardScreen.burgerMenu.click();
 });
 
 Then(`User should see option Mi perfl`, async () => {
@@ -70,7 +70,7 @@ Then(`User should see the text Servicios Digitales Popular, S.A.`, async () => {
 });
 
 Given(`User is on Dashboard screen with user miguelcasey`, async () => {
-  let adminNameElement = $("//*[contains(@text,'Hola')]");
+  let adminNameElement = $("//*[contains(@text,'Miguel')]");
   let isAdminUserActive = await Helpers.verifyElementIsDisplayed(
     adminNameElement,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
