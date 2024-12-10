@@ -24,54 +24,51 @@ class DashboardScreen {
     );
   }
   get greeting() {
-    return $(
-      "//*[@class = 'android.widget.TextView' and (@text = 'Salir' or . = 'Salir') and @resource-id = 'com.sdp.appazul:id/tvLogout']"
-    );
+    return $("//*[contains(@text,'Hola')]");
   }
   get commercialGroupName() {
-    return $(
-      "//*[@class = 'android.widget.TextView' and (@text = 'Salir' or . = 'Salir') and @resource-id = 'com.sdp.appazul:id/tvLogout']"
-    );
+    return $("//*[contains(@text,'Grupo Popular Dominicano')]");
   }
   get currentDateElement() {
-    return $(
-      "//*[@class = 'android.widget.TextView' and (@text = 'Salir' or . = 'Salir') and @resource-id = 'com.sdp.appazul:id/tvLogout']"
-    );
+    let date = this.getFormattedDateInSpanish();
+    let ekispat = "//*[contains(@text,'" + date + "')]";
+    console.log("xpath: " + ekispat);
+
+    return $(ekispat);
   }
   get miPerfil() {
-    return $(
-      "//*[@class = 'android.widget.TextView' and (@text = 'Salir' or . = 'Salir') and @resource-id = 'com.sdp.appazul:id/tvLogout']"
-    );
+    return $("//*[contains(@text,'Mi perfil')]");
   }
   get preferencias() {
-    return $(
-      "//*[@class = 'android.widget.TextView' and (@text = 'Salir' or . = 'Salir') and @resource-id = 'com.sdp.appazul:id/tvLogout']"
-    );
+    return $("//*[contains(@text,'Preferencias')]");
   }
   get salir() {
-    return $(
-      "//*[@class = 'android.widget.TextView' and (@text = 'Salir' or . = 'Salir') and @resource-id = 'com.sdp.appazul:id/tvLogout']"
-    );
+    return $("//*[contains(@text,'Salir')]");
   }
   get appVersion() {
-    return $(
-      "//*[@class = 'android.widget.TextView' and (@text = 'Salir' or . = 'Salir') and @resource-id = 'com.sdp.appazul:id/tvLogout']"
-    );
+    return $("//*[contains(@text,'Version')]");
   }
   get sdpText() {
-    return $(
-      "//*[@class = 'android.widget.TextView' and (@text = 'Salir' or . = 'Salir') and @resource-id = 'com.sdp.appazul:id/tvLogout']"
-    );
+    return $("//*[contains(@text,'Servicios Digitales Popular, S.A.')]");
   }
   get locationFilter() {
     return $(
-      "//*[@class = 'android.widget.TextView' and (@text = 'Salir' or . = 'Salir') and @resource-id = 'com.sdp.appazul:id/tvLogout']"
+      '//android.widget.RelativeLayout[@resource-id="com.sdp.appazul:id/locationFilter"]'
     );
   }
   get avanceOfferMessage() {
     return $(
-      "//*[@class = 'android.widget.TextView' and (@text = 'Salir' or . = 'Salir') and @resource-id = 'com.sdp.appazul:id/tvLogout']"
+      '//android.widget.ImageView[@resource-id="com.sdp.appazul:id/offersImageNoAmount"]'
     );
+  }
+  get azulLocationGroupElement() {
+    return $('//*[contains(@text,"AZUL")]');
+  }
+  get affiliatedAutoRentalElement() {
+    return $('//*[contains(@text,"AFFILIATED AUTO RENTAL")]');
+  }
+  get alticeLocationElement() {
+    return $('//*[contains(@text,"ALTICE")]');
   }
   async logOutFromDashboard() {
     await this.burguerMenu.click();
@@ -111,16 +108,44 @@ class DashboardScreen {
     );
   }
   async navigateToDashboard(username: string, password: string) {
-    if (
-      !(await Helpers.verifyElementExist(
-        this.screenTitle,
-        Helpers.TWENTY_SECONDS_IN_MILLISECONDS
-      ))
-    ) {
+    try {
+      if (
+        !(await Helpers.verifyElementExist(
+          this.screenTitle,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        ))
+      ) {
+        await Helpers.startAppByFirstTime();
+        await (await OnboardingScreen.saltarDemostracionButton).click();
+        await (await NewAccessScreen.yaSoyClienteButton).click();
+        await Helpers.acceptNotificationPermission();
+
+        //loginAppVersion = await this.appVersion.getText().toString();
+        await LoginScreen.passwordInput.setValue(password);
+        await LoginScreen.usernameInput.setValue(username);
+        await LoginScreen.iniciarSesionButton.click();
+
+        await Helpers.verifyElementExist(
+          PinConfigurationScreen.screenTitle,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        );
+        await PinConfigurationScreen.setPin(9499);
+
+        await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
+        await Helpers.acceptDashboardPermissions();
+        await this.dismissDashboardNovelty();
+        await Helpers.verifyElementExist(
+          this.screenTitle,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        );
+      }
+    } catch (error) {
       await Helpers.startAppByFirstTime();
       await (await OnboardingScreen.saltarDemostracionButton).click();
       await (await NewAccessScreen.yaSoyClienteButton).click();
       await Helpers.acceptNotificationPermission();
+
+      //loginAppVersion = await (await this.appVersion).getText().toString();
 
       await LoginScreen.passwordInput.setValue(password);
       await LoginScreen.usernameInput.setValue(username);
@@ -131,6 +156,48 @@ class DashboardScreen {
         Helpers.TWENTY_SECONDS_IN_MILLISECONDS
       );
       await PinConfigurationScreen.setPin(9499);
+
+      await Helpers.acceptDashboardPermissions();
+      await this.dismissDashboardNovelty();
+
+      await Helpers.verifyElementExist(
+        this.screenTitle,
+        Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+      );
+    }
+  }
+  getFormattedDateInSpanish() {
+    const months = [
+      "enero",
+      "febrero",
+      "marzo",
+      "abril",
+      "mayo",
+      "junio",
+      "julio",
+      "agosto",
+      "septiembre",
+      "octubre",
+      "noviembre",
+      "diciembre",
+    ];
+
+    const date = new Date();
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    let dateConverted = `${day} de ${month} del ${year}`;
+    console.log(dateConverted);
+
+    return dateConverted;
+  }
+  async dismissDashboardNovelty() {
+    try {
+      await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+      (await Commons.continuarButton).click();
+    } catch (error) {
+      console.log("couldn't dismiss novelty");
     }
   }
 }

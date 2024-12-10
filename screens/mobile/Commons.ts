@@ -15,6 +15,9 @@ class Commons {
   get noButton() {
     return $("//*[contains(@text,'NO')]");
   }
+  get continuarButton() {
+    return $("//*[contains(@text,'Continuar')]");
+  }
 }
 
 export default new Commons();

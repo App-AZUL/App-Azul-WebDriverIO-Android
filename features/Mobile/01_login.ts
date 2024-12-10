@@ -9,8 +9,8 @@ import Helpers from "../../helpers/Helpers.ts";
 
 /*  Verify Onboarding Screen steps  */
 Given("User started the app by first time", async () => {
-  await Helpers.startAppByFirstTime();
   try {
+    await Helpers.startAppByFirstTime();
     var isUserAtOnboardingScreen = await Helpers.verifyElementIsDisplayed(
       OnboardingScreen.bienvenidoTitle,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
@@ -209,7 +209,7 @@ Then(`User should see a message saying incorrect credentials`, async () => {
 /*  Login with valid user and invalid password  */
 
 When(`User types a valid username on username textfield`, async () => {
-  await LoginScreen.usernameInput.setValue(global.ADMIN_USERNAME);
+  await LoginScreen.usernameInput.setValue(global.USERNAME);
 });
 
 When(`User types an invalid password on password textfield`, async () => {

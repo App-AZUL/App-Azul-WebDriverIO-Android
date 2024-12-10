@@ -100,6 +100,7 @@ Then(
 
 Then(`User should be logged-in succesfully`, async () => {
   await Helpers.acceptDashboardPermissions();
+  await DashboardScreen.dismissDashboardNovelty();
   await Helpers.verifyElementIsDisplayed(
     DashboardScreen.screenTitle,
     Helpers.TEN_SECONDS_IN_MILLISECONDS

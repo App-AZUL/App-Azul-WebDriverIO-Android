@@ -70,25 +70,58 @@ Then(`User should see the text Servicios Digitales Popular, S.A.`, async () => {
 });
 
 Given(`User is on Dashboard screen with user miguelcasey`, async () => {
-  await DashboardScreen.navigateToDashboard(
-    global.USERNAME as string,
-    global.PASSWORD as string
+  let adminNameElement = $("//*[contains(@text,'Hola')]");
+  let isAdminUserActive = await Helpers.verifyElementIsDisplayed(
+    adminNameElement,
+    Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
+  if (!isAdminUserActive) {
+    await DashboardScreen.navigateToDashboard(
+      global.USERNAME as string,
+      global.PASSWORD as string
+    );
+  }
 });
 
 When(`User selects Affiliated Auto Rental location`, async () => {
   await DashboardScreen.locationFilter.click();
+  await DashboardScreen.azulLocationGroupElement.click();
+  await DashboardScreen.affiliatedAutoRentalElement.click();
 });
 
-Then(`User should not see Avance message`, () => {
-  expect(DashboardScreen.avanceOfferMessage).not.toBeDisplayed();
-  let theXpath = DashboardScreen.avanceOfferMessage.currentXpath;
+When(`User selects Altice location`, async () => {
+  await DashboardScreen.locationFilter.click();
+  await DashboardScreen.azulLocationGroupElement.click();
+  await DashboardScreen.alticeLocationElement.click();
 });
 
-When(`an User without locations logs in`, () => {
-  // [When] Describes the action or event that triggers the scenario.
+Then(`User should not see Avance message`, async () => {
+  await expect(DashboardScreen.avanceOfferMessage).not.toBeDisplayed();
+});
+Then(`User should see Avance message`, async () => {
+  await expect(DashboardScreen.avanceOfferMessage).toBeDisplayed();
+});
+Then(
+  `after closing the menu the user should stay in dashboard screen`,
+  async () => {
+    await driver.back();
+    await Helpers.verifyElementIsDisplayed(
+      DashboardScreen.screenTitle,
+      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    );
+  }
+);
+
+When(`an User without locations logs in`, async () => {
+  await DashboardScreen.navigateToDashboard(
+    global.USERNAME_WITHOUT_LOCATIONS as string,
+    global.PASSWORD as string
+  );
 });
 
-Then(`User should be on Dashboard screen`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
+Then(`User should be on Dashboard screen`, async () => {
+  await Helpers.verifyElementExist(
+    DashboardScreen.screenTitle,
+    Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+  );
 });

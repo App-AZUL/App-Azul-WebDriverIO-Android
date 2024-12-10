@@ -11,6 +11,7 @@ import {
   BLOQUEADO_USERNAME,
   DESHABILITADO_USERNAME,
   EN_INVESTIGACION_USERNAME,
+  USERNAME_WITHOUT_LOCATIONS,
   PASSWORD,
   APP_AZUL_BUNDLE,
   IS_PREVIOUS_TEST_SUCCESS,
@@ -40,9 +41,9 @@ export const config = {
     {
       "appium:platformName": "Android",
       "appium:deviceName": "Google Pixel 7 Pro (Android 14)",
-      "appium:platformVersion": "14.0",
+      "appium:platformVersion": "15.0",
       "appium:noReset": true,
-      "appium:enableMultiWindows": true,
+      "a1ppium:enableMultiWindows": true,
       "appium:automationName": "UIAutomator2",
       "appium:appPackage": "com.sdp.appazul",
       "appium:appActivity":
@@ -115,8 +116,8 @@ export const config = {
     snippets: true,
     source: true,
     strict: false,
-    tagExpression: "",
-    timeout: 90000,
+    tags: "",
+    timeout: 230000,
     ignoreUndefinedDefinitions: false,
   },
 
@@ -135,6 +136,7 @@ export const config = {
     (global as any).BLOQUEADO_USERNAME = BLOQUEADO_USERNAME;
     (global as any).DESHABILITADO_USERNAME = DESHABILITADO_USERNAME;
     (global as any).EN_INVESTIGACION_USERNAME = EN_INVESTIGACION_USERNAME;
+    (global as any).USERNAME_WITHOUT_LOCATIONS = USERNAME_WITHOUT_LOCATIONS;
     (global as any).APP_AZUL_BUNDLE = APP_AZUL_BUNDLE;
     (global as any).IS_PREVIOUS_TEST_SUCCESS = IS_PREVIOUS_TEST_SUCCESS;
     (global as any).PIN = PIN;

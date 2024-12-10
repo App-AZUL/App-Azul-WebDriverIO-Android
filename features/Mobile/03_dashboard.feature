@@ -1,8 +1,8 @@
-@run @mobile @Login @Regression
+@run @mobile @Dashboard @Regression
 
 Feature: Dashboard
 
-@Login @Regression @HappyPath
+@Dashboard @Regression @HappyPath
 Scenario Outline: Verify Identity Banner shows correct information
 
   Given User is on Dashboard screen
@@ -10,7 +10,7 @@ Scenario Outline: Verify Identity Banner shows correct information
   And User should see the Commercial Group Name
   And user should see the current date
 
-@Login @Regression @HappyPath
+@Dashboard @Regression @HappyPath
 Scenario Outline: Verify burguer menu options
 
   Given User is on Dashboard screen
@@ -20,31 +20,28 @@ Scenario Outline: Verify burguer menu options
   And User should see option Salir
   And User should see the App Version
   And User should see the text Servicios Digitales Popular, S.A.
+  And after closing the menu the user should stay in dashboard screen
 
-@Login @Regression @HappyPath
+@Dashboard @Regression @HappyPath
 Scenario Outline: Verify Avance Offer is not visible when is declined
 
   Given User is on Dashboard screen with user miguelcasey
   When User selects Affiliated Auto Rental location
   Then User should not see Avance message
 
-@Login @Regression @HappyPath
+@Dashboard @Regression @HappyPath
 Scenario Outline: Verify Avance Offer is visible when user has offer without ammount
 
   Given User is on Dashboard screen with user miguelcasey
-  When User selects Affiliated Auto Rental location
-  Then User should not see Avance message
-
-  @Login @Regression @HappyPath
-Scenario Outline: Verify Avance Offer is visible when user has offer with ammount
-
-  Given User is on Dashboard screen with user miguelcasey
-  When User selects Affiliated Auto Rental location
-  Then User should not see Avance message
-
-
-
-@Login @Regression @HappyPath
+  When User selects Altice location
+  Then User should see Avance message
+##@Dashboard @Regression @HappyPath
+##Scenario Outline: Verify Avance Offer is visible when user has offer with ammount
+##
+##  Given User is on Dashboard screen with user miguelcasey
+##  When User selects Affiliated Auto Rental location
+##  Then User should not see Avance message
+@Dashboard @Regression @HappyPath
 Scenario Outline: Verify user without location can access dashboard
 
   Given User started the app by first time

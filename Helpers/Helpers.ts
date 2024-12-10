@@ -23,6 +23,9 @@ class Helpers {
       '//*[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]'
     );
   }
+  get AppOldVersion() {
+    return "5.0.0";
+  }
   get FIVE_SECONDS_IN_MILLISECONDS() {
     return 5000;
   }
@@ -79,87 +82,31 @@ class Helpers {
       );
     } catch (error) {
       isExisting = false;
-      //await driver.deleteSession();
-      //process.exit(1);
       (global as any).IS_PREVIOUS_TEST_SUCCESS = false;
-      // throw new Error("Element not found");
     }
     return isExisting;
   }
   async startAppByFirstTime() {
     try {
-      if (
-        !(await this.verifyElementExist(
-          OnboardingScreen.bienvenidoTitle,
-          this.TWENTY_SECONDS_IN_MILLISECONDS
-        ))
-      ) {
-        await driver.removeApp(global.APP_AZUL_BUNDLE);
-        //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
-        await driver.installApp("./APP/azul-dev.apk");
-        //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
-        //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
-        /*await driver.waitUntil(
-        async () =>
-          await {
-            timeout: 50000, // custom timeout in milliseconds
-            timeoutMsg: `sss`,
-            interval: 500, // polling interval in milliseconds
-          }
-      );*/
-        await driver.activateApp(global.APP_AZUL_BUNDLE);
-        await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
-        /*await driver.waitUntil(
-        async () =>
-          await {
-            timeout: 25000, // custom timeout in milliseconds
-            timeoutMsg: `sss`,
-            interval: 500, // polling interval in milliseconds
-          }
-      );*/
-        await this.verifyElementIsDisplayed(
-          OnboardingScreen.bienvenidoTitle,
-          120000
-        );
-        await this.verifyElementIsDisplayed(
-          OnboardingScreen.bienvenidoTitle,
-          120000
-        );
-      }
-    } catch (error) {
-      console.log("Error removing the app: " + (error as Error).message);
       await driver.removeApp(global.APP_AZUL_BUNDLE);
-      //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
-      await driver.installApp("./APP/azul-dev.apk");
-      //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
-      //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
-      /*await driver.waitUntil(
-        async () =>
-          await {
-            timeout: 50000, // custom timeout in milliseconds
-            timeoutMsg: `sss`,
-            interval: 500, // polling interval in milliseconds
-          }
-      );*/
-      await driver.activateApp(global.APP_AZUL_BUNDLE);
-      await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
-      /*await driver.waitUntil(
-        async () =>
-          await {
-            timeout: 25000, // custom timeout in milliseconds
-            timeoutMsg: `sss`,
-            interval: 500, // polling interval in milliseconds
-          }
-      );*/
-      await this.verifyElementIsDisplayed(
-        OnboardingScreen.bienvenidoTitle,
-        120000
-      );
-      await this.verifyElementIsDisplayed(
-        OnboardingScreen.bienvenidoTitle,
-        120000
+    } catch (error) {
+      console.log(
+        "There was an error while unninstalling the app, it may be already uninstalled"
       );
     }
+    await driver.pause(this.TEN_SECONDS_IN_MILLISECONDS);
+    await driver.installApp("./APP/azul-dev.apk");
+    await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
+    await driver.activateApp(global.APP_AZUL_BUNDLE);
+    await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
+    await this.verifyElementIsDisplayed(
+      OnboardingScreen.bienvenidoTitle,
+      120000
+    );
+    await this.verifyElementIsDisplayed(
+      OnboardingScreen.bienvenidoTitle,
+      120000
+    );
   }
   async acceptNotificationPermission() {
     try {
@@ -198,6 +145,57 @@ class Helpers {
     } catch (error) {
       console.log("couldn't accept dashboard permissions");
     }
+  }
+  async isVersionGreater(version, comparison) {
+    const versionParts = await version.split(".").map(Number);
+    const comparisonParts = await comparison.split(".").map(Number);
+
+    for (let i = 0; i < 3; i++) {
+      if (versionParts[i] > comparisonParts[i]) {
+        return true;
+      } else if (versionParts[i] < comparisonParts[i]) {
+        return false;
+      }
+    }
+
+    return false; // They are equal
+  }
+  async scrollUntilElementVisible(
+    element,
+    maxScrolls = 10,
+    startPercentageY = 80,
+    endPercentageY = 20
+  ) {
+    let isVisible = await element.isDisplayed();
+    let scrollAttempts = 0;
+
+    while (!isVisible && scrollAttempts < maxScrolls) {
+      const { width, height } = await driver.getWindowSize(); // Get screen dimensions
+      const startX = width / 2; // Scroll from the middle of the screen
+      const startY = (height * startPercentageY) / 100;
+      const endY = (height * endPercentageY) / 100;
+
+      // Perform swipe action using touchPerform
+      await driver.touchPerform([
+        { action: "press", options: { x: startX, y: startY } },
+        { action: "wait", options: { ms: 200 } }, // Pause for gesture stabilization
+        { action: "moveTo", options: { x: startX, y: endY } },
+        { action: "release" },
+      ]);
+
+      await browser.pause(500); // Allow UI to stabilize
+      isVisible = await element.isDisplayed();
+      scrollAttempts++;
+    }
+
+    if (!isVisible) {
+      throw new Error(
+        `Element not visible after ${scrollAttempts} scroll attempts.`
+      );
+    }
+  }
+  getRandomInt(max) {
+    return Math.floor(Math.random() * max);
   }
 }
 
