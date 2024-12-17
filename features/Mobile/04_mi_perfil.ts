@@ -152,6 +152,8 @@ Then(`User should see his RNC`, async () => {
     await MiNegocioScreen.rncOption,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
+  await driver.back();
+  await driver.back();
 });
 
 When(`User clicks on Localidades`, () => {

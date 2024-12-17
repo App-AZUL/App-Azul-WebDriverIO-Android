@@ -2,13 +2,6 @@ import { Given, When, Then } from "@cucumber/cucumber";
 import DashboardScreen from "../../screens/mobile/DashboardScreen.ts";
 import Helpers from "../../helpers/Helpers.ts";
 
-Given(`User is on Dashboard screen`, async () => {
-  await DashboardScreen.navigateToDashboard(
-    global.USERNAME as string,
-    global.PASSWORD as string
-  );
-});
-
 Then(`User should see a greeting`, async () => {
   await Helpers.verifyElementIsDisplayed(
     DashboardScreen.greeting,

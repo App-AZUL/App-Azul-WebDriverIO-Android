@@ -1,6 +1,7 @@
 import { $ } from "@wdio/globals";
-import Common from "../screens/mobile/Commons.ts";
+import Commons from "../screens/mobile/Commons.ts";
 import OnboardingScreen from "../screens/mobile/OnboardingScreen.ts";
+import SettledTransactionsScreen from "../screens/mobile/SettledTransactionsScreen.ts";
 
 class Helpers {
   get AllowNotificationButton() {
@@ -45,11 +46,11 @@ class Helpers {
     return 30000;
   }
   async pressAppBackButton() {
-    await Common.backButton.click();
+    await Commons.backButton.click();
   }
   async dismissPopUp() {
     await driver.pause(1000);
-    await Common.okButton.click();
+    await Commons.okButton.click();
   }
   async verifyElementIsDisplayed(element, timeout) {
     try {
@@ -196,6 +197,18 @@ class Helpers {
   }
   getRandomInt(max) {
     return Math.floor(Math.random() * max);
+  }
+  async setDateJanuary2022onDesdeCalendar() {
+    await SettledTransactionsScreen.desdeDatePicker.click();
+    for (let i = 0; i < 34; i++) {
+      await Commons.calendarMonthBackArrow.click();
+      await driver.pause(300);
+    }
+    await this.verifyElementIsDisplayed(
+      Commons.january2022DateText,
+      this.FIVE_SECONDS_IN_MILLISECONDS
+    );
+    await Commons.calendarDay13.click();
   }
 }
 

@@ -5,7 +5,7 @@ Feature: Soporte tecnico
 @Login @Regression @HappyPath
 Scenario Outline: Verify available request to submit
 
-Given User is on Dashboard screen
+Given User is on Dashboard screen with user miguelcasey
 When User clicks on Solicitudes button
 Then User should see Historial de solicitudes button
 And User should see Soporte tecnico button

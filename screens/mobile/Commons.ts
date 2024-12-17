@@ -1,4 +1,6 @@
 import { $ } from "@wdio/globals";
+import SettledTransactionsScreen from "./SettledTransactionsScreen.ts";
+import Helpers from "../../helpers/Helpers.ts";
 
 class Commons {
   get backButton() {
@@ -17,6 +19,27 @@ class Commons {
   }
   get continuarButton() {
     return $("//*[contains(@text,'Continuar')]");
+  }
+  get proffileWithoutAccessModalTitle() {
+    return $(
+      "//*[contains(@text,'Tu perfil no posee acceso a esta funcionalidad')]"
+    );
+  }
+  get proffileWithoutAccessModalBody() {
+    return $(
+      "//*[contains(@text,'Por favor, comunícate con el administrador de tu empresa para establecer los mismos.')]"
+    );
+  }
+  get calendarMonthBackArrow() {
+    return $(
+      '//android.widget.ImageView[@resource-id="com.sdp.appazul:id/left"]'
+    );
+  }
+  get calendarDay13() {
+    return $("//*[contains(@text,'13')]");
+  }
+  get january2022DateText() {
+    return $("//*[contains(@text,'Enero 2022')]");
   }
 }
 

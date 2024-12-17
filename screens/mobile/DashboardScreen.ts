@@ -70,6 +70,15 @@ class DashboardScreen {
   get alticeLocationElement() {
     return $('//*[contains(@text,"ALTICE")]');
   }
+  get historialdeTransaccionesButton() {
+    return $('//*[contains(@text,"Historial de Transacciones")]');
+  }
+  get transaccionesLiquidadasOption() {
+    return $('//*[contains(@text,"Transacciones liquidadas")]');
+  }
+  get transaccionesQROption() {
+    return $('//*[contains(@text,"Transacciones QR")]');
+  }
   async logOutFromDashboard() {
     await this.burgerMenu.click();
     this.salirButton.click();

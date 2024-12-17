@@ -3,25 +3,41 @@
 Feature: Settled Transactions
 
 @Login @Regression @HappyPath
-Scenario Outline: Verify Settled Transactions are not visible
+Scenario Outline: Verify user without location can't consult any transaction
 
-  Given User is on Dashboard screen
-  When User clicks on Historial de Transacciones button
-  And User clicks on Transacciones Liquidadas
-  Then User should not see any transaction4
-
-@Login @Regression @HappyPath
-Scenario Outline: Verify user without location can't access Settled Transactions
-
-  Given User is on Dashboard screen
+  Given User without locations is on Dashboard screen
   When User clicks on Historial de Transacciones button
   Then User should see a message asking for permission
 
 @Login @Regression @HappyPath
-Scenario Outline: Verify user can query Settled Transactions
+Scenario Outline: Verify User without permission cant go to Settled Transaction Query screen
+
+  Given User without permissions is on Dashboard screen
+  When User clicks on Historial de Transacciones button
+  And User clicks on Transacciones Liquidadas
+  Then User should see a message saying that the proffile doesnt have access
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify User without permission cant go to QR Transaction Query screen
+
+  Given User without permissions is on Dashboard screen
+  When User clicks on Historial de Transacciones button
+  And User clicks on Transacciones QR
+  Then User should see a message saying that the proffile doesnt have access
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify Settled Transactions are not visible
+
+  Given User is on Dashboard screen with user miguelcasey
+  When User clicks on Historial de Transacciones button
+  And User clicks on Transacciones Liquidadas
+  Then User should not see any transaction
+
+@Login @Regression @HappyPath
+Scenario Outline: Verify admin user can query Settled Transactions
 
   Given User is on Settled Transaction screen
-  When User selects Affiliated Auto Rental location
+  When User selects Affiliated Auto Rental location on settled trx screen
   And User sets date to january 2022
   Then User should see at least one transaction
 
@@ -83,34 +99,34 @@ And User checks the details
 Then the transaction details should match
 
 @Login @Regression @HappyPath
-Scenario Outline: Verify Ammount textfield only allows numbers
+Scenario Outline: Verify Amount textfield only allows numbers
 
   Given User can see at least one transaction
   When User clicks three dots button of a transaction
   And User clicks Solicitar devolucion button
   And User tries to set a character that is not a number
-  Then User sould see a message asking for the ammount
-  And the ammount should be 0
+  Then User sould see a message asking for the Amount
+  And the Amount should be 0
   And User should be in Solicitar devolucion screen
 
 @Login @Regression @HappyPath
-Scenario Outline: Verify can't submit a Settled Transaction refund when ammount is 0
+Scenario Outline: Verify can't submit a Settled Transaction refund when Amount is 0
 
   Given User can see at least one transaction
   When User clicks three dots button of a transaction
   And User clicks Solicitar devolucion button
-  And User types 0 ammount
-  Then User sould see a message asking for the ammount
-  And the ammount should be 0
+  And User types 0 Amount
+  Then User sould see a message asking for the Amount
+  And the Amount should be 0
   And User should be in Solicitar devolucion screen
 
 @Login @Regression @HappyPath
-Scenario Outline: Verify can submit a Settled Transaction refund when ammount is 0.01
+Scenario Outline: Verify can submit a Settled Transaction refund when Amount is 0.01
 
   Given User can see at least one transaction
   When User clicks three dots button of a transaction
   And User clicks Solicitar devolucion button
-  And User types 0.01 ammount
+  And User types 0.01 Amount
   And User clicks on Motivo de la devolucion field
   And User selects Transaccion fraudulenta option
   Then the Solicitar a AZUL button should be enabled

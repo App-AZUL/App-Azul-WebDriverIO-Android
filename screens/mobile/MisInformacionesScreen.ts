@@ -6,7 +6,7 @@ class MisInformacionesScreen {
     return $("//*[contains(@text,'12345678901')]");
   }
   get juanPerezUserDob() {
-    return $("//*[contains(@text,'04/01/1900')]");
+    return $("//*[contains(@text,'01/01/1900')]");
   }
   get juanPerezUserOccupation() {
     return $("//*[contains(@text,'-')]");
