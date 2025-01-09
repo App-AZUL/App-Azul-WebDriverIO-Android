@@ -92,7 +92,7 @@ Then(`User should be on Login Screen`, async () => {
 /*  Verify Reset Password  */
 
 Given(`User is on Login screen`, async () => {
-  LoginScreen.navigateToLoginScreen();
+  await LoginScreen.navigateToLoginScreen();
   const userIsOnLoginScreen = await LoginScreen.verifyLoginScreenElements();
   if (!userIsOnLoginScreen) {
     await Helpers.verifyElementIsDisplayed(
@@ -173,7 +173,7 @@ Then(`User should see a message asking for typing the username`, async () => {
 /*  Login only with valid username  */
 
 When(`User only types a valid username on username textfield`, async () => {
-  (await LoginScreen.usernameInput).setValue("miguelcasey");
+  (await LoginScreen.usernameInput).setValue("jcastro");
 });
 
 Then(`User should see a message asking for typing the password`, async () => {

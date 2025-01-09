@@ -27,7 +27,9 @@ class DashboardScreen {
     return $("//*[contains(@text,'Hola')]");
   }
   get commercialGroupName() {
-    return $("//*[contains(@text,'Grupo Popular Dominicano')]");
+    console.log(global.ADMIN_BUSINESS_NAME);
+    
+    return $("//*[contains(@text,'"+global.ADMIN_BUSINESS_NAME+"')]");
   }
   get currentDateElement() {
     let date = this.getFormattedDateInSpanish();
@@ -116,14 +118,18 @@ class DashboardScreen {
       Helpers.TWENTY_SECONDS_IN_MILLISECONDS
     );
   }
-  async navigateToDashboard(username: string, password: string) {
+  async navigateToDashboard(username: string, password: string, keepCurrentApp = true) {
     try {
+      console.log("va a mantener?"+keepCurrentApp);
+      
       if (
         !(await Helpers.verifyElementExist(
           this.screenTitle,
           Helpers.TWENTY_SECONDS_IN_MILLISECONDS
-        ))
+        )) || !keepCurrentApp
       ) {
+        console.log("weisparle");
+        
         await Helpers.startAppByFirstTime();
         await (await OnboardingScreen.saltarDemostracionButton).click();
         await (await NewAccessScreen.yaSoyClienteButton).click();

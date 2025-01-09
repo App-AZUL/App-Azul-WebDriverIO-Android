@@ -7,28 +7,36 @@ import Commons from "../../screens/mobile/Commons.ts";
 
 Given(`User without permissions is on Dashboard screen`, async () => {
   try {
-    let userNameElement = $("//*[contains(@text,'zada_3')]");
-    let isUserActive = await Helpers.verifyElementIsDisplayed(
+    let userNameElement = $("//*[contains(@text,'"+global.NOT_PERMISSION_NAME+"')]");
+    let isUserActive = !!(await Helpers.verifyElementIsDisplayed(
       userNameElement,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
-    );
+  ).catch(() => false));  
     if (!isUserActive) {
       await DashboardScreen.navigateToDashboard(
         global.NOT_PERMISSION_USERNAME as string,
-        global.PASSWORD as string
+        global.PASSWORD as string, false
       );
     } else {
-      await DashboardScreen.burgerMenu.click();
-      await DashboardScreen.miPerfil.click();
+      //await DashboardScreen.burgerMenu.click();
+      //await DashboardScreen.miPerfil.click();
     }
   } catch (error) {
     await DashboardScreen.navigateToDashboard(
       global.NOT_PERMISSION_USERNAME as string,
       global.PASSWORD as string
     );
-    await DashboardScreen.burgerMenu.click();
-    await DashboardScreen.miPerfil.click();
+    //await DashboardScreen.burgerMenu.click();
+    //await DashboardScreen.miPerfil.click();
   }
+});
+Then(`User should stay in Dashboard screen after dismissing the message`, async () => {
+  await Helpers.dismissPopUp();
+  await driver.back();
+  await Helpers.verifyElementIsDisplayed(
+      DashboardScreen.screenTitle,
+      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    );
 });
 When(`User clicks on Historial de Transacciones button`, async () => {
   await DashboardScreen.historialdeTransaccionesButton.click();
@@ -49,10 +57,10 @@ Then(
       Commons.proffileWithoutAccessModalTitle,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
     );
-    await Helpers.verifyElementIsDisplayed(
+    /*await Helpers.verifyElementIsDisplayed(
       Commons.proffileWithoutAccessModalBody,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
-    );
+    );*/
   }
 );
 

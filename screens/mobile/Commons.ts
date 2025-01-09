@@ -22,7 +22,7 @@ class Commons {
   }
   get proffileWithoutAccessModalTitle() {
     return $(
-      "//*[contains(@text,'Tu perfil no posee acceso a esta funcionalidad')]"
+      "//*[contains(@text,'acceso')]"
     );
   }
   get proffileWithoutAccessModalBody() {

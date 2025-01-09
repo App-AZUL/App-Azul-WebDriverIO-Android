@@ -53,22 +53,30 @@ class Helpers {
     await Commons.okButton.click();
   }
   async verifyElementIsDisplayed(element, timeout) {
-    try {
-      var isExisting = await driver.waitUntil(
+    //try {
+      let isExisting;
+try {
+    isExisting = await driver.waitUntil(
         async () => await element.isDisplayed(),
         {
-          timeout: timeout, // custom timeout in milliseconds
-          timeoutMsg: `Element ${element.selector.toString()} not displayed after ${timeout} ms`,
-          interval: 500, // polling interval in milliseconds
+            timeout: timeout, // custom timeout in milliseconds
+            timeoutMsg: `Element ${element.selector.toString()} not displayed after ${timeout} ms`,
+            interval: 500, // polling interval in milliseconds
         }
-      );
-    } catch (error) {
+    );
+    isExisting = !!isExisting; // Ensures the value is explicitly boolean
+} catch (error) {
+    isExisting = false; // If waitUntil times out, set isExisting to false
+    throw new Error("Element not found: " + JSON.stringify(element));
+}
+
+    /*} catch (error) {
       isExisting = false;
       //await driver.deleteSession();
       //process.exit(1);
       (global as any).IS_PREVIOUS_TEST_SUCCESS = false;
       throw new Error("Element not found: " + JSON.stringify(element));
-    }
+    }/*/
     return isExisting;
   }
   async verifyElementExist(element, timeout) {
@@ -88,40 +96,53 @@ class Helpers {
     return isExisting;
   }
   async startAppByFirstTime() {
-    try {
-      await driver.removeApp(global.APP_AZUL_BUNDLE);
+    for (let i = 0; i < 1; i++) {
+      let isOnboardingScreenDisplayed = false;
+      // Verify onboarding screen element
+      let seconds = i===0 ? this.TEN_SECONDS_IN_MILLISECONDS : this.THIRTY_SECONDS_IN_MILLISECONDS;
+      try {
+        await this.verifyElementIsDisplayed(OnboardingScreen.bienvenidoTitle, seconds);
+        isOnboardingScreenDisplayed = true;
     } catch (error) {
-      console.log(
-        "There was an error while unninstalling the app, it may be already uninstalled"
-      );
+      isOnboardingScreenDisplayed = false;
     }
-    //await driver.pause(this.TEN_SECONDS_IN_MILLISECONDS);
-    await driver.installApp("./APP/azul-dev.apk");
-    //await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
+      if (!isOnboardingScreenDisplayed) {
+        
+      
+      try {
+        const isInstalled = await driver.isAppInstalled(global.APP_AZUL_BUNDLE);
+        if (isInstalled) {
+            await driver.removeApp(global.APP_AZUL_BUNDLE);
+        } else {
+            console.log("App is not installed, skipping removal step.");
+        }
+    } catch (error) {
+        console.error(
+            "There was an error while uninstalling the app:",
+            error.message
+        );
+    }
+await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
+    // Install and activate the app
+    await driver.installApp("./"+global.APP_PATH);
+    await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
+
     await driver.activateApp(global.APP_AZUL_BUNDLE);
-    //await driver.pause(this.TWENTY_SECONDS_IN_MILLISECONDS);
-    await this.verifyElementIsDisplayed(
-      OnboardingScreen.bienvenidoTitle,
-      120000
-    );
-    await this.verifyElementIsDisplayed(
-      OnboardingScreen.bienvenidoTitle,
-      120000
-    );
-  }
+    await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
+    }
+  }   
+}
+
   async acceptNotificationPermission() {
     try {
       console.log("terms and coindition should be accepted and wait 5 minutes");
+      await this.verifyElementIsDisplayed(
+        this.AllowNotificationButton,
+        this.FIFTEEN_SECONDS_IN_MILLISECONDS
+    );
       await this.AllowNotificationButton.click();
 
-      var wait = await driver.waitUntil(
-        async () =>
-          await {
-            timeout: 10000, // custom timeout in milliseconds
-            timeoutMsg: `sss`,
-            interval: 500, // polling interval in milliseconds
-          }
-      );
+      
     } catch (error) {
       console.log("couldn't accept login permissions");
     }

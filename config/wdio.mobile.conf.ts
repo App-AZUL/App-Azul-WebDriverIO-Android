@@ -4,20 +4,28 @@ import {
   INVALID_PASSWORD,
   USERNAME,
   ADMIN_USERNAME,
+  ADMIN_NAME,
+  ADMIN_BUSINESS_NAME,
   NOT_AFFILIATED_USERNAME,
+  NOT_AFFILIATED_NAME,
   NOT_PERMISSION_USERNAME,
+  NOT_PERMISSION_NAME,
   NUEVO_USERNAME,
   NUEVO_EXPIRADO_USERNAME,
   BLOQUEADO_USERNAME,
   DESHABILITADO_USERNAME,
   EN_INVESTIGACION_USERNAME,
   USERNAME_WITHOUT_LOCATIONS,
+  NO_LOCATIONS_NAME,
+  NO_LOCATIONS_CEDULA,
+  NO_LOCATIONS_DOB,
+  NO_LOCATIONS_MAIL,
   PASSWORD,
   APP_AZUL_BUNDLE,
   IS_PREVIOUS_TEST_SUCCESS,
   PIN,
   IS_PIN_REVERSED,
-} from "../Helpers/ConstantsDev.ts";
+} from "../Helpers/ConstantsQA.ts";
 
 export const config = {
   runner: "local",
@@ -45,9 +53,6 @@ export const config = {
       "appium:noReset": true,
       "a1ppium:enableMultiWindows": true,
       "appium:automationName": "UIAutomator2",
-      "appium:appPackage": "com.sdp.appazul",
-      "appium:appActivity":
-        "com.sdp.appazul.activities.dashboard.SplashScreenActivity",
     },
   ],
 
@@ -55,9 +60,9 @@ export const config = {
 
   bail: 1,
 
-  waitforTimeout: 99000,
+  waitforTimeout: 30000,
 
-  connectionRetryTimeout: 120000,
+  connectionRetryTimeout: 35000,
 
   connectionRetryCount: 0,
 
@@ -129,8 +134,12 @@ export const config = {
     (global as any).PASSWORD = PASSWORD;
     (global as any).USERNAME = USERNAME;
     (global as any).ADMIN_USERNAME = ADMIN_USERNAME;
+    (global as any).ADMIN_NAME = ADMIN_NAME;
+    (global as any).ADMIN_BUSINESS_NAME = ADMIN_BUSINESS_NAME;
     (global as any).NOT_AFFILIATED_USERNAME = NOT_AFFILIATED_USERNAME;
+    (global as any).NOT_AFFILIATED_NAME = NOT_AFFILIATED_NAME;
     (global as any).NOT_PERMISSION_USERNAME = NOT_PERMISSION_USERNAME;
+    (global as any).NOT_PERMISSION_NAME = NOT_PERMISSION_NAME;
     (global as any).NUEVO_USERNAME = NUEVO_USERNAME;
     (global as any).NUEVO_EXPIRADO_USERNAME = NUEVO_EXPIRADO_USERNAME;
     (global as any).BLOQUEADO_USERNAME = BLOQUEADO_USERNAME;
@@ -141,5 +150,9 @@ export const config = {
     (global as any).IS_PREVIOUS_TEST_SUCCESS = IS_PREVIOUS_TEST_SUCCESS;
     (global as any).PIN = PIN;
     (global as any).IS_PIN_REVERSED = IS_PIN_REVERSED;
+    (global as any).NO_LOCATIONS_NAME = NO_LOCATIONS_NAME;
+    (global as any).NO_LOCATIONS_CEDULA = NO_LOCATIONS_CEDULA;
+    (global as any).NO_LOCATIONS_DOB = NO_LOCATIONS_DOB;
+    (global as any).NO_LOCATIONS_MAIL = NO_LOCATIONS_MAIL;
   },
 };

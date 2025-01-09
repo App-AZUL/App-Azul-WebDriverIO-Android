@@ -5,7 +5,7 @@ import PreferenciasScreen from "../../screens/mobile/PreferenciasScreen.ts";
 
 Given(`User is on Preferencias screen`, async () => {
   try {
-    let userNameElement = $("//*[contains(@text,'JuanPerez')]");
+    let userNameElement = $("//*[contains(@text,'"+global.NOT_AFFILIATED_NAME+"')]");
     let isUserActive = await Helpers.verifyElementIsDisplayed(
       userNameElement,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS

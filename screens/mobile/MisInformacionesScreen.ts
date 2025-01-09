@@ -1,20 +1,20 @@
 class MisInformacionesScreen {
-  get juanPerezUsernameElement() {
-    return $("//*[contains(@text,'JuanPerez')]");
+  get noLocationsUsernameElement() {
+    return $("//*[contains(@text,'"+global.NO_LOCATIONS_NAME+"')]");
   }
-  get juanPerezUserCedula() {
-    return $("//*[contains(@text,'12345678901')]");
+  get noLocationsUserCedula() {
+    return $("//*[contains(@text,'"+global.NO_LOCATIONS_CEDULA+"')]");
   }
-  get juanPerezUserDob() {
-    return $("//*[contains(@text,'01/01/1900')]");
+  get noLocationsUserDob() {
+    return $("//*[contains(@text,'"+global.NO_LOCATIONS_DOB+"')]");
   }
-  get juanPerezUserOccupation() {
+  get noLocationsUserOccupation() {
     return $("//*[contains(@text,'-')]");
   }
-  get juanPerezUserEmail() {
-    return $("//*[contains(@text,'cbacosta@bpd.com.do')]");
+  get noLocationsUserEmail() {
+    return $("//*[contains(@text,'"+global.NO_LOCATIONS_MAIL+"')]");
   }
-  get juanPerezUserRole() {
+  get noLocationsUserRole() {
     return $("//*[contains(@text,'SecondaryUser')]");
   }
 }

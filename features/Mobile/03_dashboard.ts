@@ -62,16 +62,20 @@ Then(`User should see the text Servicios Digitales Popular, S.A.`, async () => {
   );
 });
 
-Given(`User is on Dashboard screen with user miguelcasey`, async () => {
-  let adminNameElement = $("//*[contains(@text,'Miguel')]");
-  let isAdminUserActive = await Helpers.verifyElementIsDisplayed(
+Given(`User is on Dashboard screen with admin user`, async () => {
+  let adminNameElement = $("//*[contains(@text,'"+global.ADMIN_NAME+"')]");
+  let isAdminUserActive = !!(await Helpers.verifyElementIsDisplayed(
     adminNameElement,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
-  if (!isAdminUserActive) {
+).catch(() => false));
+console.log("perocompai"+isAdminUserActive);
+
+  if (isAdminUserActive === false) {
+    console.log("viejito");
+    
     await DashboardScreen.navigateToDashboard(
       global.USERNAME as string,
-      global.PASSWORD as string
+      global.PASSWORD as string, false
     );
   }
 });

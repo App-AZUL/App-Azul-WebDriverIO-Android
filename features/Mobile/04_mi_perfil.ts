@@ -8,27 +8,28 @@ import Helpers from "../../helpers/Helpers.ts";
 
 Given(`User without locations is on Dashboard screen`, async () => {
   try {
-    let userNameElement = $("//*[contains(@text,'JuanPerez')]");
-    let isUserActive = await Helpers.verifyElementIsDisplayed(
+    let userNameElement = $("//*[contains(@text,'"+global.NO_LOCATIONS_NAME+"')]");
+    let isUserActive = !!(await Helpers.verifyElementIsDisplayed(
       userNameElement,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
-    );
+  ).catch(() => false));
+  
     if (!isUserActive) {
       await DashboardScreen.navigateToDashboard(
         global.USERNAME_WITHOUT_LOCATIONS as string,
-        global.PASSWORD as string
+        global.PASSWORD as string, false
       );
     } else {
-      await DashboardScreen.burgerMenu.click();
-      await DashboardScreen.miPerfil.click();
+      //await DashboardScreen.burgerMenu.click();
+      //await DashboardScreen.miPerfil.click();
     }
   } catch (error) {
     await DashboardScreen.navigateToDashboard(
       global.USERNAME_WITHOUT_LOCATIONS as string,
       global.PASSWORD as string
     );
-    await DashboardScreen.burgerMenu.click();
-    await DashboardScreen.miPerfil.click();
+    //await DashboardScreen.burgerMenu.click();
+    //await DashboardScreen.miPerfil.click();
   }
 });
 
@@ -57,61 +58,63 @@ Given(`User without locations is on Mi perfil screen`, async () => {
 });
 
 When(`User clicks on Mis Informaciones`, async () => {
+  await DashboardScreen.burgerMenu.click();
+  await DashboardScreen.miPerfil.click();
   await MiPerfilScreen.misInformacionesOption.click();
 });
 
 Then(`User should see his username`, async () => {
   await Helpers.verifyElementIsDisplayed(
-    MisInformacionesScreen.juanPerezUsernameElement,
+    MisInformacionesScreen.noLocationsUsernameElement,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
 });
 
 Then(`User should see his name`, async () => {
   await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.juanPerezUsernameElement,
+    await MisInformacionesScreen.noLocationsUsernameElement,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
 });
 
 Then(`User should see his ident. number`, async () => {
   await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.juanPerezUserCedula,
+    await MisInformacionesScreen.noLocationsUserCedula,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
 });
 
 Then(`User should see his DOB`, async () => {
   await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.juanPerezUserDob,
+    await MisInformacionesScreen.noLocationsUserDob,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
 });
 
 Then(`User should see his occupation`, async () => {
   await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.juanPerezUserOccupation,
+    await MisInformacionesScreen.noLocationsUserOccupation,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
 });
 
 Then(`User should see his phone number`, async () => {
   await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.juanPerezUserOccupation,
+    await MisInformacionesScreen.noLocationsUserOccupation,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
 });
 
 Then(`User should see his email`, async () => {
   await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.juanPerezUserEmail,
+    await MisInformacionesScreen.noLocationsUserEmail,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
 });
 
 Then(`User should see his role`, async () => {
   await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.juanPerezUserRole,
+    await MisInformacionesScreen.noLocationsUserRole,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
   await driver.back();
@@ -152,6 +155,7 @@ Then(`User should see his RNC`, async () => {
     await MiNegocioScreen.rncOption,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
+  await driver.back();
   await driver.back();
   await driver.back();
 });
