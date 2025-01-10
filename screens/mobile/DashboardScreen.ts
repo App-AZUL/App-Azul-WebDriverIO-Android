@@ -81,6 +81,9 @@ class DashboardScreen {
   get transaccionesQROption() {
     return $('//*[contains(@text,"Transacciones QR")]');
   }
+  get closeQRMessageButton() {
+    return $('//*[contains(@text,"Cancelar")]');
+  }
   async logOutFromDashboard() {
     await this.burgerMenu.click();
     this.salirButton.click();
@@ -122,12 +125,7 @@ class DashboardScreen {
     try {
       console.log("va a mantener?"+keepCurrentApp);
       
-      if (
-        !(await Helpers.verifyElementExist(
-          this.screenTitle,
-          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
-        )) || !keepCurrentApp
-      ) {
+      if (!keepCurrentApp) {
         console.log("weisparle");
         
         await Helpers.startAppByFirstTime();

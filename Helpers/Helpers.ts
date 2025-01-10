@@ -96,45 +96,37 @@ try {
     return isExisting;
   }
   async startAppByFirstTime() {
-    for (let i = 0; i < 1; i++) {
-      let isOnboardingScreenDisplayed = false;
-      // Verify onboarding screen element
-      let seconds = i===0 ? this.TEN_SECONDS_IN_MILLISECONDS : this.THIRTY_SECONDS_IN_MILLISECONDS;
-      try {
-        await this.verifyElementIsDisplayed(OnboardingScreen.bienvenidoTitle, seconds);
-        isOnboardingScreenDisplayed = true;
-    } catch (error) {
-      isOnboardingScreenDisplayed = false;
-    }
-      if (!isOnboardingScreenDisplayed) {
-        
-      
-      try {
-        const isInstalled = await driver.isAppInstalled(global.APP_AZUL_BUNDLE);
-        if (isInstalled) {
-            await driver.removeApp(global.APP_AZUL_BUNDLE);
-        } else {
-            console.log("App is not installed, skipping removal step.");
-        }
+    try {
+        const appPackage = global.APP_AZUL_BUNDLE;
+
+        // Step 1: Close the app
+        await driver.terminateApp(appPackage);
+
+        // Step 2: Restart the WebdriverIO session to clear data
+        if (driver.sessionId) { // Check if the session exists
+          await driver.deleteSession();
+      }
+
+        // Step 3: Start a new session
+        await driver.reloadSession(); // WebdriverIO will apply capabilities from the config file
+
+        // Step 4: Verify the app’s initial state
+        await this.verifyElementIsDisplayed(
+            OnboardingScreen.bienvenidoTitle,
+            120000
+        );
     } catch (error) {
         console.error(
-            "There was an error while uninstalling the app:",
+            "An error occurred while resetting and restarting the app:",
             error.message
         );
     }
-await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
-    // Install and activate the app
-    await driver.installApp("./"+global.APP_PATH);
-    await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
-
-    await driver.activateApp(global.APP_AZUL_BUNDLE);
-    await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
-    }
-  }   
 }
 
+
+
   async acceptNotificationPermission() {
-    try {
+    /*try {
       console.log("terms and coindition should be accepted and wait 5 minutes");
       await this.verifyElementIsDisplayed(
         this.AllowNotificationButton,
@@ -145,9 +137,9 @@ await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
       
     } catch (error) {
       console.log("couldn't accept login permissions");
-    }
+    }*/
   }
-  async acceptDashboardPermissions() {
+  async acceptDashboardPermissions() {/*
     try {
       console.log(
         "terms and coindition should be accepted and wait 10 seconds"
@@ -166,7 +158,7 @@ await driver.pause(this.FIVE_SECONDS_IN_MILLISECONDS);
       );
     } catch (error) {
       console.log("couldn't accept dashboard permissions");
-    }
+    }*/
   }
   async isVersionGreater(version, comparison) {
     const versionParts = await version.split(".").map(Number);

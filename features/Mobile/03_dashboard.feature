@@ -44,6 +44,5 @@ Scenario Outline: Verify burger menu options
 @Dashboard @Regression @HappyPath
 Scenario Outline: Verify user without location can access dashboard
 
-  Given User started the app by first time
   When an User without locations logs in
   Then User should be on Dashboard screen

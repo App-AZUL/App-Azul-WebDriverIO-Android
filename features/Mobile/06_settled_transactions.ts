@@ -6,18 +6,18 @@ import Helpers from "../../helpers/Helpers.ts";
 import Commons from "../../screens/mobile/Commons.ts";
 
 Given(`User without permissions is on Dashboard screen`, async () => {
-  try {
+  /*try {
     let userNameElement = $("//*[contains(@text,'"+global.NOT_PERMISSION_NAME+"')]");
     let isUserActive = !!(await Helpers.verifyElementIsDisplayed(
       userNameElement,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
   ).catch(() => false));  
-    if (!isUserActive) {
+    if (!isUserActive) {*/
       await DashboardScreen.navigateToDashboard(
         global.NOT_PERMISSION_USERNAME as string,
         global.PASSWORD as string, false
       );
-    } else {
+    /*} else {
       //await DashboardScreen.burgerMenu.click();
       //await DashboardScreen.miPerfil.click();
     }
@@ -28,10 +28,18 @@ Given(`User without permissions is on Dashboard screen`, async () => {
     );
     //await DashboardScreen.burgerMenu.click();
     //await DashboardScreen.miPerfil.click();
-  }
+  }*/
 });
 Then(`User should stay in Dashboard screen after dismissing the message`, async () => {
   await Helpers.dismissPopUp();
+  await driver.back();
+  await Helpers.verifyElementIsDisplayed(
+      DashboardScreen.screenTitle,
+      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    );
+});
+Then(`User should stay in Dashboard screen after dismissing the QR message`, async () => {
+  await DashboardScreen.closeQRMessageButton.click();
   await driver.back();
   await Helpers.verifyElementIsDisplayed(
       DashboardScreen.screenTitle,
@@ -61,6 +69,16 @@ Then(
       Commons.proffileWithoutAccessModalBody,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
     );*/
+  }
+);
+
+Then(
+  `User should see a message saying that the proffile doesnt have QR Product`,
+  async () => {
+    await Helpers.verifyElementIsDisplayed(
+      Commons.proffileWithoutQrCodeProductModalMessage,
+      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    );
   }
 );
 

@@ -7,19 +7,19 @@ import MiNegocioScreen from "../../screens/mobile/MiNegocioScreen.ts";
 import Helpers from "../../helpers/Helpers.ts";
 
 Given(`User without locations is on Dashboard screen`, async () => {
-  try {
+  /*try {
     let userNameElement = $("//*[contains(@text,'"+global.NO_LOCATIONS_NAME+"')]");
     let isUserActive = !!(await Helpers.verifyElementIsDisplayed(
       userNameElement,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
   ).catch(() => false));
   
-    if (!isUserActive) {
+    if (!isUserActive) {*/
       await DashboardScreen.navigateToDashboard(
         global.USERNAME_WITHOUT_LOCATIONS as string,
         global.PASSWORD as string, false
       );
-    } else {
+    /*} else {
       //await DashboardScreen.burgerMenu.click();
       //await DashboardScreen.miPerfil.click();
     }
@@ -30,7 +30,7 @@ Given(`User without locations is on Dashboard screen`, async () => {
     );
     //await DashboardScreen.burgerMenu.click();
     //await DashboardScreen.miPerfil.click();
-  }
+  }*/
 });
 
 Given(`User without locations is on Mi perfil screen`, async () => {

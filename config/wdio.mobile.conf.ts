@@ -50,9 +50,13 @@ export const config = {
       "appium:platformName": "Android",
       "appium:deviceName": "Google Pixel 7 Pro (Android 14)",
       "appium:platformVersion": "15.0",
-      "appium:noReset": true,
+      "appium:noReset": false,
       "a1ppium:enableMultiWindows": true,
       "appium:automationName": "UIAutomator2",
+      "appium:appPackage": "com.sdp.appazul",
+      "appium:appActivity":
+        "com.sdp.appazul.activities.dashboard.SplashScreenActivity",
+        "appium:autoGrantPermissions": true,
     },
   ],
 
@@ -73,6 +77,8 @@ export const config = {
   afterStep: async function () {
     if (driver.sessionId) {
       // If session is active, take a screenshot
+      console.log("session id es"+driver.sessionId);
+      
       await driver.takeScreenshot();
     }
   },

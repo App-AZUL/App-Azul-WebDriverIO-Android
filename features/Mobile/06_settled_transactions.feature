@@ -25,8 +25,8 @@ Scenario Outline: Verify User without permission cant go to QR Transaction Query
   Given User without permissions is on Dashboard screen
   When User clicks on Historial de Transacciones button
   And User clicks on Transacciones QR
-  Then User should see a message saying that the proffile doesnt have access
-And User should stay in Dashboard screen after dismissing the message
+  Then User should see a message saying that the proffile doesnt have QR Product
+And User should stay in Dashboard screen after dismissing the QR message
 
 #@SettledTransactions @Regression
 #Scenario Outline: Verify Settled Transactions are not visible

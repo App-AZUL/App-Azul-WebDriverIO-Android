@@ -63,21 +63,27 @@ Then(`User should see the text Servicios Digitales Popular, S.A.`, async () => {
 });
 
 Given(`User is on Dashboard screen with admin user`, async () => {
-  let adminNameElement = $("//*[contains(@text,'"+global.ADMIN_NAME+"')]");
-  let isAdminUserActive = !!(await Helpers.verifyElementIsDisplayed(
+  //let adminNameElement = $("//*[contains(@text,'"+global.ADMIN_NAME+"')]");
+  /*let isAdminUserActive = !!(await Helpers.verifyElementIsDisplayed(
     adminNameElement,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
 ).catch(() => false));
 console.log("perocompai"+isAdminUserActive);
 
   if (isAdminUserActive === false) {
-    console.log("viejito");
-    
+    console.log("viejito");*/
+    let isUserAtDashboard = false;
+        try {
+          await Helpers.verifyElementIsDisplayed(DashboardScreen.screenTitle, Helpers.TWENTY_SECONDS_IN_MILLISECONDS);
+          isUserAtDashboard = true;
+      } catch (error) {
+        isUserAtDashboard= false;
+      }
     await DashboardScreen.navigateToDashboard(
       global.USERNAME as string,
-      global.PASSWORD as string, false
+      global.PASSWORD as string, isUserAtDashboard
     );
-  }
+  //}
 });
 
 When(`User selects Affiliated Auto Rental location`, async () => {

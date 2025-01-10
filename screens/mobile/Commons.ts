@@ -25,6 +25,11 @@ class Commons {
       "//*[contains(@text,'acceso')]"
     );
   }
+  get proffileWithoutQrCodeProductModalMessage() {
+    return $(
+      "//*[contains(@text,'Obtén tu Código QR AZUL aquí')]"
+    );
+  }
   get proffileWithoutAccessModalBody() {
     return $(
       "//*[contains(@text,'Por favor, comunícate con el administrador de tu empresa para establecer los mismos.')]"

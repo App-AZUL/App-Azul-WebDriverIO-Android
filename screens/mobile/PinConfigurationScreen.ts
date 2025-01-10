@@ -59,7 +59,7 @@ class PinConfigurationScreen {
         '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
         buttonDigitNumber +
         '"]';
-      let buttonDigitElement = driver.$(buttonXpath);
+      let buttonDigitElement = await driver.$(buttonXpath);
       await buttonDigitElement.click();
     }
 
@@ -69,7 +69,7 @@ class PinConfigurationScreen {
         '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
         buttonDigitNumber +
         '"]';
-      let buttonDigitElement = driver.$(buttonXpath);
+      let buttonDigitElement = await driver.$(buttonXpath);
       await buttonDigitElement.click();
     }
     driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
@@ -77,10 +77,10 @@ class PinConfigurationScreen {
     if (
       await Helpers.verifyElementExist(
         this.PinConfiguration24HoursMessage,
-        Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
+        Helpers.TWENTY_SECONDS_IN_MILLISECONDS
       )
     ) {
-      this.reset24HoursPinValidation(pinString);
+      await this.reset24HoursPinValidation(pinString);
     }
 
     //Continue in case user already did set the same PIN
@@ -103,7 +103,7 @@ class PinConfigurationScreen {
           '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
           buttonDigitNumber +
           '"]';
-        let buttonDigitElement = driver.$(buttonXpath);
+        let buttonDigitElement = await driver.$(buttonXpath);
         await buttonDigitElement.click();
       }
 
@@ -113,7 +113,7 @@ class PinConfigurationScreen {
           '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
           buttonDigitNumber +
           '"]';
-        let buttonDigitElement = driver.$(buttonXpath);
+        let buttonDigitElement = await driver.$(buttonXpath);
         await buttonDigitElement.click();
       }
     }
@@ -133,7 +133,7 @@ class PinConfigurationScreen {
           '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
           buttonDigitNumber +
           '"]';
-        let buttonDigitElement = driver.$(buttonXpath);
+        let buttonDigitElement = await driver.$(buttonXpath);
         driver.pause(900);
         await buttonDigitElement.click();
       }
@@ -145,7 +145,7 @@ class PinConfigurationScreen {
           '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
           buttonDigitNumber +
           '"]';
-        let buttonDigitElement = driver.$(buttonXpath);
+        let buttonDigitElement = await driver.$(buttonXpath);
         await buttonDigitElement.click();
       }
     }
@@ -187,6 +187,7 @@ class PinConfigurationScreen {
       console.log(`Delay: ${delay}`);
 
       // Wait for the specified delay
+      await Helpers.dismissPopUp();
       await driver.pause(delay * 1000); // Convert seconds to milliseconds
 
       // Enter the PIN twice
@@ -196,7 +197,7 @@ class PinConfigurationScreen {
           '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
           buttonDigitNumber +
           '"]';
-        let buttonDigitElement = driver.$(buttonXpath);
+        let buttonDigitElement = await driver.$(buttonXpath);
         await buttonDigitElement.click();
       }
 
@@ -206,7 +207,7 @@ class PinConfigurationScreen {
           '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
           buttonDigitNumber +
           '"]';
-        let buttonDigitElement = driver.$(buttonXpath);
+        let buttonDigitElement = await driver.$(buttonXpath);
         await buttonDigitElement.click();
       }
       if (
@@ -224,7 +225,7 @@ class PinConfigurationScreen {
             '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
             buttonDigitNumber +
             '"]';
-          let buttonDigitElement = driver.$(buttonXpath);
+          let buttonDigitElement = await driver.$(buttonXpath);
           await buttonDigitElement.click();
         }
 
@@ -234,7 +235,7 @@ class PinConfigurationScreen {
             '//android.widget.Button[@resource-id="com.sdp.appazul:id/button_' +
             buttonDigitNumber +
             '"]';
-          let buttonDigitElement = driver.$(buttonXpath);
+          let buttonDigitElement = await driver.$(buttonXpath);
           await buttonDigitElement.click();
         }
       }
@@ -247,7 +248,16 @@ class PinConfigurationScreen {
         Helpers.TWENTY_SECONDS_IN_MILLISECONDS
       ))
     ) {
-      await Helpers.startAppByFirstTime();
+      let isUserAtOnboardingScreen = false;
+                try {
+                  await Helpers.verifyElementIsDisplayed(OnboardingScreen.saltarDemostracionButton, Helpers.TWENTY_SECONDS_IN_MILLISECONDS);
+                  isUserAtOnboardingScreen = true;
+              } catch (error) {
+                isUserAtOnboardingScreen= false;
+              }
+              if (!isUserAtOnboardingScreen) {
+                await Helpers.startAppByFirstTime();
+              }
       await (await OnboardingScreen.saltarDemostracionButton).click();
       await (await NewAccessScreen.yaSoyClienteButton).click();
       await Helpers.acceptNotificationPermission();

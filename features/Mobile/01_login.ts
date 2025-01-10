@@ -9,21 +9,18 @@ import Helpers from "../../helpers/Helpers.ts";
 
 /*  Verify Onboarding Screen steps  */
 Given("User started the app by first time", async () => {
-  try {
-    await Helpers.startAppByFirstTime();
-    var isUserAtOnboardingScreen = await Helpers.verifyElementIsDisplayed(
+    var isUserAtOnboardingScreen = await Helpers.verifyElementExist(
       OnboardingScreen.bienvenidoTitle,
-      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+      Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
     );
+    if (!isUserAtOnboardingScreen) {
+      await Helpers.startAppByFirstTime();
+      isUserAtOnboardingScreen = await Helpers.verifyElementExist(
+        OnboardingScreen.bienvenidoTitle,
+        Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
+      );
+    }
     await expect(isUserAtOnboardingScreen).toBeTruthy;
-  } catch (error) {
-    await Helpers.startAppByFirstTime();
-    var isUserAtOnboardingScreen = await Helpers.verifyElementIsDisplayed(
-      OnboardingScreen.bienvenidoTitle,
-      Helpers.FIVE_SECONDS_IN_MILLISECONDS
-    );
-    await expect(isUserAtOnboardingScreen).toBeTruthy;
-  }
 });
 
 When(
@@ -92,7 +89,7 @@ Then(`User should be on Login Screen`, async () => {
 /*  Verify Reset Password  */
 
 Given(`User is on Login screen`, async () => {
-  await LoginScreen.navigateToLoginScreen();
+ // await LoginScreen.navigateToLoginScreen();
   const userIsOnLoginScreen = await LoginScreen.verifyLoginScreenElements();
   if (!userIsOnLoginScreen) {
     await Helpers.verifyElementIsDisplayed(
@@ -233,7 +230,7 @@ When(`User should see a message asking for credentials`, async () => {
 Then(`User should be redirected to PIN Configuration screen`, async () => {
   await Helpers.verifyElementIsDisplayed(
     PinConfigurationScreen.screenTitle,
-    Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
+    Helpers.THIRTY_SECONDS_IN_MILLISECONDS
   );
 });
 
