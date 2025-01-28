@@ -1,3 +1,31 @@
+import {
+  APP_PATH,
+  INVALID_USERNAME,
+  INVALID_PASSWORD,
+  USERNAME,
+  ADMIN_USERNAME,
+  ADMIN_NAME,
+  ADMIN_BUSINESS_NAME,
+  NOT_AFFILIATED_USERNAME,
+  NOT_AFFILIATED_NAME,
+  NOT_PERMISSION_USERNAME,
+  NOT_PERMISSION_NAME,
+  NUEVO_USERNAME,
+  NUEVO_EXPIRADO_USERNAME,
+  BLOQUEADO_USERNAME,
+  DESHABILITADO_USERNAME,
+  EN_INVESTIGACION_USERNAME,
+  USERNAME_WITHOUT_LOCATIONS,
+  NO_LOCATIONS_NAME,
+  NO_LOCATIONS_CEDULA,
+  NO_LOCATIONS_DOB,
+  NO_LOCATIONS_MAIL,
+  PASSWORD,
+  APP_AZUL_BUNDLE,
+  IS_PREVIOUS_TEST_SUCCESS,
+  PIN,
+  IS_PIN_REVERSED,
+} from "../helpers/ConstantsQA.ts";
 const waitforTimeout = 50000;
 
 export const config: WebdriverIO.Config = {
@@ -27,7 +55,7 @@ export const config: WebdriverIO.Config = {
     // will be called from there.
     //
     specs: [
-        './Features/Mobile/login/01_login.feature'
+        '../Features/Mobile/*.feature'
     ],
     // Patterns to exclude.
     exclude: [
@@ -58,11 +86,7 @@ export const config: WebdriverIO.Config = {
     // The capabilities are set up on another file to convert more
     // Feasible the process.
     capabilities: [{
-        maxInstances: 1,
         autoGrantPermissions: true,
-        autoAcceptAlerts: true,
-        language: "es",
-        locale: "LA",
     }],
     //
     // ===================
@@ -107,7 +131,7 @@ export const config: WebdriverIO.Config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: [],
+    services: ["appium", "visual"],
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
     // see also: https://webdriver.io/docs/frameworks
@@ -146,7 +170,7 @@ export const config: WebdriverIO.Config = {
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: ['./Features/Mobile/login/01_login_screen_steps.ts'],
+        require: ['./Features/Mobile/*.ts'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -166,12 +190,41 @@ export const config: WebdriverIO.Config = {
         // <boolean> fail if there are any undefined or pending steps
         strict: false,
         // <string> (expression) only execute the features or scenarios with tags matching the expression
-        tags: '',
+        tagExpression: '',
         // <number> timeout for step definitions
-        timeout: 60000,
+        timeout: 130000,
         // <boolean> Enable this config to treat undefined definitions as warnings.
         ignoreUndefinedDefinitions: false
     },
+  before: function () {
+    // Attach constants to global object
+    (global as any).APP_PATH = APP_PATH;
+    (global as any).INVALID_USERNAME = INVALID_USERNAME;
+    (global as any).INVALID_PASSWORD = INVALID_PASSWORD;
+    (global as any).PASSWORD = PASSWORD;
+    (global as any).USERNAME = USERNAME;
+    (global as any).ADMIN_USERNAME = ADMIN_USERNAME;
+    (global as any).ADMIN_NAME = ADMIN_NAME;
+    (global as any).ADMIN_BUSINESS_NAME = ADMIN_BUSINESS_NAME;
+    (global as any).NOT_AFFILIATED_USERNAME = NOT_AFFILIATED_USERNAME;
+    (global as any).NOT_AFFILIATED_NAME = NOT_AFFILIATED_NAME;
+    (global as any).NOT_PERMISSION_USERNAME = NOT_PERMISSION_USERNAME;
+    (global as any).NOT_PERMISSION_NAME = NOT_PERMISSION_NAME;
+    (global as any).NUEVO_USERNAME = NUEVO_USERNAME;
+    (global as any).NUEVO_EXPIRADO_USERNAME = NUEVO_EXPIRADO_USERNAME;
+    (global as any).BLOQUEADO_USERNAME = BLOQUEADO_USERNAME;
+    (global as any).DESHABILITADO_USERNAME = DESHABILITADO_USERNAME;
+    (global as any).EN_INVESTIGACION_USERNAME = EN_INVESTIGACION_USERNAME;
+    (global as any).USERNAME_WITHOUT_LOCATIONS = USERNAME_WITHOUT_LOCATIONS;
+    (global as any).APP_AZUL_BUNDLE = APP_AZUL_BUNDLE;
+    (global as any).IS_PREVIOUS_TEST_SUCCESS = IS_PREVIOUS_TEST_SUCCESS;
+    (global as any).PIN = PIN;
+    (global as any).IS_PIN_REVERSED = IS_PIN_REVERSED;
+    (global as any).NO_LOCATIONS_NAME = NO_LOCATIONS_NAME;
+    (global as any).NO_LOCATIONS_CEDULA = NO_LOCATIONS_CEDULA;
+    (global as any).NO_LOCATIONS_DOB = NO_LOCATIONS_DOB;
+    (global as any).NO_LOCATIONS_MAIL = NO_LOCATIONS_MAIL;
+  },
     //
     // =====
     // Hooks
@@ -239,16 +292,16 @@ export const config: WebdriverIO.Config = {
     /**
      * Runs after a Cucumber step
      */
-    afterStep: async function (step, scenario, result) {
+    afterStep: async function () {
         await browser.takeScreenshot();
     },
     /**
      * Runs after a Cucumber scenario
      */
-    afterScenario: async function (world, result) {
+    /*afterScenario: async function () {
         await browser.closeApp();
         await browser.reset();
-    },
+    },*/
     /**
      * Runs after a Cucumber feature
      */
