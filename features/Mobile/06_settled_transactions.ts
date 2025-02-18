@@ -46,9 +46,6 @@ Then(`User should stay in Dashboard screen after dismissing the QR message`, asy
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
     );
 });
-When(`User clicks on Historial de Transacciones button`, async () => {
-  await DashboardScreen.historialdeTransaccionesButton.click();
-});
 
 When(`User clicks on Transacciones Liquidadas`, async () => {
   await DashboardScreen.transaccionesLiquidadasOption.click();
@@ -81,13 +78,6 @@ Then(
     );
   }
 );
-
-Then(`User should not see any transaction`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    SettledTransactionsScreen.noExistenTransaccionesText,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
-});
 
 Then(`User should see a message asking for permission`, () => {
   // [Then] Describes the expected outcome or result of the scenario.

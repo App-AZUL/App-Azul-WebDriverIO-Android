@@ -57,6 +57,7 @@ export const config = {
       "appium:appActivity":
         "com.sdp.appazul.activities.dashboard.SplashScreenActivity",
         "appium:autoGrantPermissions": true,
+      "appium:language": "es",
     },
   ],
 

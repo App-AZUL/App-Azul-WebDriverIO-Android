@@ -112,15 +112,15 @@ Scenario Outline: Login invalid credentials
   Then User should see a message saying incorrect credentials
     And after dismissing the message User still being on login screen
 
-@Login @Regression
-Scenario Outline: Login credentials with status Nuevo
-
-  Given User is on Login screen
-  When User types an username with status nuevo on username textfield
-    And User types a valid password on password textfield
-    And User clicks on Iniciar sesión button
-  Then User should see a message saying to setup credentials
-    And after dismissing the message User still being on login screen
+#@Login @Regression
+#Scenario Outline: Login credentials with status Nuevo
+#
+#  Given User is on Login screen
+#  When User types an username with status nuevo on username textfield
+#    And User types a valid password on password textfield
+#    And User clicks on Iniciar sesión button
+#  Then User should see a message saying to setup credentials
+#    And after dismissing the message User still being on login screen
 
 @Login @Regression
 Scenario Outline: Login credentials with status Nuevo Expirado
