@@ -51,19 +51,18 @@ export const config = {
       "appium:deviceName": "Google Pixel 7 Pro (Android 14)",
       "appium:platformVersion": "15.0",
       "appium:noReset": false,
-      "a1ppium:enableMultiWindows": true,
+      "appium:enableMultiWindows": true,
       "appium:automationName": "UIAutomator2",
       "appium:appPackage": "com.sdp.appazul",
       "appium:appActivity":
         "com.sdp.appazul.activities.dashboard.SplashScreenActivity",
         "appium:autoGrantPermissions": true,
-      "appium:language": "es",
     },
   ],
 
   logLevel: "debug",
 
-  bail: 1,
+  bail: 0,
 
   waitforTimeout: 30000,
 
@@ -78,11 +77,25 @@ export const config = {
   afterStep: async function () {
     if (driver.sessionId) {
       // If session is active, take a screenshot
-      console.log("session id es"+driver.sessionId);
+      console.log("session id es: "+driver.sessionId);
       
       await driver.takeScreenshot();
     }
   },
+
+  beforeFeature: async function ({ uri, feature, name }) {
+    if (driver) {
+        //await driver.deleteSession();
+    }
+    // WebdriverIO will automatically create a new session
+    // for the next test if you have autoCreateSession enabled
+},
+
+afterFeature: async function ({ uri, feature, name }) {
+    // Optional cleanup
+    //await driver.closeApp();
+},
+  
 
   /*afterTest: async function (
     test,
@@ -117,6 +130,8 @@ export const config = {
       },
     ],
   ],
+
+  autoCreateSession: true,
 
   cucumberOpts: {
     require: ["./features/mobile/*.ts"], // Update if needed

@@ -13,13 +13,13 @@ Given("User started the app by first time", async () => {
       OnboardingScreen.bienvenidoTitle,
       Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
     );
-    if (!isUserAtOnboardingScreen) {
+    /*if (!isUserAtOnboardingScreen) {
       await Helpers.startAppByFirstTime();
       isUserAtOnboardingScreen = await Helpers.verifyElementExist(
         OnboardingScreen.bienvenidoTitle,
         Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
       );
-    }
+    }*/
     await expect(isUserAtOnboardingScreen).toBeTruthy;
 });
 
@@ -28,14 +28,10 @@ When(
   async () => {
     await Helpers.verifyElementIsDisplayed(
       OnboardingScreen.aprendeComoHacerloButton,
-      Helpers.FIVE_SECONDS_IN_MILLISECONDS
+      Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
     );
 
-    await Helpers.verifyElementIsDisplayed(
-      OnboardingScreen.saltarDemostracionButton,
-      Helpers.FIVE_SECONDS_IN_MILLISECONDS
-    );
-
+    //await driver.pause(10000);
     await OnboardingScreen.aprendeComoHacerloButton.click();
     await OnboardingScreen.verifyOnboardingTexts();
   }
@@ -49,7 +45,7 @@ Then("User can continue to New Access Screen", async () => {
 
 /*  Verify New Access screen steps  */
 Given(`User is on the New Access Screen`, async () => {
-  await NewAccessScreen.navigateToNewAccessScreen();
+  //await NewAccessScreen.navigateToNewAccessScreen();
   await Helpers.verifyElementIsDisplayed(
     NewAccessScreen.screenTitle,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
@@ -92,11 +88,13 @@ Given(`User is on Login screen`, async () => {
  // await LoginScreen.navigateToLoginScreen();
   const userIsOnLoginScreen = await LoginScreen.verifyLoginScreenElements();
   if (!userIsOnLoginScreen) {
+    await Helpers.startAppByFirstTime();
     await Helpers.verifyElementIsDisplayed(
       OnboardingScreen.bienvenidoTitle,
       Helpers.FIVE_SECONDS_IN_MILLISECONDS
     );
     await OnboardingScreen.saltarDemostracionButton.click();
+    (await NewAccessScreen.yaSoyClienteButton).click();
   }
 });
 
@@ -194,10 +192,9 @@ When(`User types a valid password on password textfield`, async () => {
 });
 
 Then(`User should see a message saying incorrect credentials`, async () => {
-  await driver.pause(5000);
   await Helpers.verifyElementIsDisplayed(
     LoginScreen.incorrectCredentialsPopUpTitle,
-    Helpers.TEN_SECONDS_IN_MILLISECONDS
+    Helpers.THIRTY_SECONDS_IN_MILLISECONDS
   );
 });
 

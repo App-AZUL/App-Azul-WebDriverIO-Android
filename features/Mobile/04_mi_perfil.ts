@@ -6,168 +6,161 @@ import DatosDeAccesoScreen from "../../screens/mobile/DatosDeAccesoScreen.ts";
 import MiNegocioScreen from "../../screens/mobile/MiNegocioScreen.ts";
 import Helpers from "../../helpers/Helpers.ts";
 
-Given(`User without locations is on Dashboard screen`, async () => {
-  /*try {
-    let userNameElement = $("//*[contains(@text,'"+global.NO_LOCATIONS_NAME+"')]");
-    let isUserActive = !!(await Helpers.verifyElementIsDisplayed(
-      userNameElement,
-      Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  ).catch(() => false));
-  
-    if (!isUserActive) {*/
-      await DashboardScreen.navigateToDashboard(
-        global.USERNAME_WITHOUT_LOCATIONS as string,
-        global.PASSWORD as string, false
-      );
-    /*} else {
-      //await DashboardScreen.burgerMenu.click();
-      //await DashboardScreen.miPerfil.click();
-    }
-  } catch (error) {
-    await DashboardScreen.navigateToDashboard(
-      global.USERNAME_WITHOUT_LOCATIONS as string,
-      global.PASSWORD as string
-    );
-    //await DashboardScreen.burgerMenu.click();
-    //await DashboardScreen.miPerfil.click();
-  }*/
-});
-
-Given(`User without locations is on Mi perfil screen`, async () => {
-  try {
-    let isUserOnMiPerfil = await Helpers.verifyElementIsDisplayed(
-      MiPerfilScreen.screenTitle,
-      Helpers.FIVE_SECONDS_IN_MILLISECONDS
-    );
-    if (!Boolean(isUserOnMiPerfil)) {
-      await DashboardScreen.navigateToDashboard(
-        global.USERNAME_WITHOUT_LOCATIONS as string,
+Given(`User is on MiPerfil screen with admin user`, async () => {
+    await DashboardScreen.goToDashboardAfterReinstall(
+        global.ADMIN_USERNAME as string,
         global.PASSWORD as string
       );
-      await DashboardScreen.burgerMenu.click();
-      await DashboardScreen.miPerfil.click();
-    }
-  } catch (error) {
-    await DashboardScreen.navigateToDashboard(
-      global.USERNAME_WITHOUT_LOCATIONS as string,
-      global.PASSWORD as string
-    );
-    await DashboardScreen.burgerMenu.click();
-    await DashboardScreen.miPerfil.click();
-  }
+      
 });
 
-When(`User clicks on Mis Informaciones`, async () => {
-  await DashboardScreen.burgerMenu.click();
-  await DashboardScreen.miPerfil.click();
-  await MiPerfilScreen.misInformacionesOption.click();
+When(`User clicks on proffile circle`, async () => {
+    (await DashboardScreen.proffileCircleButton).click();
 });
 
-Then(`User should see his username`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    MisInformacionesScreen.noLocationsUsernameElement,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
+Then(`User should see his first name & client name`, async () => {
+    await Helpers.verifyElementIsDisplayed(
+          MiPerfilScreen.adminNameText,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        );
+
+    await Helpers.verifyElementIsDisplayed(
+          MiPerfilScreen.clientNameText,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        );
 });
 
-Then(`User should see his name`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.noLocationsUsernameElement,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
+Then(`User should see option Datos personales`, async () => {
+    await Helpers.verifyElementIsDisplayed(
+          MiPerfilScreen.datosPersonalesOption,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        );
 });
 
-Then(`User should see his ident. number`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.noLocationsUserCedula,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
+Then(`User should see option Datos del negocio`, async () => {
+    await Helpers.verifyElementIsDisplayed(
+          MiPerfilScreen.datosDelNegocioOption,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        );
 });
 
-Then(`User should see his DOB`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.noLocationsUserDob,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
+Then(`User should see option Localidades`, async () => {
+    await Helpers.verifyElementIsDisplayed(
+          MiPerfilScreen.localidadesOption,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        );
 });
 
-Then(`User should see his occupation`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.noLocationsUserOccupation,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
+Then(`User should see option Preferencias`, async () => {
+    await Helpers.verifyElementIsDisplayed(
+          MiPerfilScreen.preferenciasOption,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        );
 });
 
-Then(`User should see his phone number`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.noLocationsUserOccupation,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
+Given(`admin user is on Mi perfil screen`, async () => {
+    await Helpers.verifyElementIsDisplayed(
+          MiPerfilScreen.screenTitle,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        );
 });
 
-Then(`User should see his email`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.noLocationsUserEmail,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
+When(`User clicks on Datos personales option`, () => {
+    // [When] Describes the action or event that triggers the scenario.
 });
 
-Then(`User should see his role`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    await MisInformacionesScreen.noLocationsUserRole,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
-  await driver.back();
+Then(`User should see his username`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
 });
 
-When(`User clicks on Datos de acceso`, async () => {
-  await MiPerfilScreen.datosDeAccesoOption.click();
+Then(`User should see his identification number`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
 });
 
-Then(`User should see the current date on Ultimo Acceso field`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    await DatosDeAccesoScreen.ultimoAccesoOption,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
+Then(`User should see his date of birth`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
 });
 
-Then(`User should see asterisks in the password field`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    await DatosDeAccesoScreen.contrasenaOption,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
-  await driver.back();
+Then(`User should see his occupation`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
 });
 
-When(`User clicks on Mi negocio`, async () => {
-  await MiPerfilScreen.miNegocioOption.click();
+Then(`User should see his telephone number`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
 });
 
-Then(`User should see his Commercial Group name`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    await MiNegocioScreen.nombreOption,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
+Then(`User should see his celphone number`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
 });
 
-Then(`User should see his RNC`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    await MiNegocioScreen.rncOption,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
-  await driver.back();
-  await driver.back();
-  await driver.back();
+Then(`User should see his email`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
 });
 
-When(`User clicks on Localidades`, () => {
-  // [When] Describes the action or event that triggers the scenario.
+Then(`User should see his role`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
 });
 
-Then(`User should see all location groups assigned`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
+Then(`User should stay on Mi perfil screen after pressing back button`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
 });
 
-Then(`User should see all locations assigned according the group`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
+When(`User clicks on Datos del negocio option`, () => {
+    // [When] Describes the action or event that triggers the scenario.
+});
+
+Then(`User should see his client name`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
+});
+
+Then(`User should see his RNC`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
+});
+
+Then(`User should see his Industry Sector`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
+});
+
+When(`User clicks on Localidades option`, () => {
+    // [When] Describes the action or event that triggers the scenario.
+});
+
+Then(`User should see Affiliated Auto rental location inside Servicios Digitales unit`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
+});
+
+Then(`User should see ACADEMIA DIGITAL DE ED location inside Servicios Digitales unit`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
+});
+
+When(`User clicks on Preferencias option`, () => {
+    // [When] Describes the action or event that triggers the scenario.
+});
+
+Then(`User should see option Permitir notificaciones`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
+});
+
+Then(`User should see option Transacciones Link de Pagos`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
+});
+
+Then(`User should see option Transacciones Codigo QR`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
+});
+
+Then(`User should see option Nueva afiliacion Link de Pagos`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
+});
+
+Then(`User should see option Nueva afiliacion Tap`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
+});
+
+Then(`User should see option Solicitudes cerradas`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
+});
+
+Then(`User should be on MiPerfil screen after pressing back button`, () => {
+    // [Then] Describes the expected outcome or result of the scenario.
 });

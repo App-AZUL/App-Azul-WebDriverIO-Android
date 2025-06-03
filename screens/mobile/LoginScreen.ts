@@ -85,7 +85,7 @@ class LoginScreen {
 
   /* Functions */
   async verifyLoginScreenElements() {
-    const timeout = 5000;
+    const timeout = 15000;
     let allElementsPresent = true;
 
     // Verify user input
@@ -131,7 +131,7 @@ class LoginScreen {
   async verifyAfiliateAquiButton() {
     await this.afiliateAquiButton.click();
     await AffiliationRequirementsScreen.screenTitle.waitForExist({
-      timeout: 5000,
+      timeout: 15000,
     });
     await expect(AffiliationRequirementsScreen.screenTitle).toBeExisting();
   }

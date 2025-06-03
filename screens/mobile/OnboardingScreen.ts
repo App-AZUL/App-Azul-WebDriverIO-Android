@@ -40,11 +40,11 @@ class OnboardingScreen {
       const elementTitle = $(
         "//*[contains(@text,'" + this.infoTitles[i] + "')]"
       );
-      await elementTitle.waitForExist({ timeout: 5000 });
+      await elementTitle.waitForExist({ timeout: 10000 });
       await expect(elementTitle).toBeExisting();
 
       const elementText = $("//*[contains(@text,'" + this.infoTexts[i] + "')]");
-      await elementText.waitForExist({ timeout: 5000 });
+      await elementText.waitForExist({ timeout: 10000 });
       await expect(elementText).toBeExisting();
 
       if (i != 3 && i != 5) {

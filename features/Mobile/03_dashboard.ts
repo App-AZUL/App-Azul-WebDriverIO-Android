@@ -1,6 +1,10 @@
 import { Given, When, Then } from "@cucumber/cucumber";
 import DashboardScreen from "../../screens/mobile/DashboardScreen.ts";
 import Helpers from "../../helpers/Helpers.ts";
+import PreloggedScreen from "../../screens/mobile/PreloggedScreen.ts";
+import Commons from "../../screens/mobile/Commons.ts";
+import LoginScreen from "../../screens/mobile/LoginScreen.ts";
+import PinConfigurationScreen from "../../screens/mobile/PinConfigurationScreen.ts";
 
 Then(`User should see a greeting`, async () => {
   await Helpers.verifyElementIsDisplayed(
@@ -104,6 +108,12 @@ Then(`User should not see Avance message`, async () => {
 Then(`User should see Avance message`, async () => {
   await expect(DashboardScreen.avanceOfferMessage).toBeDisplayed();
 });
+Then(`User should see Avance offer message with amount`, async () => {
+  await expect(DashboardScreen.avanceOfferMessageWithAmount).toBeDisplayed();
+});
+Then(`User should see the correct amount offer`, async () => {
+  await expect(DashboardScreen.avanceAmountText).toBeDisplayed();
+});
 Then(
   `after closing the menu the user should stay in dashboard screen`,
   async () => {
@@ -116,10 +126,30 @@ Then(
 );
 
 When(`an User without locations logs in`, async () => {
+  /*
   await DashboardScreen.navigateToDashboard(
     global.USERNAME_WITHOUT_LOCATIONS as string,
     global.PASSWORD as string
-  );
+  );*/
+
+  (await DashboardScreen.logoutButton).click();
+  (await DashboardScreen.salirDashboardButton).click();
+  await driver.pause(Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS);
+  (await PreloggedScreen.burgerMenu).click();
+  (await PreloggedScreen.desvincularButton).click();
+  (await Commons.siButton).click();
+  await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
+
+  await LoginScreen.usernameInput.setValue(global.USERNAME_WITHOUT_LOCATIONS);
+  await LoginScreen.passwordInput.setValue(global.PASSWORD);
+  await LoginScreen.iniciarSesionButton.click();
+
+  if (global.PIN == "" || global.PIN == null) {
+    global.PIN = 7799;
+  }
+  await PinConfigurationScreen.setPin(global.PIN);
+
+  (await Commons.continuarButton).click();
 });
 
 Then(`User should be on Dashboard screen`, async () => {

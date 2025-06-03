@@ -7,11 +7,32 @@ import NewAccessScreen from "../../screens/mobile/NewAccessScreen.ts";
 import LoginScreen from "../../screens/mobile/LoginScreen.ts";
 
 //Verify User can't login using Wrong PIN Configuration
-Given(`User is at PIN Configuration`, async () => {
-  await PinConfigurationScreen.navigateToPinConfiguration(
+Given(`User navitates to PIN Configuration screen as admin user`, async () => {
+  await (await OnboardingScreen.saltarDemostracionButton).click();
+  await (await NewAccessScreen.yaSoyClienteButton).click();
+  await Helpers.acceptNotificationPermission();
+  await LoginScreen.passwordInput.setValue(global.PASSWORD as string);
+  await LoginScreen.usernameInput.setValue(global.USERNAME as string);
+  await LoginScreen.iniciarSesionButton.click();
+  await Helpers.verifyElementExist(
+    PinConfigurationScreen.screenTitle,
+    Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+  );
+  /*await PinConfigurationScreen.navigateToPinConfiguration(
     global.USERNAME as string,
     global.PASSWORD as string
-  );
+  );*/
+});
+
+Given(`User is at PIN Configuration`, async () => {
+  /*await PinConfigurationScreen.navigateToPinConfiguration(
+    global.USERNAME as string,
+    global.PASSWORD as string
+  );*/
+  await Helpers.verifyElementExist(
+    PinConfigurationScreen.screenTitle,
+          Helpers.TEN_SECONDS_IN_MILLISECONDS
+        );
 });
 
 When(`User types PIN {int}`, async (arg0: number) => {
@@ -99,8 +120,8 @@ Then(
 );
 
 Then(`User should be logged-in succesfully`, async () => {
-  await Helpers.acceptDashboardPermissions();
   await DashboardScreen.dismissDashboardNovelty();
+  await Helpers.acceptDashboardPermissions();
   await Helpers.verifyElementIsDisplayed(
     DashboardScreen.screenTitle,
     Helpers.TEN_SECONDS_IN_MILLISECONDS

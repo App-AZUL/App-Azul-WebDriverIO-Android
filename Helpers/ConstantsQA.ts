@@ -1,10 +1,10 @@
 export const APP_PATH = "APP/azul-qa.apk";
 export const INVALID_USERNAME = "wrong username";
 export const INVALID_PASSWORD = "wrong password";
-export const USERNAME = "jcastro";
-export const ADMIN_USERNAME = "jcastro";
-export const ADMIN_NAME = "JUAN";
-export const ADMIN_BUSINESS_NAME = "SUPERMERCADO BRAVO";
+export const USERNAME = "administradorpruebaspruebas";
+export const ADMIN_USERNAME = "administradorpruebaspruebas";
+export const ADMIN_NAME = "Administrador";
+export const ADMIN_BUSINESS_NAME = "Servicios Digitales";
 export const NOT_AFFILIATED_USERNAME = "mirizarry";
 export const NOT_AFFILIATED_NAME = "María";
 export const NOT_PERMISSION_USERNAME = "jmolins";

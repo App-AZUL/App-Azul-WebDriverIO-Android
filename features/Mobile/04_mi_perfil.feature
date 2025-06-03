@@ -3,39 +3,60 @@
 Feature: Mi perfil
 
 @MiPerfil @Regression @HappyPath
-Scenario Outline: Verify information on Mis Informaciones
+Scenario Outline: Verify proffile menu options
 
-Given User without locations is on Dashboard screen
-When User clicks on Mis Informaciones
-Then User should see his username
-And User should see his name
-And User should see his ident. number
-And User should see his DOB
-And User should see his occupation
-And User should see his phone number
-And User should see his email
-And User should see his role
+  Given User is on MiPerfil screen with admin user
+  When User clicks on proffile circle
+  Then User should see his first name & client name
+  And User should see option Datos personales
+  And User should see option Datos del negocio
+  And User should see option Localidades
+  And User should see option Preferencias
 
-#@MiPerfil @Regression @HappyPath
-#Scenario Outline: Verify information on Datos de acceso
+  #@MiPerfil @Regression @HappyPath
+  #Scenario Outline: Verify Datos personales information
 #
-#Given User without locations is on Mi perfil screen
-#When User clicks on Datos de acceso
-#Then User should see the current date on Ultimo Acceso field
-#And User should see asterisks in the password field
-
-@MiPerfil @Regression @HappyPath
-Scenario Outline: Verify information on Mi negocio
-
-Given User without locations is on Mi perfil screen
-When User clicks on Mi negocio
-Then User should see his Commercial Group name
-And User should see his RNC
-
-#@MiPerfil @Regression @HappyPath
-#Scenario Outline: Verify information on Localidades
+  #Given admin user is on Mi perfil screen
+  #When User clicks on Datos personales option
+  #Then User should see his username
+  #And User should see his identification number
+  #And User should see his date of birth
+  #And User should see his occupation
+  #And User should see his telephone number
+  #And User should see his celphone number
+  #And User should see his email
+  #And User should see his role
+  #And User should stay on Mi perfil screen after pressing back button
 #
-#Given User is on Mi perfil screen
-#When User clicks on Localidades
-#Then User should see all location groups assigned
-#And User should see all locations assigned according the group
+  #@MiPerfil @Regression @HappyPath
+  #Scenario Outline: Verify Datos del negocio information
+#
+  #Given admin user is on Mi perfil screen
+  #When User clicks on Datos del negocio option
+  #Then User should see his client name
+  #And User should see his RNC
+  #And User should see his Industry Sector
+  #And User should stay on Mi perfil screen after pressing back button
+#
+  #@MiPerfil @Regression @HappyPath
+  #Scenario Outline: Verify Localidades information
+#
+  #Given admin user is on Mi perfil screen
+  #When User clicks on Localidades option
+  #Then User should see Affiliated Auto rental location inside Servicios Digitales unit
+  #And User should see ACADEMIA DIGITAL DE ED location inside Servicios Digitales unit
+  #And User should stay on Mi perfil screen after pressing back button
+#
+  #@MiPerfil @Regression @HappyPath
+  #Scenario Outline: Verify Preferencias options
+#
+  #Given admin user is on Mi perfil screen
+  #When User clicks on Preferencias option
+  #Then User should see option Permitir notificaciones
+  #And User should see option Transacciones Link de Pagos
+  #And User should see option Transacciones Codigo QR
+  #And User should see option Nueva afiliacion Link de Pagos
+  #And User should see option Nueva afiliacion Tap
+  #And User should see option Solicitudes cerradas
+  #And User should stay on Mi perfil screen after pressing back button
+  #And User should be on MiPerfil screen after pressing back button

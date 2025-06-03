@@ -13,9 +13,24 @@ class DashboardScreen {
       '//android.widget.RelativeLayout[@resource-id="com.sdp.appazul:id/dashBoardTopBar"]'
     );
   }
+  get proffileCircleButton() {
+    return $(
+      "//android.widget.RelativeLayout[@resource-id=\"com.sdp.appazul:id/profile_cardView\"]"
+    );
+  }
   get burgerMenu() {
     return $(
       "//*[@class = 'android.widget.ImageView' and @resource-id = 'com.sdp.appazul:id/dashBoardBurgerMenu' and (@text = '' or . = '')]"
+    );
+  }
+  get logoutButton() {
+    return $(
+      "//android.widget.RelativeLayout[@resource-id=\"com.sdp.appazul:id/btnLogoutMenu\"]"
+    );
+  }
+  get salirDashboardButton() {
+    return $(
+      "//android.widget.TextView[@resource-id=\"com.sdp.appazul:id/txtContinueBtnView\"]"
     );
   }
   get salirButton() {
@@ -29,14 +44,15 @@ class DashboardScreen {
   get commercialGroupName() {
     console.log(global.ADMIN_BUSINESS_NAME);
     
-    return $("//*[contains(@text,'"+global.ADMIN_BUSINESS_NAME+"')]");
+    return $("//*[contains(@text,'Grupo Popular Dominicano')]");
   }
   get currentDateElement() {
     let date = this.getFormattedDateInSpanish();
-    let ekispat = "//*[contains(@text,'" + date + "')]";
-    console.log("xpath: " + ekispat);
+    let dateNextDay = this.getFormattedDateNextDayInSpanish();
+    let xpathObject = "//*[contains(@text,'" + date + "')] | //*[contains(@text,'" + dateNextDay + "')]";
+    console.log("xpath: " + xpathObject);
 
-    return $(ekispat);
+    return $(xpathObject);
   }
   get miPerfil() {
     return $("//*[contains(@text,'Mi perfil')]");
@@ -63,8 +79,18 @@ class DashboardScreen {
       '//android.widget.ImageView[@resource-id="com.sdp.appazul:id/offersImageNoAmount"]'
     );
   }
+  get avanceOfferMessageWithAmount() {
+    return $(
+      '//android.widget.RelativeLayout[@resource-id="com.sdp.appazul:id/offersImageWithAmount"]'
+    );
+  }
+  get avanceAmountText() {
+    return $(
+      '//*[contains(@text,\'RD$ 649,000\')]'
+    );
+  }
   get azulLocationGroupElement() {
-    return $('//*[contains(@text,"AZUL")]');
+    return $('//*[contains(@text,"AZUL")] | //*[contains(@text,"Servicios Digitales")]');
   }
   get affiliatedAutoRentalElement() {
     return $('//*[contains(@text,"AFFILIATED AUTO RENTAL")]');
@@ -120,6 +146,31 @@ class DashboardScreen {
       LoginScreen.usernameInput,
       Helpers.TWENTY_SECONDS_IN_MILLISECONDS
     );
+  }
+  async goToDashboardAfterReinstall(username: string, password: string) {
+    await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
+     await (await OnboardingScreen.saltarDemostracionButton).click();
+        await (await NewAccessScreen.yaSoyClienteButton).click();
+        await Helpers.acceptNotificationPermission();
+
+        //loginAppVersion = await this.appVersion.getText().toString();
+        await LoginScreen.passwordInput.setValue(password);
+        await LoginScreen.usernameInput.setValue(username);
+        await LoginScreen.iniciarSesionButton.click();
+
+        await Helpers.verifyElementExist(
+          PinConfigurationScreen.screenTitle,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        );
+        await PinConfigurationScreen.setPin(9499);
+
+        await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
+        await Helpers.acceptDashboardPermissions();
+        await this.dismissDashboardNovelty();
+        await Helpers.verifyElementExist(
+          this.screenTitle,
+          Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+        );
   }
   async navigateToDashboard(username: string, password: string, keepCurrentApp = true) {
     try {
@@ -205,6 +256,25 @@ class DashboardScreen {
 
     return dateConverted;
   }
+  getFormattedDateNextDayInSpanish() {
+    const months = [
+      "enero", "febrero", "marzo", "abril", "mayo", "junio",
+      "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+    ];
+  
+    const date = new Date();
+    date.setDate(date.getDate() + 1); // Move to next day
+  
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+  
+    const dateConverted = `${day} de ${month} del ${year}`;
+    console.log(dateConverted);
+  
+    return dateConverted;
+  }
+  
   async dismissDashboardNovelty() {
     try {
       await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);

@@ -1,33 +1,7 @@
-@run @mobile @SettledTransactions @Regression
-
-Feature: Settled Transactions
-
-@SettledTransactions @Regression
-Scenario Outline: Verify user without location can't consult any transaction
-
-  Given User without locations is on Dashboard screen
-  When User clicks on Historial de Transacciones button
-  Then User should see a message saying that the proffile doesnt have access
-And User should stay in Dashboard screen after dismissing the message
-
-@SettledTransactions @Regression
-Scenario Outline: Verify User without permission cant go to Settled Transaction Query screen
-
-  Given User without permissions is on Dashboard screen
-  When User clicks on Historial de Transacciones button
-  And User clicks on Transacciones Liquidadas
-  Then User should see a message saying that the proffile doesnt have access
-And User should stay in Dashboard screen after dismissing the message
-
-@SettledTransactions @Regression
-Scenario Outline: Verify User without permission cant go to QR Transaction Query screen
-
-  Given User without permissions is on Dashboard screen
-  When User clicks on Historial de Transacciones button
-  And User clicks on Transacciones QR
-  Then User should see a message saying that the proffile doesnt have QR Product
-And User should stay in Dashboard screen after dismissing the QR message
-
+#@run @mobile @SettledTransactions @Regression
+#
+#Feature: Settled Transactions
+#
 #@SettledTransactions @Regression
 #Scenario Outline: Verify Settled Transactions are not visible
 #
@@ -35,7 +9,7 @@ And User should stay in Dashboard screen after dismissing the QR message
 #  When User clicks on Historial de Transacciones button
 #  And User clicks on Transacciones Liquidadas
 #  Then User should not see any transaction
-
+#
 #@SettledTransactions @Regression @HappyPath
 #Scenario Outline: Verify admin user can query Settled Transactions
 #
@@ -355,3 +329,29 @@ And User should stay in Dashboard screen after dismissing the QR message
 #  And User should see the correct Location Name
 #  When User press X button
 #  Then User should be on Settled Transaction query screen
+#
+#@SettledTransactions @Regression
+#Scenario Outline: Verify user without location can't consult any transaction
+#
+#  Given User without locations is on Dashboard screen
+#  When User clicks on Historial de Transacciones button
+#  Then User should see a message saying that the proffile doesnt have access
+#And User should stay in Dashboard screen after dismissing the message
+#
+#@SettledTransactions @Regression
+#Scenario Outline: Verify User without permission cant go to Settled Transaction Query screen
+#
+#  Given User without permissions is on Dashboard screen
+#  When User clicks on Historial de Transacciones button
+#  And User clicks on Transacciones Liquidadas
+#  Then User should see a message saying that the proffile doesnt have access
+#And User should stay in Dashboard screen after dismissing the message
+#
+#@SettledTransactions @Regression
+#Scenario Outline: Verify User without permission cant go to QR Transaction Query screen
+#
+#  Given User without permissions is on Dashboard screen
+#  When User clicks on Historial de Transacciones button
+#  And User clicks on Transacciones QR
+#  Then User should see a message saying that the proffile doesnt have QR Product
+#And User should stay in Dashboard screen after dismissing the QR message

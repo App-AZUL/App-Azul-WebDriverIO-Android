@@ -4,7 +4,7 @@ Feature: PIN Configuration
 @PINConfiguration @Regression
 Scenario Outline: Verify User can't login using Wrong PIN Configuration
 
-Given User is at PIN Configuration
+Given User navitates to PIN Configuration screen as admin user
 When User types PIN 9835
 And User confirms PIN 7841
 Then User should see Incorrect PIN Message
