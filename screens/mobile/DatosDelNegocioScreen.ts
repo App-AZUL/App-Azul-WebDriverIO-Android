@@ -1,9 +1,9 @@
 class MiNegocioScreen {
   get nombreOption() {
-    return $("//*[contains(@text,'"+global.ADMIN_BUSINESS_NAME+"')]");
+    return $("//*[contains(@text,'"+global.ADMIN_CLIENT_NAME+"')]");
   }
   get rncOption() {
-    return $("//*[contains(@text,'"+global.NO_LOCATIONS_CEDULA+"')]");
+    return $("//*[contains(@text,'"+global.ADMIN_RNC+"')]");
   }
   get sectorIndustrial() {
     return $("//*[contains(@text,'-')]");

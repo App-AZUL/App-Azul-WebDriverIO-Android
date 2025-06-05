@@ -4,7 +4,14 @@ import {
   INVALID_PASSWORD,
   USERNAME,
   ADMIN_USERNAME,
+  ADMIN_USERFULLNAME,
+  ADMIN_RNC,
+  ADMIN_DOB,
+  ADMIN_PHONE,
+  ADMIN_EMAIL,
+  ADMIN_ROLE,
   ADMIN_NAME,
+  ADMIN_CLIENT_NAME,
   ADMIN_BUSINESS_NAME,
   NOT_AFFILIATED_USERNAME,
   NOT_AFFILIATED_NAME,
@@ -156,8 +163,15 @@ afterFeature: async function ({ uri, feature, name }) {
     (global as any).PASSWORD = PASSWORD;
     (global as any).USERNAME = USERNAME;
     (global as any).ADMIN_USERNAME = ADMIN_USERNAME;
+    (global as any).ADMIN_USERFULLNAME = ADMIN_USERFULLNAME ;
+    (global as any).ADMIN_RNC = ADMIN_RNC ;
+    (global as any).ADMIN_DOB = ADMIN_DOB ;
+    (global as any).ADMIN_PHONE = ADMIN_PHONE ;
+    (global as any).ADMIN_EMAIL = ADMIN_EMAIL ;
+    (global as any).ADMIN_ROLE = ADMIN_ROLE ;
     (global as any).ADMIN_NAME = ADMIN_NAME;
     (global as any).ADMIN_BUSINESS_NAME = ADMIN_BUSINESS_NAME;
+    (global as any).ADMIN_CLIENT_NAME = ADMIN_CLIENT_NAME;
     (global as any).NOT_AFFILIATED_USERNAME = NOT_AFFILIATED_USERNAME;
     (global as any).NOT_AFFILIATED_NAME = NOT_AFFILIATED_NAME;
     (global as any).NOT_PERMISSION_USERNAME = NOT_PERMISSION_USERNAME;

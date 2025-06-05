@@ -6,7 +6,7 @@ class SettledTransactionsScreen {
     return $("//*[contains(@text,'Transacciones liquidadas')]");
   }
   get noExistenTransaccionesText() {
-    return $("//*[contains(@text,'No existen transacciones')]");
+    return $("//android.widget.TextView[@text=\"No existen transacciones\"]");
   }
   get locationFilter() {
     return $(

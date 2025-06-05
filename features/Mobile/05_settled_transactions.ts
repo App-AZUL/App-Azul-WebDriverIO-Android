@@ -83,9 +83,10 @@ Then(
 );
 
 Then(`User should not see any transaction`, async () => {
+  await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
   await Helpers.verifyElementIsDisplayed(
     SettledTransactionsScreen.noExistenTransaccionesText,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
+    Helpers.TWENTY_SECONDS_IN_MILLISECONDS
   );
 });
 

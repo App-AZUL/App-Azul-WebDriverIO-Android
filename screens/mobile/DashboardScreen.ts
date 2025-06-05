@@ -178,11 +178,9 @@ class DashboardScreen {
       
       if (!keepCurrentApp) {
         console.log("weisparle");
-        
-        await Helpers.startAppByFirstTime();
-        await (await OnboardingScreen.saltarDemostracionButton).click();
-        await (await NewAccessScreen.yaSoyClienteButton).click();
-        await Helpers.acceptNotificationPermission();
+        await OnboardingScreen.saltarDemostracionButton.click();
+        await NewAccessScreen.yaSoyClienteButton.click();
+        //await Helpers.acceptNotificationPermission();
 
         //loginAppVersion = await this.appVersion.getText().toString();
         await LoginScreen.passwordInput.setValue(password);

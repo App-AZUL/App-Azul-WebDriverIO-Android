@@ -1,15 +1,15 @@
-#@run @mobile @SettledTransactions @Regression
-#
-#Feature: Settled Transactions
-#
-#@SettledTransactions @Regression
-#Scenario Outline: Verify Settled Transactions are not visible
-#
-#  Given User is on Dashboard screen with admin user
-#  When User clicks on Historial de Transacciones button
-#  And User clicks on Transacciones Liquidadas
-#  Then User should not see any transaction
-#
+@run @mobile @SettledTransactions @Regression
+
+Feature: Settled Transactions
+
+@SettledTransactions @Regression
+Scenario Outline: Verify Settled Transactions are not visible
+
+  Given User is on Dashboard screen with admin user
+  When User clicks on Historial de Transacciones button
+  And User clicks on Transacciones Liquidadas
+  Then User should not see any transaction
+
 #@SettledTransactions @Regression @HappyPath
 #Scenario Outline: Verify admin user can query Settled Transactions
 #

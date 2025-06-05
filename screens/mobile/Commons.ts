@@ -3,8 +3,14 @@ import SettledTransactionsScreen from "./SettledTransactionsScreen.ts";
 import Helpers from "../../helpers/Helpers.ts";
 
 class Commons {
+  get sesionExpiradaTitle() {
+    return $("//*[contains(@text,'Sesión expirada')]");
+  }
+  get sesionExpiradaAceptarButton() {
+    return $("//*[contains(@text,'ACEPTAR')]");
+  }
   get backButton() {
-    return $("//*[contains(@resource-id,'com.sdp.appazul:id/btnBackScreen')]");
+    return $("//*[contains(@resource-id,'com.sdp.appazul:id/btnBackScreen')] | //android.widget.ImageView[@resource-id=\"com.sdp.appazul:id/infoBackButton\"] | //android.widget.RelativeLayout[@resource-id=\"com.sdp.appazul:id/relBackBtnLayout\"] | //android.widget.ImageView[@resource-id=\"com.sdp.appazul:id/myBusinessButton\"] | //android.widget.ImageView[@resource-id=\"com.sdp.appazul:id/unitsLocationBackButton\"]");
   }
   get okButton() {
     return $(

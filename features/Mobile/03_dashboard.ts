@@ -5,6 +5,8 @@ import PreloggedScreen from "../../screens/mobile/PreloggedScreen.ts";
 import Commons from "../../screens/mobile/Commons.ts";
 import LoginScreen from "../../screens/mobile/LoginScreen.ts";
 import PinConfigurationScreen from "../../screens/mobile/PinConfigurationScreen.ts";
+import OnboardingScreen from "../../screens/mobile/OnboardingScreen.ts";
+import NewAccessScreen from "../../screens/mobile/NewAccessScreen.ts";
 
 Then(`User should see a greeting`, async () => {
   await Helpers.verifyElementIsDisplayed(
@@ -38,13 +40,6 @@ Then(`User should see option Mi perfl`, async () => {
   );
 });
 
-Then(`User should see option Preferencias`, async () => {
-  await Helpers.verifyElementIsDisplayed(
-    DashboardScreen.preferencias,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-  );
-});
-
 Then(`User should see option Salir`, async () => {
   await Helpers.verifyElementIsDisplayed(
     DashboardScreen.salir,
@@ -67,27 +62,42 @@ Then(`User should see the text Servicios Digitales Popular, S.A.`, async () => {
 });
 
 Given(`User is on Dashboard screen with admin user`, async () => {
-  //let adminNameElement = $("//*[contains(@text,'"+global.ADMIN_NAME+"')]");
-  /*let isAdminUserActive = !!(await Helpers.verifyElementIsDisplayed(
-    adminNameElement,
-    Helpers.FIVE_SECONDS_IN_MILLISECONDS
-).catch(() => false));
-console.log("perocompai"+isAdminUserActive);
+  let isUserOnDashboard = await Helpers.verifyElementExist(
+    DashboardScreen.screenTitle,
+    Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
+  );
 
-  if (isAdminUserActive === false) {
-    console.log("viejito");*/
-    let isUserAtDashboard = false;
-        try {
-          await Helpers.verifyElementIsDisplayed(DashboardScreen.screenTitle, Helpers.TWENTY_SECONDS_IN_MILLISECONDS);
-          isUserAtDashboard = true;
-      } catch (error) {
-        isUserAtDashboard= false;
-      }
-    await DashboardScreen.navigateToDashboard(
-      global.USERNAME as string,
-      global.PASSWORD as string, isUserAtDashboard
+  if (!isUserOnDashboard) {
+    await console.log("user was not in dashboard");
+    
+    
+    let isAppRestarted = await Helpers.verifyElementExist(
+    OnboardingScreen.saltarDemostracionButton,
+    Helpers.TEN_SECONDS_IN_MILLISECONDS
     );
-  //}
+    if (isAppRestarted) {
+      await console.log("emm the app was clean restarted");
+      await OnboardingScreen.saltarDemostracionButton.click();
+      await NewAccessScreen.yaSoyClienteButton.click();
+      await LoginScreen.usernameInput.setValue(global.ADMIN_USERNAME);
+      await LoginScreen.passwordInput.setValue(global.PASSWORD);
+      await LoginScreen.iniciarSesionButton.click();
+
+      await Helpers.verifyElementExist(
+                PinConfigurationScreen.screenTitle,
+                Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+              );
+      await PinConfigurationScreen.setPin(9499);
+
+      await DashboardScreen.dismissDashboardNovelty();
+      await Helpers.verifyElementExist(
+        DashboardScreen.screenTitle,
+        Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
+      );
+    }
+  } else {
+    await console.log("yes, user is on dashboard");
+  }
 });
 
 When(`User selects Affiliated Auto Rental location`, async () => {

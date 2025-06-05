@@ -187,8 +187,8 @@ class PinConfigurationScreen {
       console.log(`Delay: ${delay}`);
 
       // Wait for the specified delay
-      await Helpers.dismissPopUp();
       await driver.pause(delay * 1000); // Convert seconds to milliseconds
+      await Helpers.dismissPopUp();
 
       // Enter the PIN twice
       for (let i = 0; i < pin.length; i++) {
@@ -210,14 +210,17 @@ class PinConfigurationScreen {
         let buttonDigitElement = await driver.$(buttonXpath);
         await buttonDigitElement.click();
       }
+      //handle session expired
       if (
         await Helpers.verifyElementExist(
-          Commons.okButton,
+          Commons.sesionExpiradaTitle,
           Helpers.FIVE_SECONDS_IN_MILLISECONDS
         )
       ) {
-        Helpers.dismissPopUp();
+        (await Commons.sesionExpiradaAceptarButton).click();
         (await LoginScreen.iniciarSesionButton).click();
+
+        await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
 
         for (let i = 0; i < pin.length; i++) {
           let buttonDigitNumber = pin[i];
