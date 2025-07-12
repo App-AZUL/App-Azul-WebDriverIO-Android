@@ -1,5 +1,11 @@
 import { $ } from "@wdio/globals";
 import Helpers from "../../helpers/Helpers.ts";
+import OnboardingScreen from "./OnboardingScreen.ts";
+import NewAccessScreen from "./NewAccessScreen.ts";
+import LoginScreen from "./LoginScreen.ts";
+import PinConfigurationScreen from "./PinConfigurationScreen.ts";
+import DashboardScreen from "./DashboardScreen.ts";
+import Commons from "./Commons.ts";
 
 class SettledTransactionsScreen {
   get screenTitle() {
@@ -21,6 +27,11 @@ class SettledTransactionsScreen {
   get hastaDatePicker() {
     return $(
       '//android.widget.LinearLayout[@resource-id="com.sdp.appazul:id/layoutUntilDatePicker"]'
+    );
+  }
+  get trxSearchBar() {
+    return $(
+      '//*[@resource-id="com.sdp.appazul:id/etSearchBy"]'
     );
   }
   get firstSettledTransactionContainer() {
@@ -56,6 +67,11 @@ class SettledTransactionsScreen {
   get firstSettledTransactionThreeDotsButton() {
     return $(
       '(//android.widget.ImageView[@resource-id="com.sdp.appazul:id/imgMoreButton"])[1]'
+    );
+  }
+  get trxSolicitarDevolucionButton() {
+    return $(
+      '//android.widget.RelativeLayout[@resource-id="com.sdp.appazul:id/btnTxnInfo"]'
     );
   }
   //Three dots modal
@@ -177,6 +193,81 @@ class SettledTransactionsScreen {
     );
     console.log("No. de transaccion: " + global["Settled Transaction type"]);
   }
+  async selectTrxLocation() {
+        await this.locationFilter.click();
+            await DashboardScreen.azulLocationGroupElement.click();
+            const { height, width } = await driver.getWindowRect();
+        
+            const startX = Math.floor(width / 2);
+            const startY = Math.floor(height * 0.8); // Bottom-ish
+            const endY = Math.floor(height * 0.2);   // Top-ish
+        
+              await driver.performActions([
+                {
+                  type: 'pointer',
+                  id: 'finger1',
+                  parameters: { pointerType: 'touch' },
+                  actions: [
+                    { type: 'pointerMove', duration: 0, x: startX, y: startY },
+                    { type: 'pointerDown', button: 0 },
+                    { type: 'pause', duration: 50 },
+                    { type: 'pointerMove', duration: 50, x: startX, y: endY },
+                    { type: 'pointerUp', button: 0 },
+                  ],
+                },
+              ]);
+              await driver.releaseActions(); // Clean up after each swipe
+            
+            await DashboardScreen.sdpHotelLocationElement.click();
+    }
+  async queryTransactions() {
+        let isATrxVisible:boolean = await Helpers.verifyElementExist(this.firstTrxOfList, Helpers.TEN_SECONDS_IN_MILLISECONDS, false);
+        if (!isATrxVisible) {
+            let isUserAtSettledTransactionScreen:boolean = await Helpers.verifyElementExist(this.desdeDatePickerButton, Helpers.TEN_SECONDS_IN_MILLISECONDS, false);
+            if (!isUserAtSettledTransactionScreen) {
+            await this.navigateToSettledTransactionScreen();
+            await this.selectTrxLocation();
+            await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+            await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.TWENTY_SECONDS_IN_MILLISECONDS, false);
+            await this.selectAnyDayFrom2022();
+            await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+            await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.TWENTY_SECONDS_IN_MILLISECONDS, false);
+            await Helpers.verifyElementExist(this.firstTrxOfList, Helpers.TEN_SECONDS_IN_MILLISECONDS, true)   
+            } else {
+                await this.selectTrxLocation();
+                await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+                await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.TWENTY_SECONDS_IN_MILLISECONDS, false);
+                await this.selectAnyDayFrom2022();
+                await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+                await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.TWENTY_SECONDS_IN_MILLISECONDS, false);
+                await Helpers.verifyElementExist(this.firstTrxOfList, Helpers.TEN_SECONDS_IN_MILLISECONDS, true)   
+            }
+        }
+    }
+  async navigateToSettledTransactionScreen() {
+        let isUserAtSettledTrxScreen:Boolean = await Helpers.verifyElementExist(this.noExistenTransaccionesText, Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+          if (!isUserAtSettledTrxScreen) {
+            try {
+                  await driver.acceptAlert();  
+            } catch (error) {
+                await console.error("could not accept the notification permission"); 
+              }
+              await driver.reloadSession();
+            await OnboardingScreen.saltarDemostracionButton.click();
+            await NewAccessScreen.yaSoyClienteButton.click();
+            await LoginScreen.usernameInput.setValue(global.USERNAME);
+            await LoginScreen.passwordInput.setValue(global.PASSWORD);
+            await LoginScreen.iniciarSesionButton.click();
+            await PinConfigurationScreen.setPin(8723);
+            await DashboardScreen.dismissDashboardNovelty();
+            await Helpers.verifyElementIsDisplayed(DashboardScreen.screenTitle, Helpers.TEN_SECONDS_IN_MILLISECONDS);
+            await DashboardScreen.historialdeTransaccionesButton.click();
+            await DashboardScreen.transaccionesLiquidadasOption.click();
+            //await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.THIRTY_FIVE_SECONDS_IN_MILLISECONDS, false);
+            await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
+            await Helpers.verifyElementIsDisplayed(this.noExistenTransaccionesText, Helpers.THIRTY_FIVE_SECONDS_IN_MILLISECONDS)
+            }
+    }
 }
 
 export default new SettledTransactionsScreen();

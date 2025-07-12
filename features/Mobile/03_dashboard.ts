@@ -61,7 +61,7 @@ Then(`User should see the text Servicios Digitales Popular, S.A.`, async () => {
   );
 });
 
-Given(`User is on Dashboard screen with admin user`, async () => {
+Given(`User navigates to Dashboard screen as admin user`, async () => {
   let isUserOnDashboard = await Helpers.verifyElementExist(
     DashboardScreen.screenTitle,
     Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS

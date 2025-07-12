@@ -5,7 +5,7 @@
 #@Login @Regression @HappyPath
 #Scenario Outline: Verify available request to submit
 #
-#Given User is on Dashboard screen with admin user
+#Given User navigates to Dashboard screen as admin user
 #When User clicks on Solicitudes button
 #Then User should see Historial de solicitudes button
 #And User should see Soporte tecnico button

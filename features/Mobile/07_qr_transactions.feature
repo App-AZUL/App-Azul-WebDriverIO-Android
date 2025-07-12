@@ -5,7 +5,7 @@
 #@Login @Regression @HappyPath
 #Scenario Outline: Verify Settled Transactions are not visible
 #
-#  Given User is on Dashboard screen with admin user
+#  Given User navigates to Dashboard screen as admin user
 #  When User clicks on Historial de Transacciones button
 #  And User clicks on Transacciones QR
 #  Then User should not see any transaction

@@ -32,4 +32,5 @@ export const PASSWORD = "prueba1";
 export const PIN = "";
 export const IS_PIN_REVERSED = false;
 export const APP_AZUL_BUNDLE = "com.sdp.appazul";
+export let SCENARIO_CONTEXT = [];
 export let IS_PREVIOUS_TEST_SUCCESS = true;

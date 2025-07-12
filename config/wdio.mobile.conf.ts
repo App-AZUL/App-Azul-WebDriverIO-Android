@@ -55,8 +55,8 @@ export const config = {
   capabilities: [
     {
       "appium:platformName": "Android",
-      "appium:deviceName": "Google Pixel 7 Pro (Android 14)",
-      "appium:platformVersion": "15.0",
+      "appium:deviceName": "emulator-5554",
+      "appium:platformVersion": "16.0",
       "appium:noReset": false,
       "appium:enableMultiWindows": true,
       "appium:automationName": "UIAutomator2",

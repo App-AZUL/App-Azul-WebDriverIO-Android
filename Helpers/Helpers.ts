@@ -79,6 +79,39 @@ try {
     }/*/
     return isExisting;
   }
+  async verifyElementNotExist(element: any, timeout: number, strict = true): Promise<boolean> {
+  let isNotExisting = false;
+
+  try {
+    await driver.waitUntil(
+      async () => {
+        try {
+          // Return true when the element is not displayed (invisible or gone)
+          return !(await element.isDisplayed());
+        } catch {
+          // If element doesn't exist, consider it not existing
+          return true;
+        }
+      },
+      {
+        timeout,
+        timeoutMsg: `Element ${JSON.stringify(element.selector?.toString())} \n ${JSON.stringify(element)}\n is still displayed after ${timeout} ms`,
+        interval: 1000,
+      }
+    );
+    isNotExisting = true;
+  } catch (error) {
+    isNotExisting = false;
+  }
+
+  if (!isNotExisting && strict === true) {
+    throw new Error(
+      `The element was still found/displayed \nElement: ${JSON.stringify(element)}\nTimeout: ${timeout}`
+    );
+  }
+
+  return isNotExisting;
+}
   async verifyElementExist(element, timeout) {
     try {
       var isExisting = await driver.waitUntil(
