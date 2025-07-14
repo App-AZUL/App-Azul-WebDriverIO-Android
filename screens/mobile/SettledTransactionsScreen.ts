@@ -11,6 +11,30 @@ class SettledTransactionsScreen {
   get screenTitle() {
     return $("//*[contains(@text,'Transacciones liquidadas')]");
   }
+  get calendarLeftArrow() {
+    return $('//android.widget.ImageView[@resource-id="com.sdp.appazul:id/left"]');
+  }
+  get year2022Label() {
+    return $('//android.widget.TextView[@resource-id="com.sdp.appazul:id/title"][contains(@text,"2022")]');
+  }
+  get clearAllFiltersButton() {
+    return $('//android.widget.ImageView[@resource-id="com.sdp.appazul:id/clearEnteredText"]');
+  }
+  get noAprobacionSearchOption() {
+    return $('//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvApprovalNo" and @text="No. aprobación"]');
+  }
+  get noTerminalSearchOption() {
+    return $('//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvTerminalNo"]');
+  }
+  get noTarjetaSearchOption() {
+    return $('//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvCardNo"]');
+  }
+  get firstTrxThreeDotsButton() {
+    return $('(//android.widget.ImageView[@resource-id="com.sdp.appazul:id/imgMoreButton"])[1]');
+  }
+  get dayOftheMonthButton() {
+    return $('//android.widget.TextView[@resource-id="com.sdp.appazul:id/date" and @text="15"]');
+  }
   get noExistenTransaccionesText() {
     return $("//android.widget.TextView[@text=\"No existen transacciones\"]");
   }
@@ -122,7 +146,11 @@ class SettledTransactionsScreen {
           global["Settled Transaction date and time"]
       );
       //mark error
-      throw new Error("date time in modal is different from the list");
+      throw new Error("date time in modal is different from the list \n" +
+        "Modal date time: " +
+        global["Settled Transaction date and time on modal"] +
+        "\nList date time: " +
+        global["Settled Transaction date and time"]);
     } else if (
       global["Settled Transaction Amount on modal"] !=
       global["Settled Transaction Amount"]
@@ -148,9 +176,7 @@ class SettledTransactionsScreen {
     //retrieving info
     //date time
     global["Settled Transaction date and time"] = String(
-      await driver.getElementText(
-        await this.firstSettledTransactionDateTime.elementId
-      )
+      await this.firstSettledTransactionDateTime.getText()
     );
     console.log(
       "Hora y fecha de transaccion: " +
@@ -177,53 +203,58 @@ class SettledTransactionsScreen {
 
     //trx credit card number
     global["Settled Transaction Credit Card Number"] = String(
-      await driver.getElementText(
-        await this.firstSettledTransactionType.elementId
-      )
+      await this.firstSettledTransactionCreditCardNumber.getText()
     );
     console.log(
       "No. de tarjeta: " + global["Settled Transaction Credit Card Number"]
     );
 
     //trx approval number
-    global["Settled Transaction Approval Number"] = String(
-      await driver.getElementText(
-        await this.firstSettledTransactionApprovalNumber.elementId
-      )
+    global["Settled Transaction Approval Number In Trx Info Screen"] = String(
+      await this.firstSettledTransactionApprovalNumber.getText()
     );
-    console.log("No. de transaccion: " + global["Settled Transaction type"]);
+    console.log("No. de transaccion: " + global["Settled Transaction Approval Number In Trx Info Screen"]);
   }
   async selectTrxLocation() {
-        await this.locationFilter.click();
-            await DashboardScreen.azulLocationGroupElement.click();
-            const { height, width } = await driver.getWindowRect();
-        
-            const startX = Math.floor(width / 2);
-            const startY = Math.floor(height * 0.8); // Bottom-ish
-            const endY = Math.floor(height * 0.2);   // Top-ish
-        
-              await driver.performActions([
-                {
-                  type: 'pointer',
-                  id: 'finger1',
-                  parameters: { pointerType: 'touch' },
-                  actions: [
-                    { type: 'pointerMove', duration: 0, x: startX, y: startY },
-                    { type: 'pointerDown', button: 0 },
-                    { type: 'pause', duration: 50 },
-                    { type: 'pointerMove', duration: 50, x: startX, y: endY },
-                    { type: 'pointerUp', button: 0 },
-                  ],
-                },
-              ]);
-              await driver.releaseActions(); // Clean up after each swipe
-            
-            await DashboardScreen.sdpHotelLocationElement.click();
+    // Open location filter
+    await this.locationFilter.click();
+
+    // Tap on "Azul" location group
+    await DashboardScreen.azulLocationGroupElement.click();
+
+    await Helpers.scrollUntilElementVisible({
+  element: DashboardScreen.sdpHotelLocationElement
+});
+
+
+    // Tap on "Hotel" location
+    await DashboardScreen.sdpHotelLocationElement.click();
+}
+
+    async selectAnyDayFrom2022() {
+        (await this.desdeDatePicker).click();
+        for (let i = 0; i < 42; i++) {
+          await this.calendarLeftArrow.click();
+        }
+        await this.dayOftheMonthButton.click();
     }
   async queryTransactions() {
-        let isATrxVisible:boolean = await Helpers.verifyElementExist(this.firstTrxOfList, Helpers.TEN_SECONDS_IN_MILLISECONDS, false);
-        if (!isATrxVisible) {
-            let isUserAtSettledTransactionScreen:boolean = await Helpers.verifyElementExist(this.desdeDatePickerButton, Helpers.TEN_SECONDS_IN_MILLISECONDS, false);
+        let isFirstTrxVisible:boolean = await Helpers.verifyElementExist(this.firstSettledTransactionContainer, Helpers.TEN_SECONDS_IN_MILLISECONDS);
+        if (!isFirstTrxVisible) {
+          //verifying if user is at settled transaction screen
+          let isUserAtSettledTransactionScreen:boolean = await Helpers.verifyElementExist(this.screenTitle, Helpers.THREE_SECONDS_IN_MILLISECONDS);
+          if (isUserAtSettledTransactionScreen) {
+            await this.selectTrxLocation();
+            await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+            await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.TWENTY_SECONDS_IN_MILLISECONDS, false);
+            await this.selectAnyDayFrom2022();
+            await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+            await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.TWENTY_SECONDS_IN_MILLISECONDS, false);
+            isFirstTrxVisible = await Helpers.verifyElementExist(this.firstSettledTransactionContainer, Helpers.TEN_SECONDS_IN_MILLISECONDS);   
+          }
+        }
+        if (!isFirstTrxVisible) {
+            let isUserAtSettledTransactionScreen:boolean = await Helpers.verifyElementExist(this.desdeDatePicker, Helpers.TEN_SECONDS_IN_MILLISECONDS);
             if (!isUserAtSettledTransactionScreen) {
             await this.navigateToSettledTransactionScreen();
             await this.selectTrxLocation();
@@ -232,7 +263,7 @@ class SettledTransactionsScreen {
             await this.selectAnyDayFrom2022();
             await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
             await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.TWENTY_SECONDS_IN_MILLISECONDS, false);
-            await Helpers.verifyElementExist(this.firstTrxOfList, Helpers.TEN_SECONDS_IN_MILLISECONDS, true)   
+            await Helpers.verifyElementExist(this.firstSettledTransactionContainer, Helpers.TEN_SECONDS_IN_MILLISECONDS)   
             } else {
                 await this.selectTrxLocation();
                 await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
@@ -240,33 +271,92 @@ class SettledTransactionsScreen {
                 await this.selectAnyDayFrom2022();
                 await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
                 await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.TWENTY_SECONDS_IN_MILLISECONDS, false);
-                await Helpers.verifyElementExist(this.firstTrxOfList, Helpers.TEN_SECONDS_IN_MILLISECONDS, true)   
+                await Helpers.verifyElementExist(this.firstSettledTransactionContainer, Helpers.TEN_SECONDS_IN_MILLISECONDS)   
             }
         }
     }
   async navigateToSettledTransactionScreen() {
-        let isUserAtSettledTrxScreen:Boolean = await Helpers.verifyElementExist(this.noExistenTransaccionesText, Helpers.FIVE_SECONDS_IN_MILLISECONDS);
-          if (!isUserAtSettledTrxScreen) {
-            try {
-                  await driver.acceptAlert();  
-            } catch (error) {
-                await console.error("could not accept the notification permission"); 
+        try {
+              let keepCurrentApp:boolean = await Helpers.verifyElementExist(
+                OnboardingScreen.saltarDemostracionButton,
+                Helpers.THREE_SECONDS_IN_MILLISECONDS
+              );
+              
+              if (keepCurrentApp) {
+                console.log("weisparle");
+                await OnboardingScreen.saltarDemostracionButton.click();
+                await NewAccessScreen.yaSoyClienteButton.click();
+                
+                await LoginScreen.passwordInput.setValue(global.PASSWORD as string);
+                await LoginScreen.usernameInput.setValue(global.USERNAME as string);
+                await LoginScreen.iniciarSesionButton.click();
+        
+                await Helpers.verifyElementExist(
+                  PinConfigurationScreen.screenTitle,
+                  Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+                );
+                await PinConfigurationScreen.setPin(9499);
+        
+                await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
+                await DashboardScreen.dismissDashboardNovelty();
+                await Helpers.verifyElementExist(
+                  DashboardScreen.screenTitle,
+                  Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+                );
+              } else if(await Helpers.verifyElementExist(
+                DashboardScreen.screenTitle,
+                Helpers.FIVE_SECONDS_IN_MILLISECONDS
+              )) {
+                console.log("ya esta en dashboard");
+        
+              } else {
+                  await Helpers.startAppByFirstTime();
+                  await (await OnboardingScreen.saltarDemostracionButton).click();
+                  await (await NewAccessScreen.yaSoyClienteButton).click();
+                  await LoginScreen.passwordInput.setValue(global.PASSWORD as string);
+                  await LoginScreen.usernameInput.setValue(global.USERNAME as string);
+                  await LoginScreen.iniciarSesionButton.click();
+                  
+                  await Helpers.verifyElementExist(
+                    PinConfigurationScreen.screenTitle,
+                    Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+                  );
+                  await PinConfigurationScreen.setPin(9499);
+                
+                  await DashboardScreen.dismissDashboardNovelty();
+                
+                  await Helpers.verifyElementExist(
+                    DashboardScreen.screenTitle,
+                    Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+                  );
               }
-              await driver.reloadSession();
-            await OnboardingScreen.saltarDemostracionButton.click();
-            await NewAccessScreen.yaSoyClienteButton.click();
-            await LoginScreen.usernameInput.setValue(global.USERNAME);
-            await LoginScreen.passwordInput.setValue(global.PASSWORD);
-            await LoginScreen.iniciarSesionButton.click();
-            await PinConfigurationScreen.setPin(8723);
-            await DashboardScreen.dismissDashboardNovelty();
-            await Helpers.verifyElementIsDisplayed(DashboardScreen.screenTitle, Helpers.TEN_SECONDS_IN_MILLISECONDS);
+            } catch (error) {
+              await Helpers.startAppByFirstTime();
+              await (await OnboardingScreen.saltarDemostracionButton).click();
+              await (await NewAccessScreen.yaSoyClienteButton).click();
+
+              await LoginScreen.passwordInput.setValue(global.PASSWORD as string);
+              await LoginScreen.usernameInput.setValue(global.USERNAME as string);
+              await LoginScreen.iniciarSesionButton.click();
+        
+              await Helpers.verifyElementExist(
+                PinConfigurationScreen.screenTitle,
+                Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+              );
+              await PinConfigurationScreen.setPin(9499);
+        
+              await DashboardScreen.dismissDashboardNovelty();
+        
+              await Helpers.verifyElementExist(
+                DashboardScreen.screenTitle,
+                Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+              );
+            }
             await DashboardScreen.historialdeTransaccionesButton.click();
             await DashboardScreen.transaccionesLiquidadasOption.click();
             //await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.THIRTY_FIVE_SECONDS_IN_MILLISECONDS, false);
             await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
             await Helpers.verifyElementIsDisplayed(this.noExistenTransaccionesText, Helpers.THIRTY_FIVE_SECONDS_IN_MILLISECONDS)
-            }
     }
 }
 

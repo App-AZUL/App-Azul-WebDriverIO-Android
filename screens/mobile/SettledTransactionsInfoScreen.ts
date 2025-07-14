@@ -57,7 +57,9 @@ class SettledTransactionsInfoScreen {
       );
       //mark error
       throw new Error(
-        "Date time on Trx Info Screen is different from the expected"
+        "Date time on Trx Info Screen is different from the expected \n"+
+        "expected Date time: " + global["Settled Transaction date and time"] + "\n" +
+        "Current date time: " + global["Settled Transaction date and time In Trx Info Screen"]
       );
     }
 
@@ -82,7 +84,7 @@ class SettledTransactionsInfoScreen {
 
     //Credit card validation
     global["Settled Transaction Credit Card Number In Trx Info Screen"] =
-      String(await driver.getElementText(await this.trxCardNumber.elementId));
+  String(await this.trxCardNumber.getText()).replace(/\s+/g, '');
     if (
       global["Settled Transaction Credit Card Number"] !=
       global["Settled Transaction Credit Card Number In Trx Info Screen"]
@@ -97,7 +99,9 @@ class SettledTransactionsInfoScreen {
       );
       //mark error
       throw new Error(
-        "Credit Card on Trx Info Screen is different from the expected"
+        "Credit Card on Trx Info Screen is different from the expected \n" +
+        "expected credit card: " + global["Settled Transaction Credit Card Number"] + "\n" +
+        "Current credit card: " + global["Settled Transaction Credit Card Number In Trx Info Screen"]
       );
     }
 
@@ -120,26 +124,18 @@ class SettledTransactionsInfoScreen {
       );
     }
 
-    //Trx Approval Number validation
-    global["Settled Transaction Approval Number In Trx Info Screen"] = String(
-      await driver.getElementText(await this.trxApprovalNumber.elementId)
-    );
-    if (
-      global["Settled Transaction Approval Number"] !=
-      global["Settled Transaction Approval Number In Trx Info Screen"]
-    ) {
-      console.log(
-        "expected trx approval number: " +
-          global["Settled Transaction Approval Number"]
-      );
-      console.log(
-        "Current amount: " +
-          global["Settled Transaction Approval Number In Trx Info Screen"]
-      );
-      //mark error
-      throw new Error(
-        "Trx Approval Number on Trx Info Screen is different from the expected"
-      );
+    let expected = global["Settled Transaction Approval Number In Trx Info Screen"] as string;
+    //expected = String(expected).replace(/^Aprobada\s*/, '');
+const actual = global["Settled Transaction Approval Number In Trx Info Screen"];
+
+if (expected !== actual) {
+  console.log("expected trx approval number: " + expected);
+  console.log("Current trx approval number: " + actual);
+  throw new Error(
+    "Trx Approval Number on Trx Info Screen is different from the expected\n" +
+    "Expected: " + expected + "\n" +
+    "Actual: " + actual
+  );
     }
   }
 }

@@ -73,7 +73,6 @@ When(`User press Ya soy cliente`, async () => {
 
 Then(`User should be on Login Screen`, async () => {
   try {
-    await Helpers.acceptNotificationPermission();
     await LoginScreen.verifyLoginScreenElements();
   } catch (error) {
     console.log("user may not be on login screen");

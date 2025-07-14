@@ -51,6 +51,10 @@ class PinConfigurationScreen {
     let pinString = arg0.toString();
     global.PIN = pinString;
     console.log("Setting PIN: " + pinString);
+    await Helpers.verifyElementIsDisplayed(
+      this.screenTitle,
+      Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+    );
 
     //Typing PIN
     for (let i = 0; i < pinString.length; i++) {
@@ -72,7 +76,7 @@ class PinConfigurationScreen {
       let buttonDigitElement = await driver.$(buttonXpath);
       await buttonDigitElement.click();
     }
-    driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
+    //driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
     //Continue in case user already set the pin before 24 hours
     if (
       await Helpers.verifyElementExist(
@@ -87,7 +91,7 @@ class PinConfigurationScreen {
     if (
       await Helpers.verifyElementExist(
         this.equalPinConfirmationMessage,
-        Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
+        Helpers.TEN_SECONDS_IN_MILLISECONDS
       )
     ) {
       await console.log("El pin no puede ser igual al anterior.");
@@ -263,7 +267,6 @@ class PinConfigurationScreen {
               }
       await (await OnboardingScreen.saltarDemostracionButton).click();
       await (await NewAccessScreen.yaSoyClienteButton).click();
-      await Helpers.acceptNotificationPermission();
 
       await LoginScreen.passwordInput.setValue(password);
       await LoginScreen.usernameInput.setValue(username);

@@ -10,7 +10,6 @@ import LoginScreen from "../../screens/mobile/LoginScreen.ts";
 Given(`User navitates to PIN Configuration screen as admin user`, async () => {
   await (await OnboardingScreen.saltarDemostracionButton).click();
   await (await NewAccessScreen.yaSoyClienteButton).click();
-  await Helpers.acceptNotificationPermission();
   await LoginScreen.passwordInput.setValue(global.PASSWORD as string);
   await LoginScreen.usernameInput.setValue(global.USERNAME as string);
   await LoginScreen.iniciarSesionButton.click();
@@ -88,7 +87,6 @@ Then(`User should see Sequential PIN Message`, async () => {
 //Verify User can't login using Equal PIN Configuration
 When(`User logged in succesfully`, async () => {
   driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
-  await Helpers.acceptDashboardPermissions();
   await Helpers.verifyElementIsDisplayed(
     DashboardScreen.screenTitle,
     Helpers.THIRTY_FIVE_SECONDS_IN_MILLISECONDS
@@ -121,10 +119,9 @@ Then(
 
 Then(`User should be logged-in succesfully`, async () => {
   await DashboardScreen.dismissDashboardNovelty();
-  await Helpers.acceptDashboardPermissions();
   await Helpers.verifyElementIsDisplayed(
     DashboardScreen.screenTitle,
-    Helpers.TEN_SECONDS_IN_MILLISECONDS
+    Helpers.TWENTY_FIVE_SECONDS_IN_MILLISECONDS
   );
 });
 
@@ -132,7 +129,6 @@ Then(`User should be logged-in succesfully`, async () => {
 Given(`User navigates to login screen from Onboarding Screen`, async () => {
   await OnboardingScreen.skipOnboardingScreen();
   (await NewAccessScreen.yaSoyClienteButton).click();
-  await Helpers.acceptNotificationPermission();
   await LoginScreen.verifyLoginScreenElements();
 });
 

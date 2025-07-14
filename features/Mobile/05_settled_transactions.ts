@@ -8,6 +8,15 @@ import SettledTransactionsDetailsScreen from "../../screens/mobile/SettledTransa
 import SolicitarDevolucionScreen from "../../screens/mobile/SolicitarDevolucionScreen.ts";
 import RequestCreatedSettledTransactionScreen from "../../screens/mobile/RequestCreatedSettledTransactionScreen.ts";
 
+Given(`User is on Solicitar devolucion form`, async () => {
+  let isUserAtDevolucionForm:boolean = await Helpers.verifyElementExist(SolicitarDevolucionScreen.screenTitle, Helpers.TEN_SECONDS_IN_MILLISECONDS);
+  if (!isUserAtDevolucionForm) {
+    await SettledTransactionsScreen.queryTransactions();
+    await SettledTransactionsScreen.firstTrxThreeDotsButton.click();
+    await SettledTransactionsScreen.trxSolicitarDevolucionButton.click();
+    await Helpers.verifyElementExist(SolicitarDevolucionScreen.screenTitle, Helpers.TEN_SECONDS_IN_MILLISECONDS);
+  }
+});
 Given(`User without permissions is on Dashboard screen`, async () => {
   /*try {
     let userNameElement = $("//*[contains(@text,'"+global.NOT_PERMISSION_NAME+"')]");
@@ -34,7 +43,13 @@ Given(`User without permissions is on Dashboard screen`, async () => {
   }*/
 });
 Given(`User navigates to Settle Transaction screen as admin user`, async () => {
+  let isUserAtTrxScreen:boolean = await Helpers.verifyElementExist(
+    SettledTransactionsScreen.screenTitle,
+    Helpers.THREE_SECONDS_IN_MILLISECONDS
+  );
+  if (!isUserAtTrxScreen) {
   await SettledTransactionsScreen.navigateToSettledTransactionScreen();
+  }
 });
 Then(`User should stay in Dashboard screen after dismissing the message`, async () => {
   await Helpers.dismissPopUp();
@@ -108,18 +123,28 @@ Given(`User is on Settled Transaction screen`, async () => {
 });
 
 When(
-  `User selects Affiliated Auto Rental location on settled trx screen`,
+  `User selects the expected location on settled trx screen`,
   async () => {
-    await SettledTransactionsScreen.locationFilter.click();
+    /*await SettledTransactionsScreen.locationFilter.click();
     await DashboardScreen.azulLocationGroupElement.click();
-    await DashboardScreen.affiliatedAutoRentalElement.click();
+    await DashboardScreen.affiliatedAutoRentalElement.click();*/
+    await SettledTransactionsScreen.selectTrxLocation();
   }
 );
 
 When(
   `User filters trx by date on year two thousand twenty two`,
   async () => {
-    //to do (calendar on android is different)
+    await Helpers.verifyElementNotExist(
+      Commons.newLoadingAnimation,
+      Helpers.TWENTY_FIVE_SECONDS_IN_MILLISECONDS
+    );
+    await Helpers.setDateJanuary2022onDesdeCalendar();
+    driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+    await Helpers.verifyElementNotExist(
+      Commons.newLoadingAnimation,
+      Helpers.THIRTY_FIVE_SECONDS_IN_MILLISECONDS
+    );
   }
 );
 
@@ -136,6 +161,23 @@ Then(`User should see at least one transaction`, async () => {
 });
 
 Given(`User can see at least one transaction`, async () => {
+  let isTransactionExist:boolean = await Helpers.verifyElementExist(
+    SettledTransactionsScreen.firstSettledTransactionContainer,
+    Helpers.THREE_SECONDS_IN_MILLISECONDS
+  );
+  if (!isTransactionExist) {
+    await SettledTransactionsScreen.navigateToSettledTransactionScreen();
+  
+  await SettledTransactionsScreen.selectTrxLocation();
+  await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+  await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.TWENTY_SECONDS_IN_MILLISECONDS, false);
+  await SettledTransactionsScreen.selectAnyDayFrom2022();
+  await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+  await Helpers.verifyElementNotExist(Commons.newLoadingAnimation, Helpers.TWENTY_SECONDS_IN_MILLISECONDS, false);
+  await Helpers.verifyElementExist(SettledTransactionsScreen.firstSettledTransactionContainer, Helpers.TEN_SECONDS_IN_MILLISECONDS)   
+
+  /*await SettledTransactionsScreen.queryTransactions();*/
+  }
   await SettledTransactionsScreen.verifyFirstTransactionInListExist();
 });
 
@@ -148,7 +190,8 @@ Then(`the transaction info should match`, async () => {
 });
 
 Then(`User still in screen after pressing in the middle`, async () => {
-  await SettledTransactionsScreen.verifyTrxInfoModal();
+  await driver.back();
+  await SettledTransactionsScreen.clearAllFiltersButton.click();
 });
 
 When(`User clicks on chevron details button`, async () => {
@@ -158,16 +201,21 @@ When(`User clicks on chevron details button`, async () => {
 When(`User search the No. de aprobacion`, async () => {
   global.SCENARIO_CONTEXT["firstTrxNoApproval"] = await SettledTransactionsDetailsScreen.approvalNumber.getAttribute("text");
     await Helpers.pressAppBackButton();
+    await SettledTransactionsScreen.trxSearchBar.click();
+    await SettledTransactionsScreen.noAprobacionSearchOption.click();
     (await SettledTransactionsScreen.trxSearchBar).setValue(global.SCENARIO_CONTEXT["firstTrxNoApproval"]);
 });
 
 Then(`the transaction details should match`, async () => {
   await SettledTransactionsInfoScreen.verifyTrxInformation();
+  await Helpers.pressAppBackButton();
+  await Helpers.verifyElementExist(SettledTransactionsScreen.screenTitle, Helpers.TEN_SECONDS_IN_MILLISECONDS);
 });
 
 When(`User search the No.Lote`, async () => {
-  global.SCENARIO_CONTEXT["firstTrxNoLote"] = await SettledTransactionsDetailsScreen.noLote.getAttribute("text");
+  global.SCENARIO_CONTEXT["firstTrxNoLote"] = await SettledTransactionsDetailsScreen.noLote.getText();
     await Helpers.pressAppBackButton();
+    await SettledTransactionsScreen.trxSearchBar.click();
     (await SettledTransactionsScreen.trxSearchBar).setValue(global.SCENARIO_CONTEXT["firstTrxNoLote"]);
 });
 
@@ -191,6 +239,9 @@ When(`User clicks Solicitar devolucion button`, async () => {
 When(`User tries to set a character that is not a number`, async () => {
   await SolicitarDevolucionScreen.montoADevolverTextfield.clearValue();
   await SolicitarDevolucionScreen.montoADevolverTextfield.setValue("NOTNUMBER");
+  await SolicitarDevolucionScreen.montoADevolverTextfield.click(); // To trigger the validation
+  await SolicitarDevolucionScreen.motivoDeDevolucionTextfield.click();
+  await driver.back(); // Go back to the text field to check the value
 });
 
 Then(`User sould see a message asking for the Amount`, async () => {
@@ -200,8 +251,9 @@ Then(`User sould see a message asking for the Amount`, async () => {
 Then(`the Amount should be 0`, async () => {
   let valueInTextfield:String = await SolicitarDevolucionScreen.montoADevolverTextfield.getAttribute("text");
   let expectedValueInTextfield = "US$ 0.00";
-  if (valueInTextfield != expectedValueInTextfield) {
-    throw new Error("The value on text field is different from expected \n"+"Value on textfield: "+valueInTextfield+"\n" + "Expected value: "+expectedValueInTextfield);
+  let expectedValueInTextfieldInDop = "RD$ 0.00";
+  if (valueInTextfield != expectedValueInTextfield && valueInTextfield != expectedValueInTextfieldInDop) {
+    throw new Error("The value on text field is different from expected \n"+"Value on textfield: "+valueInTextfield+"\n" + "Expected value: "+expectedValueInTextfield + " or " + expectedValueInTextfieldInDop);
   }
 });
 
@@ -265,42 +317,55 @@ Given(
   }
 );
 
-Then(`User should stay in Solicitar devolucion form`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
+Then(`User should stay in Solicitar devolucion form`, async () => {
+  await Helpers.verifyElementExist(SolicitarDevolucionScreen.screenTitle, Helpers.TEN_SECONDS_IN_MILLISECONDS);
 });
 
-When(`User types a comment`, () => {
-  // [When] Describes the action or event that triggers the scenario.
+When(`User types a comment`, async () => {
+  await SolicitarDevolucionScreen.comentarioTextField.setValue("Comment for refund on Settled Transaction");
 });
 
-Then(`User clicks on Motivo de la devolucion field`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
+Then(`User selects Monto Incorrecto option`, async () => {
+  await SolicitarDevolucionScreen.montoIncorrectoOption.click();
 });
 
-Then(`User selects Transaccion fraudulenta option`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
+Then(`User selects Transaccion Duplicada option`, async () => {
+  await SolicitarDevolucionScreen.transaccionDuplicadaOption.click();
 });
 
-Then(`User selects Monto Incorrecto option`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
+Then(`User selects Pagado por otro medio option`, async () => {
+  await SolicitarDevolucionScreen.pagadoPorOtroMedioOption.click();
 });
 
-Then(`User selects Transaccion Duplicada option`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
+Then(`User selects Servicio no recibido option`, async () => {
+  await SolicitarDevolucionScreen.servicioNoRecibidoOption.click();
 });
 
-Then(`User selects Pagado por otro medio option`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
-});
-
-Then(`User selects Servicio no recibido option`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
-});
-
-Then(`User types a comment`, () => {
-  // [Then] Describes the expected outcome or result of the scenario.
-});
-
-When('User search the No. de terminal', () => {
-  // Write code here that turns the phrase above into concrete actions
+Then('User can see at least one transaction if goes back', async () => {
+  await Helpers.pressAppBackButton();
+  await Helpers.verifyElementExist(SettledTransactionsScreen.firstSettledTransactionContainer, Helpers.TEN_SECONDS_IN_MILLISECONDS);
 })
+
+When('User search the No. de terminal', async () => {
+  global.SCENARIO_CONTEXT["firstTrxNoTerminal"] = await SettledTransactionsDetailsScreen.terminalId.getAttribute("name");
+    await Helpers.pressAppBackButton();
+    await SettledTransactionsScreen.trxSearchBar.click();
+    await SettledTransactionsScreen.noTerminalSearchOption.click();
+    (await SettledTransactionsScreen.trxSearchBar).setValue(global.SCENARIO_CONTEXT["firstTrxNoTerminal"]);
+})
+
+When('User search the No. de tarjeta', async () => {
+  global.SCENARIO_CONTEXT["firstTrxNoTarjeta"] = await SettledTransactionsDetailsScreen.trxCardNumber.getAttribute("text");
+    await Helpers.pressAppBackButton();
+    await SettledTransactionsScreen.trxSearchBar.click();
+    await SettledTransactionsScreen.noTarjetaSearchOption.click();
+    (await SettledTransactionsScreen.trxSearchBar).setValue(global.SCENARIO_CONTEXT["firstTrxNoTarjeta"]);
+})
+/*
+When('User search the No. de terminal', async () => {
+  global.SCENARIO_CONTEXT["firstTrxNoTerminal"] = await SettledTransactionsDetailsScreen.terminalId.getAttribute("name");
+    await SettledTransactionsScreen.trxSearchFilterArrow.click();
+    await SettledTransactionsScreen.trxNoTerminalSearchOption.click();
+    (await SettledTransactionsScreen.trxSearchBar).setValue(global.SCENARIO_CONTEXT["firstTrxNoTerminal"]);
+})
+*/

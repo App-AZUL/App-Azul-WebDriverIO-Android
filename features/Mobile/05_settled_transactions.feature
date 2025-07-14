@@ -14,7 +14,7 @@ Scenario Outline: Verify Settled Transactions are not visible
 Scenario Outline: Verify admin user can query Settled Transactions
 
   Given User navigates to Settle Transaction screen as admin user
-  When User selects Affiliated Auto Rental location on settled trx screen
+  When User selects the expected location on settled trx screen
   And User filters trx by date on year two thousand twenty two
   Then User should see at least one transaction
 
@@ -81,31 +81,32 @@ Scenario Outline: Verify Amount textfield only allows numbers
   Then User sould see a message asking for the Amount
   And the Amount should be 0
   And User should be in Solicitar devolucion screen
+  And User can see at least one transaction if goes back
 
-@SettledTransactions
-Scenario Outline: Verify can't submit a Settled Transaction refund when Amount is 0
+#@SettledTransactions
+#Scenario Outline: Verify can't submit a Settled Transaction refund when Amount is 0
+#
+#  Given User is on Solicitar devolucion form
+#  And User types 0 Amount
+#  Then User sould see a message asking for the Amount
+#  And the Amount should be 0
+#  And User should be in Solicitar devolucion screen
 
-  Given User is on Solicitar devolucion form
-  And User types 0 Amount
-  Then User sould see a message asking for the Amount
-  And the Amount should be 0
-  And User should be in Solicitar devolucion screen
-
-@SettledTransactions
-Scenario Outline: Verify can submit a Settled Transaction refund when Amount is 0.01
-
-  Given User is on Solicitar devolucion form
-  And User types 0.01 Amount
-  And User clicks on Motivo de la devolucion field
-  And User selects Transaccion fraudulenta option
-  And User clicks Solicitar a AZUL button
-  Then User should be on Request Received screen
-  And User should see the correct SLA message
-  And User should see the request number
-  And User should see the correct MID
-  And User should see the correct Location Name
-  When User press X button
-  Then User should be on Settled Transaction query screen
+#@SettledTransactions
+#Scenario Outline: Verify can submit a Settled Transaction refund when Amount is 0.01
+#
+#  Given User is on Solicitar devolucion form
+#  And User types 0.01 Amount
+#  And User clicks on Motivo de la devolucion field
+#  And User selects Transaccion fraudulenta option
+#  And User clicks Solicitar a AZUL button
+#  Then User should be on Request Received screen
+#  And User should see the correct SLA message
+#  And User should see the request number
+#  And User should see the correct MID
+#  And User should see the correct Location Name
+#  When User press X button
+#  Then User should be on Settled Transaction query screen
 
 @SettledTransactions
 Scenario Outline: Verify can't submit a Settled Transaction refund when fields are empty

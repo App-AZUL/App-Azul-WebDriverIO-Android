@@ -32,6 +32,7 @@ import {
   IS_PREVIOUS_TEST_SUCCESS,
   PIN,
   IS_PIN_REVERSED,
+  SCENARIO_CONTEXT,
 } from "../Helpers/ConstantsQA.ts";
 
 export const config = {
@@ -151,7 +152,7 @@ afterFeature: async function ({ uri, feature, name }) {
     source: true,
     strict: false,
     tags: "",
-    timeout: 130000,
+    timeout: 200000,
     ignoreUndefinedDefinitions: false,
   },
 
@@ -190,5 +191,6 @@ afterFeature: async function ({ uri, feature, name }) {
     (global as any).NO_LOCATIONS_CEDULA = NO_LOCATIONS_CEDULA;
     (global as any).NO_LOCATIONS_DOB = NO_LOCATIONS_DOB;
     (global as any).NO_LOCATIONS_MAIL = NO_LOCATIONS_MAIL;
+    (global as any).SCENARIO_CONTEXT = SCENARIO_CONTEXT;
   },
 };

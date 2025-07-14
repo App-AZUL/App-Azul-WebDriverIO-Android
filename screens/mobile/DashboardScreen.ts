@@ -28,6 +28,11 @@ class DashboardScreen {
       "//android.widget.RelativeLayout[@resource-id=\"com.sdp.appazul:id/btnLogoutMenu\"]"
     );
   }
+  get sdpHotelLocationElement() {
+    return $(
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvItem" and @text="SDP-LODGING/LAB01"]'
+    );
+  }
   get salirDashboardButton() {
     return $(
       "//android.widget.TextView[@resource-id=\"com.sdp.appazul:id/txtContinueBtnView\"]"
@@ -151,7 +156,6 @@ class DashboardScreen {
     await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
      await (await OnboardingScreen.saltarDemostracionButton).click();
         await (await NewAccessScreen.yaSoyClienteButton).click();
-        await Helpers.acceptNotificationPermission();
 
         //loginAppVersion = await this.appVersion.getText().toString();
         await LoginScreen.passwordInput.setValue(password);
@@ -165,24 +169,25 @@ class DashboardScreen {
         await PinConfigurationScreen.setPin(9499);
 
         await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
-        await Helpers.acceptDashboardPermissions();
         await this.dismissDashboardNovelty();
         await Helpers.verifyElementExist(
           this.screenTitle,
           Helpers.TWENTY_SECONDS_IN_MILLISECONDS
         );
   }
-  async navigateToDashboard(username: string, password: string, keepCurrentApp = true) {
+  async navigateToDashboard(username: string, password: string, keepCurrentApp:boolean = true) {
     try {
       console.log("va a mantener?"+keepCurrentApp);
+      keepCurrentApp = await Helpers.verifyElementExist(
+        OnboardingScreen.saltarDemostracionButton,
+        Helpers.FIVE_SECONDS_IN_MILLISECONDS
+      );
       
-      if (!keepCurrentApp) {
+      if (keepCurrentApp) {
         console.log("weisparle");
         await OnboardingScreen.saltarDemostracionButton.click();
         await NewAccessScreen.yaSoyClienteButton.click();
-        //await Helpers.acceptNotificationPermission();
-
-        //loginAppVersion = await this.appVersion.getText().toString();
+        
         await LoginScreen.passwordInput.setValue(password);
         await LoginScreen.usernameInput.setValue(username);
         await LoginScreen.iniciarSesionButton.click();
@@ -194,20 +199,43 @@ class DashboardScreen {
         await PinConfigurationScreen.setPin(9499);
 
         await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
-        await Helpers.acceptDashboardPermissions();
         await this.dismissDashboardNovelty();
         await Helpers.verifyElementExist(
           this.screenTitle,
           Helpers.TWENTY_SECONDS_IN_MILLISECONDS
         );
+      } else if(await Helpers.verifyElementExist(
+        this.screenTitle,
+        Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+      )) {
+        console.log("ya esta en dashboard");
+
+      } else {
+          await Helpers.startAppByFirstTime();
+          await (await OnboardingScreen.saltarDemostracionButton).click();
+          await (await NewAccessScreen.yaSoyClienteButton).click();
+          
+          await LoginScreen.passwordInput.setValue(password);
+          await LoginScreen.usernameInput.setValue(username);
+          await LoginScreen.iniciarSesionButton.click();
+          
+          await Helpers.verifyElementExist(
+            PinConfigurationScreen.screenTitle,
+            Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+          );
+          await PinConfigurationScreen.setPin(9499);
+        
+          await this.dismissDashboardNovelty();
+        
+          await Helpers.verifyElementExist(
+            this.screenTitle,
+            Helpers.TWENTY_SECONDS_IN_MILLISECONDS
+          );
       }
     } catch (error) {
       await Helpers.startAppByFirstTime();
       await (await OnboardingScreen.saltarDemostracionButton).click();
       await (await NewAccessScreen.yaSoyClienteButton).click();
-      await Helpers.acceptNotificationPermission();
-
-      //loginAppVersion = await (await this.appVersion).getText().toString();
 
       await LoginScreen.passwordInput.setValue(password);
       await LoginScreen.usernameInput.setValue(username);
@@ -219,7 +247,6 @@ class DashboardScreen {
       );
       await PinConfigurationScreen.setPin(9499);
 
-      await Helpers.acceptDashboardPermissions();
       await this.dismissDashboardNovelty();
 
       await Helpers.verifyElementExist(
@@ -275,7 +302,10 @@ class DashboardScreen {
   
   async dismissDashboardNovelty() {
     try {
-      await driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
+      await Helpers.verifyElementExist(
+        Commons.continuarButton,
+        Helpers.FIVE_SECONDS_IN_MILLISECONDS
+      );
       (await Commons.continuarButton).click();
     } catch (error) {
       console.log("couldn't dismiss novelty");

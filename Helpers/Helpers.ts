@@ -27,6 +27,9 @@ class Helpers {
   get AppOldVersion() {
     return "5.0.0";
   }
+  get THREE_SECONDS_IN_MILLISECONDS() {
+    return 5000;
+  }
   get FIVE_SECONDS_IN_MILLISECONDS() {
     return 5000;
   }
@@ -38,6 +41,9 @@ class Helpers {
   }
   get TWENTY_SECONDS_IN_MILLISECONDS() {
     return 20000;
+  }
+  get TWENTY_FIVE_SECONDS_IN_MILLISECONDS() {
+    return 25000;
   }
   get THIRTY_SECONDS_IN_MILLISECONDS() {
     return 30000;
@@ -61,7 +67,7 @@ try {
         {
             timeout: timeout, // custom timeout in milliseconds
             timeoutMsg: `Element ${element.selector.toString()} not displayed after ${timeout} ms`,
-            interval: 500, // polling interval in milliseconds
+            interval: 900, // polling interval in milliseconds
         }
     );
     isExisting = !!isExisting; // Ensures the value is explicitly boolean
@@ -114,12 +120,12 @@ try {
 }
   async verifyElementExist(element, timeout) {
     try {
-      var isExisting = await driver.waitUntil(
+      var isExisting:boolean = await driver.waitUntil(
         async () => await element.isDisplayed(),
         {
           timeout: timeout, // custom timeout in milliseconds
           timeoutMsg: `Element ${element.selector.toString()} not displayed after ${timeout} ms`,
-          interval: 500, // polling interval in milliseconds
+          interval: 900, // polling interval in milliseconds
         }
       );
     } catch (error) {
@@ -156,43 +162,6 @@ try {
     }
 }
 
-
-
-  async acceptNotificationPermission() {
-    /*try {
-      console.log("terms and coindition should be accepted and wait 5 minutes");
-      await this.verifyElementIsDisplayed(
-        this.AllowNotificationButton,
-        this.FIFTEEN_SECONDS_IN_MILLISECONDS
-    );
-      await this.AllowNotificationButton.click();
-
-      
-    } catch (error) {
-      console.log("couldn't accept login permissions");
-    }*/
-  }
-  async acceptDashboardPermissions() {/*
-    try {
-      console.log(
-        "terms and coindition should be accepted and wait 10 seconds"
-      );
-      (await this.allowCameraPermissionButton).click();
-      (await this.allowLocationPermissionButton).click();
-      (await this.allowCallPermissionButton).click();
-
-      var wait = await driver.waitUntil(
-        async () =>
-          await {
-            timeout: 10000, // custom timeout in milliseconds
-            timeoutMsg: `sss`,
-            interval: 500, // polling interval in milliseconds
-          }
-      );
-    } catch (error) {
-      console.log("couldn't accept dashboard permissions");
-    }*/
-  }
   async isVersionGreater(version, comparison) {
     const versionParts = await version.split(".").map(Number);
     const comparisonParts = await comparison.split(".").map(Number);
@@ -207,46 +176,59 @@ try {
 
     return false; // They are equal
   }
-  async scrollUntilElementVisible(
-    element,
-    maxScrolls = 10,
-    startPercentageY = 80,
-    endPercentageY = 20
-  ) {
-    let isVisible = await element.isDisplayed();
-    let scrollAttempts = 0;
 
-    while (!isVisible && scrollAttempts < maxScrolls) {
-      const { width, height } = await driver.getWindowSize(); // Get screen dimensions
-      const startX = width / 2; // Scroll from the middle of the screen
-      const startY = (height * startPercentageY) / 100;
-      const endY = (height * endPercentageY) / 100;
+async scrollUntilElementVisible({
+  element,
+  maxScrolls = 10,
+  scrollPercent = 2.5
+}: {
+  element: ChainablePromiseElement,
+  maxScrolls?: number,
+  scrollPercent?: number
+}): Promise<void> {
+  const { height, width } = await driver.getWindowRect();
+  let attempts = 0;
 
-      // Perform swipe action using touchPerform
-      await driver.touchPerform([
-        { action: "press", options: { x: startX, y: startY } },
-        { action: "wait", options: { ms: 200 } }, // Pause for gesture stabilization
-        { action: "moveTo", options: { x: startX, y: endY } },
-        { action: "release" },
-      ]);
+  // Recommended Y positions: avoid very top/bottom edges
+  const startY = Math.floor(height * 0.7); // scroll starts higher
+  const endY = Math.floor(height * 0.3);   // scroll ends lower
 
-      await browser.pause(500); // Allow UI to stabilize
-      isVisible = await element.isDisplayed();
-      scrollAttempts++;
+  while (attempts < maxScrolls) {
+    try {
+      if (await element.isDisplayed()) return;
+    } catch {
+      // ignore lookup errors until it appears
     }
 
-    if (!isVisible) {
-      throw new Error(
-        `Element not visible after ${scrollAttempts} scroll attempts.`
-      );
-    }
+    await driver.performActions([
+      {
+        type: 'pointer',
+        id: 'finger1',
+        parameters: { pointerType: 'touch' },
+        actions: [
+          { type: 'pointerMove', duration: 0, x: width / 2, y: startY },
+          { type: 'pointerDown', button: 0 },
+          { type: 'pause', duration: 100 },
+          { type: 'pointerMove', duration: 500, x: width / 2, y: endY },
+          { type: 'pointerUp', button: 0 },
+        ],
+      },
+    ]);
+
+    await driver.releaseActions();
+    await browser.pause(500);
+    attempts++;
   }
+
+  throw new Error(`Element not visible after ${maxScrolls} scrolls.`);
+}
+
   getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
   async setDateJanuary2022onDesdeCalendar() {
     await SettledTransactionsScreen.desdeDatePicker.click();
-    for (let i = 0; i < 34; i++) {
+    for (let i = 0; i < 42; i++) {
       await Commons.calendarMonthBackArrow.click();
       await driver.pause(300);
     }

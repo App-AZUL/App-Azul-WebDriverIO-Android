@@ -62,42 +62,10 @@ Then(`User should see the text Servicios Digitales Popular, S.A.`, async () => {
 });
 
 Given(`User navigates to Dashboard screen as admin user`, async () => {
-  let isUserOnDashboard = await Helpers.verifyElementExist(
-    DashboardScreen.screenTitle,
-    Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
+  await DashboardScreen.navigateToDashboard(
+    global.USERNAME as string,
+    global.PASSWORD as string
   );
-
-  if (!isUserOnDashboard) {
-    await console.log("user was not in dashboard");
-    
-    
-    let isAppRestarted = await Helpers.verifyElementExist(
-    OnboardingScreen.saltarDemostracionButton,
-    Helpers.TEN_SECONDS_IN_MILLISECONDS
-    );
-    if (isAppRestarted) {
-      await console.log("emm the app was clean restarted");
-      await OnboardingScreen.saltarDemostracionButton.click();
-      await NewAccessScreen.yaSoyClienteButton.click();
-      await LoginScreen.usernameInput.setValue(global.ADMIN_USERNAME);
-      await LoginScreen.passwordInput.setValue(global.PASSWORD);
-      await LoginScreen.iniciarSesionButton.click();
-
-      await Helpers.verifyElementExist(
-                PinConfigurationScreen.screenTitle,
-                Helpers.TWENTY_SECONDS_IN_MILLISECONDS
-              );
-      await PinConfigurationScreen.setPin(9499);
-
-      await DashboardScreen.dismissDashboardNovelty();
-      await Helpers.verifyElementExist(
-        DashboardScreen.screenTitle,
-        Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS
-      );
-    }
-  } else {
-    await console.log("yes, user is on dashboard");
-  }
 });
 
 When(`User selects Affiliated Auto Rental location`, async () => {
@@ -136,30 +104,10 @@ Then(
 );
 
 When(`an User without locations logs in`, async () => {
-  /*
   await DashboardScreen.navigateToDashboard(
     global.USERNAME_WITHOUT_LOCATIONS as string,
     global.PASSWORD as string
-  );*/
-
-  (await DashboardScreen.logoutButton).click();
-  (await DashboardScreen.salirDashboardButton).click();
-  await driver.pause(Helpers.FIFTEEN_SECONDS_IN_MILLISECONDS);
-  (await PreloggedScreen.burgerMenu).click();
-  (await PreloggedScreen.desvincularButton).click();
-  (await Commons.siButton).click();
-  await driver.pause(Helpers.TEN_SECONDS_IN_MILLISECONDS);
-
-  await LoginScreen.usernameInput.setValue(global.USERNAME_WITHOUT_LOCATIONS);
-  await LoginScreen.passwordInput.setValue(global.PASSWORD);
-  await LoginScreen.iniciarSesionButton.click();
-
-  if (global.PIN == "" || global.PIN == null) {
-    global.PIN = 7799;
-  }
-  await PinConfigurationScreen.setPin(global.PIN);
-
-  (await Commons.continuarButton).click();
+  );
 });
 
 Then(`User should be on Dashboard screen`, async () => {

@@ -12,7 +12,7 @@ class RequestCreatedSettledTransactionScreen {
         return $("//android.widget.TextView[@resource-id='com.sdp.appazul:id/txtSelectedLocation']");
     }
     get locationMid(){
-        return $("//android.widget.TextView[@resource-id='com.sdp.appazul:id/txtSelectedLocation'");
+        return $("//android.widget.TextView[@resource-id='com.sdp.appazul:id/txtSelectedLocation']");
     }
     get closeButton(){
         return $('//android.widget.RelativeLayout[@resource-id="com.sdp.appazul:id/btnClose"]/android.widget.ImageView');

@@ -10,7 +10,7 @@ class Commons {
     return $("//*[contains(@text,'ACEPTAR')]");
   }
   get backButton() {
-    return $("//*[contains(@resource-id,'com.sdp.appazul:id/btnBackScreen')] | //android.widget.ImageView[@resource-id=\"com.sdp.appazul:id/infoBackButton\"] | //android.widget.RelativeLayout[@resource-id=\"com.sdp.appazul:id/relBackBtnLayout\"] | //android.widget.ImageView[@resource-id=\"com.sdp.appazul:id/myBusinessButton\"] | //android.widget.ImageView[@resource-id=\"com.sdp.appazul:id/unitsLocationBackButton\"]");
+    return $("//android.widget.RelativeLayout[@resource-id='com.sdp.appazul:id/backBtnLayout'] | //*[contains(@resource-id,'com.sdp.appazul:id/btnBackScreen')] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/infoBackButton'] | //android.widget.RelativeLayout[@resource-id='com.sdp.appazul:id/relBackBtnLayout'] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/myBusinessButton'] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/unitsLocationBackButton'] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/btnSettleTrBack'] | //*[@resource-id='com.sdp.appazul:id/backBtnImg']");
   }
   get okButton() {
     return $(
@@ -52,6 +52,9 @@ class Commons {
   get january2022DateText() {
     return $("//*[contains(@text,'Enero 2022')]");
   }
+  get newLoadingAnimation () {
+        return $('//android.widget.ImageView[@resource-id="com.sdp.appazul:id/GifImageView"]');
+    }
 }
 
 export default new Commons();
