@@ -359,7 +359,8 @@ When('User search the No. de tarjeta', async () => {
     await Helpers.pressAppBackButton();
     await SettledTransactionsScreen.trxSearchBar.click();
     await SettledTransactionsScreen.noTarjetaSearchOption.click();
-    (await SettledTransactionsScreen.trxSearchBar).setValue(global.SCENARIO_CONTEXT["firstTrxNoTarjeta"]);
+    let numberToSearch:string = global.SCENARIO_CONTEXT["firstTrxNoTarjeta"]; // Remove spaces
+    (await SettledTransactionsScreen.trxSearchBar).setValue(numberToSearch.slice(0, 4));
 })
 /*
 When('User search the No. de terminal', async () => {
