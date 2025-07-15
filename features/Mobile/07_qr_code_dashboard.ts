@@ -5,17 +5,7 @@ import QrCodeScreen from "../../screens/mobile/QrCodeScreen.ts";
 import SettledTransactionsScreen from "../../screens/mobile/SettledTransactionsScreen.ts";
 
 Given('User is on QR Code screen', async () => {
-    let isUserAtQRCodeScreen:Boolean = await Helpers.verifyElementExist(
-      QrCodeScreen.screenTitle,
-      Helpers.FIVE_SECONDS_IN_MILLISECONDS
-    );
-    if (!isUserAtQRCodeScreen) {
-      await DashboardScreen.navigateToDashboard(
-        global.USERNAME as string,
-        global.PASSWORD as string
-      );
-      await DashboardScreen.qrButton.click();
-    }
+    await QrCodeScreen.navigateToQrCodeScreen();
 })
 
 Then('User should see the QR code', async () => {

@@ -1,6 +1,7 @@
 import { $ } from "@wdio/globals";
 import Helpers from "../../helpers/Helpers.ts";
 import OnboardingScreen from "./OnboardingScreen.ts";
+import DashboardScreen from "./DashboardScreen.ts";
 
 class QrCodeScreen {
   get screenTitle() {
@@ -42,6 +43,19 @@ class QrCodeScreen {
     return $(
       '//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvDateFilter"]'
     );
+  }
+  async navigateToQrCodeScreen() {
+    let isUserAtQRCodeScreen:Boolean = await Helpers.verifyElementExist(
+          this.screenTitle,
+          Helpers.FIVE_SECONDS_IN_MILLISECONDS
+        );
+        if (!isUserAtQRCodeScreen) {
+          await DashboardScreen.navigateToDashboard(
+            global.USERNAME as string,
+            global.PASSWORD as string
+          );
+          await DashboardScreen.qrButton.click();
+        }
   }
 }
 

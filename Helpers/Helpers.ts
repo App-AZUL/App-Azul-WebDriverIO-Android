@@ -247,6 +247,12 @@ async scrollUntilElementVisible({
     
     await Commons.calendarDay13.click();
   }
+  async pressAppSiButton() {
+    await Commons.siButton.click();
+  }
+  async pressAppNoButton() {
+    await Commons.noButton.click();
+  }
 }
 
 export default new Helpers();

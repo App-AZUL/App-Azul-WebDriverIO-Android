@@ -118,6 +118,9 @@ class DashboardScreen {
   get qrButton() {
     return $('//android.widget.TextView[@resource-id="com.sdp.appazul:id/text_view" and @text="Código QR"]');
   }
+  get paymentLinkButton() {
+    return $('//android.widget.TextView[@resource-id="com.sdp.appazul:id/text_view" and @text="Link de Pagos"]');
+  }
   async logOutFromDashboard() {
     await this.burgerMenu.click();
     this.salirButton.click();

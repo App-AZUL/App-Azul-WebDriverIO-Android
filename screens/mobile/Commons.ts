@@ -10,7 +10,7 @@ class Commons {
     return $("//*[contains(@text,'ACEPTAR')]");
   }
   get backButton() {
-    return $("//android.widget.RelativeLayout[@resource-id='com.sdp.appazul:id/backBtnLayout'] | //*[contains(@resource-id,'com.sdp.appazul:id/btnBackScreen')] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/infoBackButton'] | //android.widget.RelativeLayout[@resource-id='com.sdp.appazul:id/relBackBtnLayout'] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/myBusinessButton'] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/unitsLocationBackButton'] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/btnSettleTrBack'] | //*[@resource-id='com.sdp.appazul:id/backBtnImg']");
+    return $("//android.widget.RelativeLayout[@resource-id='com.sdp.appazul:id/backBtnLayout'] | //*[contains(@resource-id,'com.sdp.appazul:id/btnBackScreen')] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/infoBackButton'] | //android.widget.RelativeLayout[@resource-id='com.sdp.appazul:id/relBackBtnLayout'] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/myBusinessButton'] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/unitsLocationBackButton'] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/btnSettleTrBack'] | //*[@resource-id='com.sdp.appazul:id/backBtnImg'] | //android.widget.ImageView[@resource-id='com.sdp.appazul:id/btnBackToPrevious']");
   }
   get okButton() {
     return $(
@@ -18,10 +18,10 @@ class Commons {
     );
   }
   get siButton() {
-    return $("//*[contains(@text,'SÍ')] | //*[contains(@text,'YES')]");
+    return $("//*[contains(@text,'SÍ')] | //*[contains(@text,'YES')] | //*[contains(@text,'Si')]");
   }
   get noButton() {
-    return $("//*[contains(@text,'NO')]");
+    return $("//*[contains(@text,'NO')] | //*[contains(@text,'No')]");
   }
   get continuarButton() {
     return $("//*[contains(@text,'Continuar')]");
