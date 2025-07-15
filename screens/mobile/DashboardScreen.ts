@@ -115,6 +115,9 @@ class DashboardScreen {
   get closeQRMessageButton() {
     return $('//*[contains(@text,"Cancelar")]');
   }
+  get qrButton() {
+    return $('//android.widget.TextView[@resource-id="com.sdp.appazul:id/text_view" and @text="Código QR"]');
+  }
   async logOutFromDashboard() {
     await this.burgerMenu.click();
     this.salirButton.click();
@@ -177,14 +180,16 @@ class DashboardScreen {
   }
   async navigateToDashboard(username: string, password: string, keepCurrentApp:boolean = true) {
     try {
-      console.log("va a mantener?"+keepCurrentApp);
+      //verify first if the app is already open
+      await console.log("should we keep current app?: "+keepCurrentApp);
       keepCurrentApp = await Helpers.verifyElementExist(
         OnboardingScreen.saltarDemostracionButton,
         Helpers.FIVE_SECONDS_IN_MILLISECONDS
       );
       
+      //in case app is already open, it will not try to open it again
       if (keepCurrentApp) {
-        console.log("weisparle");
+        await console.log("weisparle");
         await OnboardingScreen.saltarDemostracionButton.click();
         await NewAccessScreen.yaSoyClienteButton.click();
         
@@ -208,9 +213,10 @@ class DashboardScreen {
         this.screenTitle,
         Helpers.TWENTY_SECONDS_IN_MILLISECONDS
       )) {
-        console.log("ya esta en dashboard");
+        await console.log("ya esta en dashboard");
 
       } else {
+        //if app is not open or is not at the desired screen, will start it
           await Helpers.startAppByFirstTime();
           await (await OnboardingScreen.saltarDemostracionButton).click();
           await (await NewAccessScreen.yaSoyClienteButton).click();
@@ -233,6 +239,8 @@ class DashboardScreen {
           );
       }
     } catch (error) {
+      //if there is an error, it will try to start the app from the beginning
+      await console.log("Error navigating to dashboard, trying to start app from first time: " + error);
       await Helpers.startAppByFirstTime();
       await (await OnboardingScreen.saltarDemostracionButton).click();
       await (await NewAccessScreen.yaSoyClienteButton).click();

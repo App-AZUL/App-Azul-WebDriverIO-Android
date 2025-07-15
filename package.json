@@ -10,7 +10,7 @@
     "appium": "appium",
     "clean": "rimraf .tsbuild/ && rimraf allure-results/ && rimraf junit-report/ && rimraf poGenerated/",
     "start-web": "npm run clean && npx tsc && npx wdio run ./config/wdio.chrome.conf.ts",
-    "start-mobile": "npm run clean && npx tsc && npx wdio run ./config/wdio.mobile.conf.ts --cucumberOpts.tags \"@Regression \"",
+    "start-mobile": "npm run clean && npx tsc && npx wdio run ./config/wdio.mobile.conf.ts --cucumberOpts.tags \"@QRCode \"",
     "start-mobile-bs": "npm run clean && npx tsc && npx wdio run ./config/wdio.mobile.bs.conf.ts --cucumberOpts.tags \"@mobile \"",
     "start-mobile-aws": "npm run clean && npx tsc && npx wdio run ./config/wdio.mobile.aws.conf.ts --cucumberOpts.tags ",
     "clean-report": "allure generate --clean --single-file ./allure-results",
