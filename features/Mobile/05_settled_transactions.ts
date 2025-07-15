@@ -133,13 +133,15 @@ When(
   async () => {
     await Helpers.verifyElementNotExist(
       Commons.newLoadingAnimation,
-      Helpers.TWENTY_FIVE_SECONDS_IN_MILLISECONDS
+      Helpers.TWENTY_FIVE_SECONDS_IN_MILLISECONDS,
+      false
     );
     await Helpers.setTrxDateOnDesdeCalendar();
     driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
     await Helpers.verifyElementNotExist(
       Commons.newLoadingAnimation,
-      Helpers.THIRTY_FIVE_SECONDS_IN_MILLISECONDS
+      Helpers.THIRTY_FIVE_SECONDS_IN_MILLISECONDS,
+      false
     );
   }
 );
