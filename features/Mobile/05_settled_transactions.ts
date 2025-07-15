@@ -75,10 +75,6 @@ When(`User clicks on Transacciones Liquidadas`, async () => {
   await DashboardScreen.transaccionesLiquidadasOption.click();
 });
 
-When(`User clicks on Transacciones QR`, async () => {
-  await DashboardScreen.transaccionesQROption.click();
-});
-
 Then(
   `User should see a message saying that the proffile doesnt have access`,
   async () => {
@@ -139,7 +135,7 @@ When(
       Commons.newLoadingAnimation,
       Helpers.TWENTY_FIVE_SECONDS_IN_MILLISECONDS
     );
-    await Helpers.setDateJanuary2022onDesdeCalendar();
+    await Helpers.setTrxDateOnDesdeCalendar();
     driver.pause(Helpers.FIVE_SECONDS_IN_MILLISECONDS);
     await Helpers.verifyElementNotExist(
       Commons.newLoadingAnimation,
@@ -149,7 +145,7 @@ When(
 );
 
 When(`User sets date to january {int}`, async (arg0: number) => {
-  await Helpers.setDateJanuary2022onDesdeCalendar();
+  await Helpers.setTrxDateOnDesdeCalendar();
 });
 
 Then(`User should see at least one transaction`, async () => {

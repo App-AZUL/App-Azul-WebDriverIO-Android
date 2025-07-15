@@ -50,7 +50,10 @@ class Commons {
     return $("//*[contains(@text,'13')]");
   }
   get january2022DateText() {
-    return $("//*[contains(@text,'Enero 2022')]");
+    return $("//*[contains(@text,'2022')]");
+  }
+  get january2020DateText() {
+    return $("//*[contains(@text,'2020')]");
   }
   get newLoadingAnimation () {
         return $('//android.widget.ImageView[@resource-id="com.sdp.appazul:id/GifImageView"]');

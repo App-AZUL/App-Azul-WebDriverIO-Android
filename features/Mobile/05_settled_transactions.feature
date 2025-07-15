@@ -108,7 +108,7 @@ Scenario Outline: Verify Amount textfield only allows numbers
 #  When User press X button
 #  Then User should be on Settled Transaction query screen
 
-@SettledTransactions
+@SettledTransactions 
 Scenario Outline: Verify can't submit a Settled Transaction refund when fields are empty
 
  Given User can see at least one transaction after switching the location
@@ -125,7 +125,7 @@ Scenario Outline: Verify can't submit a Settled Transaction refund without filli
   And User clicks Solicitar a AZUL button
   Then User should stay in Solicitar devolucion form
 
-@SettledTransactions
+@SettledTransactions @HappyPath
 Scenario Outline: Verify User can submit a Settled Transaction refund for Transaccion fraudulenta
 
   Given User is on Solicitar devolucion form
@@ -140,7 +140,7 @@ Scenario Outline: Verify User can submit a Settled Transaction refund for Transa
   When User press X button
   Then User should be on Settled Transaction query screen
 
-@SettledTransactions 
+@SettledTransactions @HappyPath
 Scenario Outline: Verify User can submit a Settled Transaction refund for Monto Incorrecto
 
   Given User can see at least one transaction after switching the location
@@ -157,7 +157,7 @@ Scenario Outline: Verify User can submit a Settled Transaction refund for Monto 
   When User press X button
   Then User should be on Settled Transaction query screen
 
-@SettledTransactions 
+@SettledTransactions @HappyPath
 Scenario Outline: Verify User can submit a Settled Transaction refund for Transaccion Duplicada
 
   Given User can see at least one transaction after switching the location
@@ -174,7 +174,7 @@ Scenario Outline: Verify User can submit a Settled Transaction refund for Transa
   When User press X button
   Then User should be on Settled Transaction query screen
 
-@SettledTransactions
+@SettledTransactions @HappyPath
 Scenario Outline: Verify User can submit a Settled Transaction refund for Pagado por otro medio
 
   Given User can see at least one transaction after switching the location
@@ -191,7 +191,7 @@ Scenario Outline: Verify User can submit a Settled Transaction refund for Pagado
   When User press X button
   Then User should be on Settled Transaction query screen
 
-@SettledTransactions
+@SettledTransactions @HappyPath
 Scenario Outline: Verify User can submit a Settled Transaction refund for Servicio no recibido
 
   Given User can see at least one transaction after switching the location

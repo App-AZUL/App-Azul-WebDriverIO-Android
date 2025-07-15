@@ -226,16 +226,25 @@ async scrollUntilElementVisible({
   getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
-  async setDateJanuary2022onDesdeCalendar() {
+  async setTrxDateOnDesdeCalendar(isQrTrx = false) {
     await SettledTransactionsScreen.desdeDatePicker.click();
-    for (let i = 0; i < 42; i++) {
+    let backArrowClickCount = isQrTrx ? 66 : 42; // When coming from QR Transactions screen, we need to go back more months to reach January 2020, for Settled Transactions screen, we need to go back less months (2022 is enough).
+    for (let i = 0; i < backArrowClickCount; i++) {
       await Commons.calendarMonthBackArrow.click();
       await driver.pause(300);
     }
-    await this.verifyElementIsDisplayed(
+    if (isQrTrx) {
+      await this.verifyElementIsDisplayed(
+        Commons.january2020DateText,
+        this.FIVE_SECONDS_IN_MILLISECONDS
+      );
+    } else {
+      await this.verifyElementIsDisplayed(
       Commons.january2022DateText,
       this.FIVE_SECONDS_IN_MILLISECONDS
     );
+    }
+    
     await Commons.calendarDay13.click();
   }
 }
