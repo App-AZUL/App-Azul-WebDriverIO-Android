@@ -25,12 +25,12 @@ class PaymentLinkTrxScreen {
   }
   get trxDate() {
     return $(
-      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvDateAndTime"]'
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvCreatedDateTIme"]'
     );
   }
   get trxAmount() {
     return $(
-      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvAmount"]'
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvHiddenAmount"]'
     );
   }
   get trxLocalityName() {

@@ -70,6 +70,21 @@ class PaymentLinkCalculatorScreen {
       '//android.widget.Button[@resource-id="com.sdp.appazul:id/btnConfirmAmount"]'
     );
   }
+  get deleteMainButton() {
+    return $(
+      '//android.widget.ImageView[@resource-id="com.sdp.appazul:id/tvDelete"]'
+    );
+  }
+  get clearCalcButton() {
+    return $(
+      '//android.widget.ImageView[@resource-id="com.sdp.appazul:id/cancelFromInside"]'
+    );
+  }
+  get amountOnCalculatorText() {
+    return $(
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvAmount"]'
+    );
+  }
   async setTenRandomNumbers() {
     //Typing numbers in the calculator
     let randomNumbersStr = '';

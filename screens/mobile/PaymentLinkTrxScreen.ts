@@ -6,12 +6,22 @@ import DashboardScreen from "./DashboardScreen.ts";
 class PaymentLinkTrxScreen {
   get screenTitle() {
     return $(
-      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/toolbarTextTitle"]'
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/toolbarTextTitle" and @text="Transacciones Link de Pagos"]'
     );
   }
   get comenzarAUsarButton() {
     return $(
       '//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvFinalAmount"]'
+    );
+  }
+  get firstPLTransaction() {
+    return $(
+      '(//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvPaymentAmount"])[1]'
+    );
+  }
+  get label2022() {
+    return $(
+      '//*[contains(@text,"/2022")]'
     );
   }
   get firstPLTransactionAmount() {
@@ -77,6 +87,11 @@ class PaymentLinkTrxScreen {
   get crearShortcutButton() {
     return $(
       '//android.widget.RelativeLayout[@resource-id="com.sdp.appazul:id/btnPaymentCreateShortcut"]'
+    );
+  }
+  get locationNameOnFilter() {
+    return $(
+      '//android.widget.TextView[@resource-id="com.sdp.appazul:id/tvLocationName"]'
     );
   }
   async navigateToPaymentLinkTrxScreen() {

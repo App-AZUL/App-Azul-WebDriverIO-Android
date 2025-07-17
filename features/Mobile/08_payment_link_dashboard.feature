@@ -41,6 +41,7 @@ Given User is on PL Transaction Query screen
 When User clicks the Crear shortcut
 And User presses ten times a random number
 Then the app should show a message saying Limit Amount exceed
+And User can clear the calculator
 
 @PaymentLink @Regression @HappyPath
 Scenario Outline: Verify user can create a Payment Link

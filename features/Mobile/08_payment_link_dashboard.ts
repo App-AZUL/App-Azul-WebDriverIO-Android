@@ -9,11 +9,13 @@ import PaymentLinkGeneratedScreen from "../../screens/mobile/PaymentLinkGenerate
 
 Given('User is on PL Transaction Query screen', async () => {
   await PaymentLinkTrxScreen.navigateToPaymentLinkTrxScreen();
+  let currentLocationName:string = await PaymentLinkTrxScreen.locationNameOnFilter.getText();
+  global.SCENARIO_CONTEXT["firstPLTrxLocality"] = currentLocationName.split(" - ")[0];
 })
 
 Given('User can see at least one PL transaction', async () => {
     let doesAnyPLTransactionExist:Boolean = await Helpers.verifyElementExist(
-        PaymentLinkTrxScreen.firstPLTransactionAmount,
+        PaymentLinkTrxScreen.firstPLTransaction,
         Helpers.FIVE_SECONDS_IN_MILLISECONDS
         );
     let isUserAtPaymentLinkTrxScreen:Boolean = await Helpers.verifyElementExist(
@@ -23,9 +25,18 @@ Given('User can see at least one PL transaction', async () => {
     if (!doesAnyPLTransactionExist) {
       console.log("No PL transactions found, navigating to Payment Link Transactions screen");
       await PaymentLinkTrxScreen.navigateToPaymentLinkTrxScreen();
-    } else if (isUserAtPaymentLinkTrxScreen) {
+      await Helpers.setTrxDateOnDesdeCalendar();
+      await Helpers.verifyElementIsDisplayed(
+      PaymentLinkTrxScreen.firstPLTransaction,
+      Helpers.TEN_SECONDS_IN_MILLISECONDS
+      );
+    } else if (isUserAtPaymentLinkTrxScreen && !doesAnyPLTransactionExist) {
       console.log("User could not see any transaction, but is in the PL Trx screen, setting date to 2022");
       await Helpers.setTrxDateOnDesdeCalendar();
+      await Helpers.verifyElementIsDisplayed(
+      PaymentLinkTrxScreen.firstPLTransaction,
+      Helpers.TEN_SECONDS_IN_MILLISECONDS
+      );
     }
 })
 
@@ -132,6 +143,7 @@ Then('the transaction Status should match', async () => {
 Then('the transaction Link ID should match', async () => {
   let trxLinkIDInApp:string = await PaymentLinkTrxDetailsScreen.trxLinkID.getText();
   let expectedLinkID:string = (global.SCENARIO_CONTEXT["firstPLLinkID"] as string);
+  expectedLinkID = await expectedLinkID.split("Link ID: ")[1];
   if (trxLinkIDInApp != expectedLinkID) {
     console.log("The transaction Link ID does not match the expected Link ID");
     throw new Error(
@@ -141,7 +153,7 @@ Then('the transaction Link ID should match', async () => {
 })
 
 Then('the transaction Date should match', async () => {
-  let trxDateInApp:string = await PaymentLinkTrxDetailsScreen.trxDate.getText();
+  let trxDateInApp:string = (await PaymentLinkTrxDetailsScreen.trxDate.getText()).split(" ")[1];
   let expectedDate:string = (global.SCENARIO_CONTEXT["firstPLTrxDate"] as string);
   if (trxDateInApp != expectedDate) {
     console.log("The transaction Date does not match the expected Date");
@@ -152,8 +164,9 @@ Then('the transaction Date should match', async () => {
 })
 
 Then('the transaction Locality should match', async () => {
-  let trxLocalityInApp:string = await PaymentLinkTrxDetailsScreen.trxLocalityName.getText();
+  let trxLocalityInApp:string = (await PaymentLinkTrxDetailsScreen.trxLocalityName.getText()).split(" - ")[0];
   let expectedLocality:string = (global.SCENARIO_CONTEXT["firstPLTrxLocality"] as string);
+  expectedLocality = await expectedLocality.split(" - ")[0];
   if (trxLocalityInApp != expectedLocality) {
     console.log("The transaction Locality does not match the expected Locality");
     throw new Error(
@@ -207,6 +220,7 @@ When('User sets an Amount bitween {float} and {float}', async (float: number, fl
 })
 
 When('User clicks on Continuar button', async () => {
+  global.SCENARIO_CONTEXT["currentPaymentLinkAmount"] = (await PaymentLinkCalculatorScreen.amountOnCalculatorText.getText() as string);
   await PaymentLinkCalculatorScreen.continuarButton.click();
 })
 
@@ -225,6 +239,7 @@ Then('User should see a confirmation screen with all the details', async () => {
 Then('all the information match', async () => {
   let locationNameinApp = await GeneratePaymentLinkConfirmationScreen.locationTextfield.getText();
   let expectedLocationName = (global.SCENARIO_CONTEXT["firstPLTrxLocality"] as string);
+  expectedLocationName = await expectedLocationName.toLowerCase();
   if (locationNameinApp != expectedLocationName) {
     console.log("The location Name does not match the expected Name");
     throw new Error(
@@ -232,8 +247,8 @@ Then('all the information match', async () => {
     );
   }
 
-  let trxAmountInApp = await GeneratePaymentLinkConfirmationScreen.totalAmountTextfield.getText();
-  let expectedAmount = (global.SCENARIO_CONTEXT["firstPLTrxAmount"] as string);
+  let trxAmountInApp:string = await GeneratePaymentLinkConfirmationScreen.totalAmountTextfield.getText();
+  let expectedAmount = (global.SCENARIO_CONTEXT["currentPaymentLinkAmount"] as string);
   if (trxAmountInApp != expectedAmount) {
     console.log("The transaction Amount does not match the expected Amount");
     throw new Error(
@@ -243,27 +258,34 @@ Then('all the information match', async () => {
 })
 
 When('User slide to generate the PL', async () => {
-  // Locate the element
-  const slider = GeneratePaymentLinkConfirmationScreen.deslizaParaGenerarLinkSlider; // adjust selector as needed
-  
-  // Get element location and size
+  const slider = GeneratePaymentLinkConfirmationScreen.deslizaParaGenerarLinkSlider;
+
   const location = await slider.getLocation();
   const size = await slider.getSize();
-  
-  // Calculate swipe coordinates
-  const startX = location.x + 10; // slight offset to avoid edge
+
+  const startX = location.x + 10;
   const startY = location.y + size.height / 2;
   const endX = location.x + size.width - 10;
   const endY = startY;
-  
-  // Perform swipe gesture
-  await driver.touchPerform([
-    { action: 'press', options: { x: startX, y: startY }},
-    { action: 'wait', options: { ms: 300 }},
-    { action: 'moveTo', options: { x: endX, y: endY }},
-    { action: 'release' }
+
+  await driver.performActions([
+    {
+      type: 'pointer',
+      id: 'finger1',
+      parameters: { pointerType: 'touch' },
+      actions: [
+        { type: 'pointerMove', duration: 0, x: startX, y: startY },
+        { type: 'pointerDown', button: 0 },
+        { type: 'pause', duration: 300 },
+        { type: 'pointerMove', duration: 800, x: endX, y: endY },
+        { type: 'pointerUp', button: 0 }
+      ]
+    }
   ]);
-})
+
+  await driver.releaseActions();
+});
+
 
 Then('the PL has been generated succesfuly', async () => {
   await PaymentLinkGeneratedScreen.verifyPaymentLinkHasBeenGenerated();
@@ -280,15 +302,39 @@ Then('the Amount is the expected', async () => {
   }
 })
 
+import { Buffer } from 'buffer';
+
 Then('User can copy the PL', async () => {
   await PaymentLinkGeneratedScreen.copyLinkButton.click();
 
-  const clipboardText = await driver.getClipboard();
+  const clipboardRaw = await driver.getClipboard();
+
+  // Try to decode only if it’s valid base64
+  let clipboardText: string;
+
+  try {
+    const decoded = Buffer.from(clipboardRaw, 'base64').toString('utf-8');
+
+    // Check if the decoded string looks like a URL
+    if (decoded.startsWith('http')) {
+      clipboardText = decoded;
+    } else {
+      clipboardText = clipboardRaw;
+    }
+  } catch {
+    clipboardText = clipboardRaw;
+  }
 
   if (!clipboardText.includes("https://pagos.azul.com.do/")) {
-    throw new Error("The copied link is not valid");
+    throw new Error(
+      "The copied link is not valid \n" +
+      clipboardText +
+      "\n does not contain https://pagos.azul.com.do/"
+    );
   }
 });
+
+
 
 Then('User can share the PL', async () => {
   await PaymentLinkGeneratedScreen.shareLinkButton.click();
@@ -306,4 +352,9 @@ Then('User can go back by pressing X button', async () => {
     PaymentLinkTrxScreen.screenTitle,
     Helpers.FIVE_SECONDS_IN_MILLISECONDS
   );
+})
+
+Then('User can clear the calculator', async () => {
+  await PaymentLinkCalculatorScreen.deleteMainButton.click();
+  await PaymentLinkCalculatorScreen.clearCalcButton.click();
 })
